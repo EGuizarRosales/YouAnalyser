@@ -2,3 +2,4 @@
 
 export(inspect_data)
 export(ya_example)
+importFrom(parameters,model_parameters)

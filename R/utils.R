@@ -20,3 +20,13 @@ ya_example <- function(path = NULL) {
     system.file("extdata", path, package = "YouAnalyser", mustWork = TRUE)
   }
 }
+
+ya_format_numeric <- function(x, digits = 2) {
+  format(round(x, digits), nsmall = digits)
+}
+
+# Re-exports --------------------------------------------------------------------
+
+#' @importFrom parameters model_parameters
+#' @export
+NULL
