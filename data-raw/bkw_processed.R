@@ -1,5 +1,5 @@
-kda_example_data_01_processed <- haven::read_sav(ya_example(
-  "kda_example_data_01.sav"
+bkw_processed <- haven::read_sav(ya_example(
+  "bkw.sav"
 )) |>
   # Select only the variables used in the regression model
   dplyr::select(
@@ -22,4 +22,4 @@ kda_example_data_01_processed <- haven::read_sav(ya_example(
   # Filter for rows with non-missing values in the dependent variable (F600)
   dplyr::filter(!is.na(F600))
 
-usethis::use_data(kda_example_data_01_processed, overwrite = TRUE)
+usethis::use_data(bkw_processed, overwrite = TRUE)

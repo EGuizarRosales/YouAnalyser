@@ -10,7 +10,7 @@ ya_example(path = NULL)
 \item{path}{A character string specifying the path to the example file within the package. If NULL, lists all available example files.}
 }
 \value{
-A character string with the full path to the specified example file, or a list of available example files if path is NULL.
+A character string with the full path to the specified example file, or a vector of character strings of available example files if path is NULL.
 }
 \description{
 Get the path to an example file in the package

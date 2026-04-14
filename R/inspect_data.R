@@ -3,12 +3,12 @@
 #' @param data A data frame to be inspected.
 #' @param variables An optional vector of variable names to include in the inspection. If NULL, all variables are included.
 #'
-#' @returns
+#' @returns A temporaty html summary table of the data, which is displayed in the browser.
 #'
 #' @export
 #' @examples
 #' # Inspect a subset of variables in the data
-#' inspect_data(kda_example_data_01_raw, variables = c("F600", paste0("F800_", 1:14)))
+#' inspect_data(kda_example_data_01_raw, variables = c("F600", "F800_1", "F800_2"))
 #' # Inspect all variables in the data
 #' inspect_data(kda_example_data_01_processed)
 inspect_data <- function(data, variables = NULL) {
