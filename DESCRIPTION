@@ -13,10 +13,13 @@ URL: https://github.com/EGuizarRosales/YouAnalyser
 BugReports: https://github.com/EGuizarRosales/YouAnalyser/issues
 Imports: 
     cli,
+    correlation (>= 0.8.8),
+    domir (>= 1.2.0),
     dplyr,
     forcats,
     haven,
     insight,
+    iopsych (>= 0.90.1),
     parameters,
     performance,
     purrr,

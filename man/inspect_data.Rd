@@ -19,7 +19,7 @@ Inspect data
 }
 \examples{
 # Inspect a subset of variables in the data
-inspect_data(kda_example_data_01_raw, variables = c("F600", "F800_1", "F800_2"))
+inspect_data(bkw_raw, variables = c("F600", "F800_1", "F800_2"))
 # Inspect all variables in the data
-inspect_data(kda_example_data_01_processed)
+inspect_data(bkw_processed)
 }

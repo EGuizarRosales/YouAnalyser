@@ -100,6 +100,152 @@ kda_forest_plot <- function(model, model_parameters, predictor_labels) {
   return(p_plot)
 }
 
+# ---- Dominance Analysis ------------------------------------------------------
+
+#' Perform KDA dominance analysis
+#'
+#' @description
+#' A short description...
+#'
+#' @param model A fitted model object.
+#' @param domir_args Optional. A list of arguments to pass to [domir::domir()].
+#'
+#' @returns
+#' A list containing:
+#' - `out`: A tibble with predictor importance metrics (raw, ratio, percent, and rank).
+#' - `da`: The raw dominance analysis object from [domir::domir()].
+#'
+#' @export
+kda_domir <- function(
+  model,
+  domir_args = list(
+    .set = NULL
+  )
+) {
+  # Define partial function for dominance analysis with user-specified arguments
+  partial_domir <- purrr::partial(
+    domir::domir,
+    .adj = FALSE,
+    .cdl = FALSE,
+    .cpt = FALSE,
+    .prg = FALSE,
+    !!!domir_args
+  )
+
+  # Get model infos
+  formula_obj <- insight::find_formula(model)$conditional
+  data <- insight::get_data(model)
+
+  # Define function to calculate R² for a given formula and data
+  partial_glm <- purrr::partial(glm, family = binomial())
+  reg_type <- if (insight::model_info(model)$is_binomial) partial_glm else lm
+  R2_wrapper <- function(formula, data) {
+    mod <- reg_type(formula, data = data)
+    r2 <- performance::r2(mod)$R2
+    return(r2)
+  }
+
+  # Run dominance analysis
+  da <- partial_domir(
+    .obj = formula_obj,
+    .fct = R2_wrapper,
+    data = data
+  )
+
+  out <- tibble::enframe(
+    da$General_Dominance,
+    name = "predictor",
+    value = "Importance_Raw"
+  ) |>
+    dplyr::mutate(
+      Importance_Ratio = as.numeric(da$Standardized),
+      Importance_Percent = Importance_Ratio * 100,
+      Importance_Rank = as.numeric(da$Ranks)
+    )
+
+  return(list(
+    out = out,
+    da = da
+  ))
+}
+
+
+#' Calculate Importance using Johnson's Relative Weights
+#'
+#' @description
+#' This function is a more efficient, though less precise, alternative to
+#' [kda_domir()]. While [kda_domir()] can become computationally intensive with
+#' more than ~15 predictors, this function scales better to larger models.
+#'
+#' For linear regression models, relative importance is computed from each
+#' predictor's contribution to model \(R^2\). For logistic regression models,
+#' relative importance is computed from each predictor's contribution to
+#' pseudo-\(R^2\).
+#'
+#' @seealso [kda_domir()]
+#' @param model A model object.
+#' @param correlation_method Optional. One of `"polychoric"` or `"pearson"`. Defaults to `"polychoric"` for binomial models and `"pearson"` otherwise.
+#'
+#' @returns
+#' A list containing:
+#' - `out`: A tibble with predictor importance metrics (raw, ratio, percent, and rank).
+#' - `jrw`: The Johnson's Relative Weights object.
+#'
+#' @export
+kda_jrw <- function(
+  model,
+  correlation_method = if (insight::model_info(model)$is_binomial) {
+    "polychoric"
+  } else {
+    "pearson"
+  }
+) {
+  # Get model data
+  data <- dplyr::bind_cols(
+    insight::get_data(model)[, insight::find_variables(model)$response],
+    insight::get_data(model)[, insight::find_variables(model)$conditional]
+  )
+
+  if (insight::model_info(model)$is_binomial) {
+    data <- data |>
+      dplyr::mutate(dplyr::across(dplyr::everything(), \(x) as.numeric(x) - 1))
+  }
+
+  # Calculate correlation matrix
+  corr <- correlation::correlation(
+    data,
+    method = correlation_method,
+    use = "pairwise.complete.obs"
+  )
+  corr_mat <- as.matrix(corr)
+
+  # Calculate Johnson's Relative Weights
+  jrw <- iopsych::relWt(
+    corr_mat,
+    y_col = 1,
+    x_col = 2:ncol(corr_mat)
+  )
+
+  out <- tibble::as_tibble(jrw$eps, rownames = "predictor") |>
+    dplyr::mutate(
+      Importance_Raw = EPS,
+      Importance_Ratio = EPS / sum(EPS),
+      Importance_Percent = Importance_Ratio * 100,
+      Importance_Rank = dplyr::row_number(dplyr::desc(EPS))
+    ) |>
+    # Make sure that Importance_Raw values sum up to the models R squared
+    # (important for glm models)
+    dplyr::mutate(
+      Importance_Raw = performance::r2(model)$R2 * Importance_Ratio
+    ) |>
+    dplyr::select(-EPS)
+
+  return(list(
+    out = out,
+    jrw = jrw
+  ))
+}
+
 kda_reg <- function(
   data,
   outcome,
