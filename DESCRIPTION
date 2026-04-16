@@ -17,6 +17,7 @@ Imports:
     domir (>= 1.2.0),
     dplyr,
     forcats,
+    GGally (>= 2.4.0),
     haven,
     insight,
     iopsych (>= 0.90.1),
