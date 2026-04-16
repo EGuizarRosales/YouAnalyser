@@ -334,9 +334,34 @@ kda_ipma <- function(importance_obj, performance_obj) {
 
 #---- Plotting Functions -------------------------------------------------------
 
-kda_forestPlot <- function(model, model_parameters, predictor_labels) {
+#' Create a forest plot for model coefficients
+#'
+#' @description
+#' A short description...
+#'
+#' @param model A fitted regression model.
+#' @param model_parameters_args Optional. A list of additional arguments passed to [parameters::model_parameters()].
+#'
+#' @returns
+#' A list with elements `d` (a data frame of plot data) and `p` (a ggplot2 object).
+#'
+#' @export
+kda_forestPlot <- function(model, model_parameters_args = list()) {
+  # Extract data used in model
+  data <- insight::get_data(model)
+  predictor_labels <- ya_get_predictor_labels(model)
+
+  # Define partial function for model parameters with user-specified arguments
+  partial_model_parameters <- purrr::partial(
+    parameters::model_parameters,
+    !!!model_parameters_args
+  )
+
+  # Get model parameters
+  m_params <- partial_model_parameters(model)
+
   # Create data frame for plotting
-  d_plot <- model_parameters |>
+  d_plot <- m_params |>
     dplyr::filter(Parameter != "(Intercept)") |>
     dplyr::mutate(
       coeff_label = paste0(
@@ -358,11 +383,8 @@ kda_forestPlot <- function(model, model_parameters, predictor_labels) {
 
   R2 <- as.numeric(performance::r2(model)$R2) * 100
   R2 <- paste0(ya_format_numeric(R2), "%")
-  N <- nrow(insight::get_data(model))
-  x_intercept <- dplyr::case_when(
-    attributes(model_parameters)$coefficient_name == "Odds Ratio" ~ 1,
-    TRUE ~ 0
-  )
+  N <- nrow(data)
+  x_intercept <- if (attr(m_params, "exponentiate")) 1 else 0
 
   p_plot <- d_plot |>
     ggplot2::ggplot(ggplot2::aes(x = Coefficient, y = label_withPred)) +
@@ -374,9 +396,7 @@ kda_forestPlot <- function(model, model_parameters, predictor_labels) {
     ggplot2::geom_pointrange(ggplot2::aes(
       xmin = CI_low,
       xmax = CI_high,
-      color = if (
-        attributes(model_parameters)$coefficient_name == "Odds Ratio"
-      ) {
+      color = if (x_intercept == 1) {
         Coefficient > 1
       } else {
         Coefficient > 0
@@ -400,7 +420,7 @@ kda_forestPlot <- function(model, model_parameters, predictor_labels) {
     ) +
     ggplot2::labs(
       title = "Forest Plot of Regression Results",
-      x = attributes(model_parameters)$coefficient_name,
+      x = attr(m_params, "coefficient_name"),
       subtitle = paste0("R² = ", R2, "; N = ", N),
       caption = paste0(
         "Outcome: ",
@@ -415,7 +435,10 @@ kda_forestPlot <- function(model, model_parameters, predictor_labels) {
       axis.title.y = ggplot2::element_blank()
     )
 
-  return(p_plot)
+  return(list(
+    d = d_plot,
+    p = p_plot
+  ))
 }
 
 #' Create KDA importance bar plot
