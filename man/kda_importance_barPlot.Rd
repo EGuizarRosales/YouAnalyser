@@ -4,7 +4,12 @@
 \alias{kda_importance_barPlot}
 \title{Create KDA importance bar plot}
 \usage{
-kda_importance_barPlot(model, importance_obj, color = yougov_colors[["Red 1"]])
+kda_importance_barPlot(
+  model,
+  importance_obj,
+  color = yougov_colors[["Red 1"]],
+  label_size = 3
+)
 }
 \arguments{
 \item{model}{A model object.}

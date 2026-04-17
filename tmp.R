@@ -24,3 +24,21 @@ bkw_bin_numeric_labelled <- sjlabelled::set_labels(
   labels = labels_bkw_bin
 )
 sjlabelled::get_labels(bkw_bin_numeric_labelled)
+
+
+tmp <- function(data) {
+  corr <- correlation::correlation(data)
+  p <- ggplotify::as.ggplot(
+    ~ corrplot::corrplot(as.matrix(corr)),
+    envir = environment()
+  )
+  return(p)
+}
+
+tmp(bkw_processed)
+
+myCor <- correlation::correlation(bkw_processed)
+
+ggplotify::as.ggplot(
+  ~ corrplot::corrplot(as.matrix(myCor))
+)

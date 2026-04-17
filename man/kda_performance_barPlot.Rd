@@ -7,7 +7,8 @@
 kda_performance_barPlot(
   model,
   performance_obj,
-  color = yougov_colors[["Red 1"]]
+  color = yougov_colors[["Red 1"]],
+  label_size = 3
 )
 }
 \arguments{

@@ -1,4 +1,4 @@
-kda_formula <- function(data, outcome, predictors) {
+kda_formula <- function(outcome, predictors) {
   as.formula(
     paste(outcome, "~", paste(predictors, collapse = " + "))
   )
@@ -457,7 +457,8 @@ kda_forestPlot <- function(model, model_parameters_args = list()) {
 kda_importance_barPlot <- function(
   model,
   importance_obj,
-  color = yougov_colors[["Red 1"]]
+  color = yougov_colors[["Red 1"]],
+  label_size = 3
 ) {
   # Extract data used in model
   data <- insight::get_data(model)
@@ -496,7 +497,7 @@ kda_importance_barPlot <- function(
       ggplot2::aes(label = label_geomLabel),
       hjust = 0.5,
       fill = "white",
-      size = 3
+      size = label_size
     ) +
     ggplot2::scale_x_continuous(labels = scales::label_percent()) +
     ggplot2::labs(
@@ -558,7 +559,8 @@ kda_importance_barPlot <- function(
 kda_performance_barPlot <- function(
   model,
   performance_obj,
-  color = yougov_colors[["Red 1"]]
+  color = yougov_colors[["Red 1"]],
+  label_size = 3
 ) {
   # Extract data used in model
   data <- insight::get_data(model)
@@ -590,7 +592,7 @@ kda_performance_barPlot <- function(
       ggplot2::aes(label = label_geomLabel),
       hjust = 0.5,
       fill = "white",
-      size = 3
+      size = label_size
     ) +
     ggplot2::scale_x_continuous(labels = scales::label_percent()) +
     ggplot2::labs(
@@ -662,7 +664,7 @@ kda_ipma_scatterPlot <- function(
   data <- insight::get_data(model)
   predictor_labels <- ya_get_predictor_labels(model) |>
     dplyr::mutate(predictor_nr = dplyr::row_number()) |>
-    dplyr::relocate(predictor_nr, .before = predictor)
+    dplyr::relocate(predictor_nr, .after = predictor)
 
   # Data for plot
   d_plot <- ipma_obj$out |>
@@ -746,76 +748,150 @@ kda_ipma_scatterPlot <- function(
 
 # ---- KDA Main Function -------------------------------------------------------
 
-kda_reg <- function(
-  data,
-  outcome,
-  predictors,
+#' Conduct KDA regression analysis
+#'
+#' @description
+#' A short description...
+#'
+#' @param data A data frame containing the outcome and predictors. Optional if `model` is provided.
+#' @param outcome A single string naming the outcome variable. Optional if `model` is provided.
+#' @param predictors A character vector of predictor variable names. Optional if `model` is provided.
+#' @param model A fitted regression model object. Optional if `data`, `outcome`, and `predictors` are provided.
+#' @param diagnostics A logical indicating whether to compute model diagnostics. Defaults to `FALSE`.
+#' @param importance_method One of `"auto"`, `"domir"`, `"jrw"`, or `"sumOfCoefficients"`. Defaults to `"auto"`.
+#' @param importance_barPlot_args Optional. A list of additional arguments passed to the importance bar plot function. See [YouAnalyser::kda_importance_barPlot()] for details..
+#' @param performance_barPlot_args Optional. A list of additional arguments passed to the performance bar plot function. See [YouAnalyser::kda_performance_barPlot()] for details..
+#' @param ipma_scatterPlot_args Optional. A list of additional arguments passed to the IPMA scatter plot function. See [YouAnalyser::kda_ipma_scatterPlot()] for details..
+#'
+#' @returns
+#' A list containing model results, importance measures, performance metrics, IPMA analysis, and associated plots. Errors if neither `model` nor all of `data`, `outcome`, and `predictors` are provided.
+#'
+#' @export
+kda_regression <- function(
+  data = NULL,
+  outcome = NULL,
+  predictors = NULL,
+  model = NULL,
   diagnostics = FALSE,
-  model_parameters_args = list()
+  importance_method = "auto",
+  importance_barPlot_args = list(),
+  performance_barPlot_args = list(),
+  ipma_scatterPlot_args = list()
 ) {
-  # Call KDA formula and model functions
-  formula_obj <- kda_formula(data, outcome, predictors)
-  model <- kda_model_reg(data, formula_obj)
+  # ---- 1. Preparation ----
 
-  # Extract model information
-  is_linear <- insight::model_info(model)$is_linear
-  is_binomial <- insight::model_info(model)$is_binomial
-
-  # Extract data used in model
-  model_data <- insight::get_data(model)
-  df_outcome <- model_data[outcome]
-  df_predictors <- model_data[predictors]
-
-  # outcome_is_binary <- length(unique(df_outcome[!is.na(df_outcome)])) == 2
-  # outcome_is_continuous <- length(unique(df_outcome[!is.na(df_outcome)])) > 2
-  # all_predictors_are_binary <- all(sapply(df_predictors, \(x) {
-  #   length(unique(x[!is.na(x)])) == 2
-  # }))
-  # all_predictors_are_continuous <- all(sapply(df_predictors, \(x) {
-  #   length(unique(x[!is.na(x)])) > 2
-  # }))
-
-  predictor_labels <- sjlabelled::get_label(df_predictors) |>
-    tibble::enframe(name = "predictor", value = "label") |>
-    dplyr::mutate(label_withPred = paste0(predictor, ": ", label))
-
-  # ---- 1. Regression Diagnostics ----
-  if (diagnostics) {
-    check_model <- performance::check_model(model)
-
-    cor_mat <- dplyr::bind_cols(df_outcome, df_predictors) |>
-      dplyr::mutate(dplyr::across(dplyr::everything(), as.numeric)) |>
-      cor(method = "pearson", use = "pairwise.complete.obs")
-    cor_plot <- function() {
-      corrplot::corrplot.mixed(
-        cor_mat,
-        lower = "pie",
-        upper = "number",
-        diag = "n",
-        tl.col = "black"
+  if (
+    is.null(model) && (is.null(data) || is.null(outcome) || is.null(predictors))
+  ) {
+    cli::cli_abort(
+      c(
+        "Insufficient arguments provided.",
+        "i" = "Either {.arg model} or all of {.arg data}, {.arg outcome}, and {.arg predictors} must be supplied.",
+        "x" = "{.arg model} is {.val NULL} and one or more of {.arg data}, {.arg outcome}, {.arg predictors} is missing."
       )
-    }
-    diagnostics <- list(
-      check_model = check_model,
-      cor_plot = cor_plot
     )
-  } else {
-    diagnostics <- NULL
   }
 
-  # --- 2. Inspect regression results ----
-  partial_model_parameters <- purrr::partial(
-    parameters::model_parameters,
-    !!!model_parameters_args
+  # Get or define model
+  if (!is.null(model)) {
+    model <- model
+  } else {
+    formula_obj <- kda_formula(outcome, predictors)
+    model <- kda_model_reg(data, formula_obj)
+  }
+
+  # Get model information
+  m_data <- insight::get_data(model)
+
+  # ---- 2. Inspect Model Results ----
+
+  m_parameters <- parameters::model_parameters(model) |>
+    dplyr::left_join(
+      ya_get_predictor_labels(model),
+      by = c("Parameter" = "predictor")
+    ) |>
+    dplyr::select(-label_withPred) |>
+    dplyr::select(Parameter, Label = label, dplyr::everything())
+
+  p_forestPlot <- kda_forestPlot(model)
+
+  model_obj = list(
+    model = model,
+    parameters = m_parameters
   )
 
-  m_parameters <- partial_model_parameters(model)
+  # ---- 3. Model Diagnostics ----
 
-  p_forestPlot <- kda_forestPlot(model, m_parameters, predictor_labels)
+  # Define model diagnostics if requested
+  if (diagnostics) {
+    p_correlation <- eda_correlation(
+      data = m_data,
+      correlation_type = "auto"
+    )
+    p_model_diagnostics <- performance::check_model(model)
+    p_diagnostics <- list(
+      correlation = p_correlation,
+      model_diagnostics = p_model_diagnostics
+    )
+  } else {
+    p_diagnostics <- NULL
+  }
+
+  # ---- 4. Variable Importance & Performance ----
+
+  # Importance
+  imp_obj <- if (importance_method == "auto") {
+    if (ncol(insight::get_predictors(model)) <= 15) {
+      kda_importance_domir(model)
+    } else {
+      kda_importance_jrw(model)
+    }
+  } else if (importance_method == "domir") {
+    kda_importance_domir(model)
+  } else if (importance_method == "jrw") {
+    kda_importance_jrw(model)
+  } else if (importance_method == "sumOfCoefficients") {
+    kda_importance_sumOfCoefficients(model)
+  } else {
+    cli::cli_abort(
+      c(
+        "Invalid {.arg importance_method}: {.val {importance_method}}.",
+        "i" = "Must be one of {.val auto}, {.val domir}, {.val jrw}, {.val sumOfCoefficients}."
+      )
+    )
+  }
+  p_imp <-
+    do.call(
+      kda_importance_barPlot,
+      c(list(model = model, imp_obj = imp_obj), importance_barPlot_args)
+    )
+
+  # Performance
+  perf_obj <- kda_performance(model)
+  p_perf <- do.call(
+    kda_performance_barPlot,
+    c(list(model = model, perf_obj = perf_obj), performance_barPlot_args)
+  )
+
+  # ---- 5. Importance-Performance Matrix Analysis ----
+
+  ipma_obj <- kda_ipma(imp_obj, perf_obj)
+  p_ipma <- do.call(
+    kda_ipma_scatterPlot,
+    c(list(model = model, ipma_obj = ipma_obj), ipma_scatterPlot_args)
+  )
 
   return(list(
-    model,
-    m_parameters,
-    p_forestPlot
+    model = model_obj,
+    importance = imp_obj,
+    performance = perf_obj,
+    ipma = ipma_obj,
+    plots = list(
+      diagnostics = p_diagnostics,
+      model_forestPlot = p_forestPlot,
+      importance_barPlot = p_imp,
+      performance_barPlot = p_perf,
+      ipma_scatterPlot = p_ipma
+    )
   ))
 }
