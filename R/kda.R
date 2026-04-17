@@ -9,10 +9,24 @@ kda_model_reg <- function(data, formula_obj) {
   y_non_missing <- y[!is.na(y)]
   is_binary <- length(unique(y_non_missing)) == 2
 
+  # Get the name of the data object from the calling environment
+  data_name <- deparse(substitute(data))
+
+  # Create the model with the actual data name
   if (is_binary) {
-    eval(bquote(glm(.(formula_obj), data = data, family = binomial())))
+    eval(
+      bquote(
+        glm(.(formula_obj), data = .(as.name(data_name)), family = binomial())
+      ),
+      envir = parent.frame()
+    )
   } else {
-    eval(bquote(lm(.(formula_obj), data = data)))
+    eval(
+      bquote(
+        lm(.(formula_obj), data = .(as.name(data_name)))
+      ),
+      envir = parent.frame()
+    )
   }
 }
 
@@ -82,7 +96,7 @@ kda_importance_domir <- function(
 
   # Get model infos
   formula_obj <- insight::find_formula(model)$conditional
-  data <- insight::get_data(model)
+  data <- insight::get_data(model, source = "mf")
 
   # Define function to calculate R² for a given formula and data
   partial_glm <- purrr::partial(glm, family = binomial())
@@ -152,8 +166,12 @@ kda_importance_jrw <- function(
 ) {
   # Get model data
   data <- dplyr::bind_cols(
-    insight::get_data(model)[, insight::find_variables(model)$response],
-    insight::get_data(model)[, insight::find_variables(model)$conditional]
+    insight::get_data(model, source = "mf")[,
+      insight::find_variables(model)$response
+    ],
+    insight::get_data(model, source = "mf")[,
+      insight::find_variables(model)$conditional
+    ]
   )
 
   if (insight::model_info(model)$is_binomial) {
@@ -348,7 +366,7 @@ kda_ipma <- function(importance_obj, performance_obj) {
 #' @export
 kda_forestPlot <- function(model, model_parameters_args = list()) {
   # Extract data used in model
-  data <- insight::get_data(model)
+  data <- insight::get_data(model, source = "mf")
   predictor_labels <- ya_get_predictor_labels(model)
 
   # Define partial function for model parameters with user-specified arguments
@@ -449,6 +467,7 @@ kda_forestPlot <- function(model, model_parameters_args = list()) {
 #' @param model A model object.
 #' @param importance_obj An importance object, i.e., the output from [YouAnalyser::kda_importance_sumOfCoefficients()], [YouAnalyser::kda_importance_domir()], or [YouAnalyser::kda_importance_jrw()].
 #' @param color Optional. A single string specifying the bar color.
+#' @param label_size Optional. A numeric value specifying the size of the labels on the bars. Defaults to 3.
 #'
 #' @returns
 #' A list with elements `d` (a data frame of plot data) and `p` (a ggplot2 object).
@@ -461,7 +480,7 @@ kda_importance_barPlot <- function(
   label_size = 3
 ) {
   # Extract data used in model
-  data <- insight::get_data(model)
+  data <- insight::get_data(model, source = "mf")
   predictor_labels <- ya_get_predictor_labels(model)
 
   # Data for plot
@@ -551,6 +570,7 @@ kda_importance_barPlot <- function(
 #' @param model A model object.
 #' @param performance_obj A performance object, i.e., the output from [YouAnalyser::kda_performance()].
 #' @param color Optional. A single string specifying the bar color.
+#' @param label_size Optional. A numeric value specifying the size of the labels on the bars. Defaults to 3.
 #'
 #' @returns
 #' A list with two elements: `d`, a data frame containing the plot data, and `p`, a ggplot2 object.
@@ -563,7 +583,7 @@ kda_performance_barPlot <- function(
   label_size = 3
 ) {
   # Extract data used in model
-  data <- insight::get_data(model)
+  data <- insight::get_data(model, source = "mf")
   predictor_labels <- ya_get_predictor_labels(model)
 
   # Data for plot
@@ -661,7 +681,7 @@ kda_ipma_scatterPlot <- function(
   )
 ) {
   # Extract data used in model
-  data <- insight::get_data(model)
+  data <- insight::get_data(model, source = "mf")
   predictor_labels <- ya_get_predictor_labels(model) |>
     dplyr::mutate(predictor_nr = dplyr::row_number()) |>
     dplyr::relocate(predictor_nr, .after = predictor)
@@ -801,7 +821,7 @@ kda_regression <- function(
   }
 
   # Get model information
-  m_data <- insight::get_data(model)
+  m_data <- insight::get_data(model, source = "mf")
 
   # ---- 2. Inspect Model Results ----
 
@@ -863,14 +883,14 @@ kda_regression <- function(
   p_imp <-
     do.call(
       kda_importance_barPlot,
-      c(list(model = model, imp_obj = imp_obj), importance_barPlot_args)
+      c(list(model = model, importance_obj = imp_obj), importance_barPlot_args)
     )
 
   # Performance
   perf_obj <- kda_performance(model)
   p_perf <- do.call(
     kda_performance_barPlot,
-    c(list(model = model, perf_obj = perf_obj), performance_barPlot_args)
+    c(list(model = model, performance_obj = perf_obj), performance_barPlot_args)
   )
 
   # ---- 5. Importance-Performance Matrix Analysis ----

@@ -17,14 +17,17 @@ Imports:
     domir (>= 1.2.0),
     dplyr,
     forcats,
+    fs (>= 2.0.1),
     GGally (>= 2.4.0),
     haven,
     insight,
     iopsych (>= 0.90.1),
     parameters,
     performance,
+    psych (>= 2.6.3),
     purrr,
     rlang,
+    showtext (>= 0.9.8),
     sjlabelled,
     stringr,
     summarytools,
@@ -32,3 +35,7 @@ Imports:
 Depends: 
     R (>= 3.5)
 LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
