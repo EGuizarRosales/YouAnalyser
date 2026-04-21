@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>What the Package Does (One Line, Title Case) • YouAnalyser</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -13,6 +18,7 @@
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="What the Package Does (One Line, Title Case)">
 <meta name="description" content="What the package does (one paragraph).">
 <meta property="og:description" content="What the package does (one paragraph).">
+<meta property="og:image" content="https://eguizarrosales.github.io/YouAnalyser/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -52,8 +58,63 @@
   </div>
 </nav><div class="container template-home">
 <div class="row">
-  <main id="main" class="col-md-9">
-What the package does (one paragraph).
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header">
+<img src="logo.png" class="logo" alt=""><h1 id="youanalyser-">YouAnalyser 
+<a class="anchor" aria-label="anchor" href="#youanalyser-"></a>
+</h1>
+</div>
+<!-- badges: start -->
+<!-- badges: end -->
+<p>The goal of YouAnalyser is to provide Analytics Partners of YouGov DACH with a convenient and standardized way to perform core analyses on survey data, such as Key Driver Analysis (KDA). The package includes functions for data preprocessing, exploratory data analysis (EDA), and KDA (more to come), all designed to work seamlessly with survey data in the <code><a href="https://haven.tidyverse.org/reference/labelled.html" class="external-link">haven::labelled()</a></code> format. By using YouAnalyser, you can save time and ensure consistency in your analyses across different projects.</p>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>You can install the development version of YouAnalyser from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"EGuizarRosales/YouAnalyser"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h2>
+<p>This is a basic example which shows you how to conduct a End-2-End Key Driver Analysis using the <code>YouAnalyser</code> package. For a more detailed walkthrough, please refer to the vignettes included in the package, which provide step-by-step guides on how to use the various functions for KDA:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EGuizarRosales/YouAnalyser" class="external-link">YouAnalyser</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org" class="external-link">haven</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kda_regression.html">kda_regression</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">bkw_processed</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="st">"F600"</span>,</span>
+<span>  predictors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>,</span>
+<span>  diagnostics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  importance_method <span class="op">=</span> <span class="st">"auto"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: '.cpt' and '.cdl' are depreciated arguments to 'domir' as of version 1.3.</span></span>
+<span><span class="co">#&gt; Use '.cdl' and '.cpt' as arguments to 'print()' instead.</span></span></code></pre></div>
+<p><code>res</code> is a list containing the results of the KDA, including the fitted regression model, variable importance and performance measures, and plots. The most important outcome is the “Importance Performance Map Analysis” (IPMA) plot, which can be accessed like this:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">p</span></span></code></pre></div>
+<p><img src="reference/figures/README-res_plots_ipma_p-1.png" width="100%"></p>
+<p>The data visualized in this plot can be accessed like this:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">res</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">d</span></span>
+<span><span class="co">#&gt; # A tibble: 8 × 13</span></span>
+<span><span class="co">#&gt;   predictor Importance_Raw Importance_Ratio Importance_Percent Importance_Rank</span></span>
+<span><span class="co">#&gt;   &lt;chr&gt;              &lt;dbl&gt;            &lt;dbl&gt;              &lt;dbl&gt;           &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1 F800_1            0.0259           0.0722               7.22               8</span></span>
+<span><span class="co">#&gt; 2 F800_2            0.0498           0.139               13.9                2</span></span>
+<span><span class="co">#&gt; 3 F800_3            0.0456           0.127               12.7                4</span></span>
+<span><span class="co">#&gt; 4 F800_4            0.0590           0.165               16.5                1</span></span>
+<span><span class="co">#&gt; 5 F800_5            0.0449           0.125               12.5                5</span></span>
+<span><span class="co">#&gt; 6 F800_6            0.0405           0.113               11.3                7</span></span>
+<span><span class="co">#&gt; 7 F800_7            0.0442           0.123               12.3                6</span></span>
+<span><span class="co">#&gt; 8 F800_8            0.0487           0.136               13.6                3</span></span>
+<span><span class="co">#&gt; # ℹ 8 more variables: Performance_Raw &lt;dbl&gt;, Performance_Ratio &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   Performance_Percent &lt;dbl&gt;, Performance_Rank &lt;int&gt;, recommendation &lt;fct&gt;,</span></span>
+<span><span class="co">#&gt; #   predictor_nr &lt;int&gt;, label &lt;chr&gt;, label_withPred &lt;chr&gt;</span></span></code></pre></div>
+</div>
+</div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
@@ -80,7 +141,7 @@ What the package does (one paragraph).
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>First Last <br><small class="roles"> Author, maintainer </small>   </li>
+<li>Emmanuel Guizar Rosales <br><small class="roles"> Author, maintainer </small>   </li>
 </ul>
 </div>
 
@@ -91,7 +152,7 @@ What the package does (one paragraph).
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by First Last.</p>
+  <p>Developed by Emmanuel Guizar Rosales.</p>
 </div>
 
 <div class="pkgdown-footer-right">

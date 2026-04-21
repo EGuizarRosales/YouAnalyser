@@ -49,17 +49,15 @@ A list containing:
 ``` r
 # Fit a model
 m <- lm(F600 ~ ., data = bkw_processed)
-#> Error in vec_arith("-", e1, e2): <haven_labelled> - <haven_labelled> is not permitted
 # Fit importance and performance objects
 importance_obj <- kda_importance_jrw(m)
-#> Error: object 'm' not found
+#> New names:
+#> • `` -> `...1`
 performance_obj <- kda_performance(m)
-#> Error: object 'm' not found
 ipma_obj <- kda_ipma(importance_obj, performance_obj)
-#> Error: object 'importance_obj' not found
 # Create IPMA scatter plot
 ipma_plot <- kda_ipma_scatterPlot(m, ipma_obj)
-#> Error: object 'm' not found
+#> Error in loadNamespace(x): there is no package called ‘ggrepel’
 # Access IPMA plot
 print(ipma_plot$p)
 #> Error: object 'ipma_plot' not found

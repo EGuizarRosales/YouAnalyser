@@ -32,8 +32,26 @@ browser.
 # Inspect a subset of variables in the data
 eda_summary(bkw_raw, variables = c("F600", "F800_1", "F800_2"))
 #> Warning: no DISPLAY variable so Tk is not available
-#> Error in as.character(x): Can't convert `x` <haven_labelled> to <character>.
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Output file written: /tmp/Rtmp8reUJm/file1c11279de4e0.html
 # Inspect all variables in the data
 eda_summary(bkw_processed)
-#> Error in as.character(x): Can't convert `x` <haven_labelled> to <character>.
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Warning: unable to open connection to X11 display ''
+#> Output file written: /tmp/Rtmp8reUJm/file1c1149f38174.html
 ```
