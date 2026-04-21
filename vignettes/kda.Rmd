@@ -6,7 +6,7 @@ output:
     toc_depth: 3
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Key Driver Analysis}
+  %\VignetteIndexEntry{Key Driver Analysis: Vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

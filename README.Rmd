@@ -1,0 +1,61 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# YouAnalyser <a href="https://eguizarrosales.github.io/YouAnalyser/"><img src="man/figures/logo.png" align="right" height="139" alt="YouAnalyser website" /></a>
+
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of YouAnalyser is to provide Analytics Partners of YouGov DACH with a convenient and standardized way to perform core analyses on survey data, such as Key Driver Analysis (KDA). The package includes functions for data preprocessing, exploratory data analysis (EDA), and KDA (more to come), all designed to work seamlessly with survey data in the `haven::labelled()` format. By using YouAnalyser, you can save time and ensure consistency in your analyses across different projects.
+
+## Installation
+
+You can install the development version of YouAnalyser from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("EGuizarRosales/YouAnalyser")
+```
+
+## Example
+
+This is a basic example which shows you how to conduct a End-2-End Key Driver Analysis using the `YouAnalyser` package. For a more detailed walkthrough, please refer to the vignettes included in the package, which provide step-by-step guides on how to use the various functions for KDA:
+
+```{r kda_regression_example}
+library(YouAnalyser)
+library(haven)
+
+res <- kda_regression(
+  data = bkw_processed,
+  outcome = "F600",
+  predictors = paste0("F800_", 1:8),
+  diagnostics = TRUE,
+  importance_method = "auto"
+)
+```
+
+`res` is a list containing the results of the KDA, including the fitted regression model, variable importance and performance measures, and plots. The most important outcome is the "Importance Performance Map Analysis" (IPMA) plot, which can be accessed like this:
+
+```{r res_plots_ipma_p, fig.width = 12, fig.height = 12, out.width = "100%"}
+res$plots$ipma_scatterPlot$p
+```
+
+The data visualized in this plot can be accessed like this:
+
+```{r res_plots_ipma_d, fig.width = 12, fig.height = 12, out.width = "100%"}
+res$plots$ipma_scatterPlot$d
+```
+
