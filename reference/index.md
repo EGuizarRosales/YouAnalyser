@@ -36,3 +36,5 @@
   : Create a KDA performance bar plot
 - [`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
   : Conduct KDA regression analysis
+- [`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md)
+  : Save a plot to JPEG

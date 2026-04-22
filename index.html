@@ -76,9 +76,9 @@
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"EGuizarRosales/YouAnalyser"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="key-driver-analysis-kda">Key Driver Analysis (KDA)<a class="anchor" aria-label="anchor" href="#key-driver-analysis-kda"></a>
 </h2>
-<p>This is a basic example which shows you how to conduct a End-2-End Key Driver Analysis using the <code>YouAnalyser</code> package. For a more detailed walkthrough, please refer to the vignettes included in the package, which provide step-by-step guides on how to use the various functions for KDA:</p>
+<p>This is a basic example which shows you how to conduct a End-2-End Key Driver Analysis using the YouAnalyser package. For a more detailed walkthrough, please refer to the vignettes included in the package (use <code><a href="articles/kda.html">vignette("kda", package = "YouAnalyser")</a></code>), which provide step-by-step guides on how to use the various functions for KDA.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EGuizarRosales/YouAnalyser" class="external-link">YouAnalyser</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org" class="external-link">haven</a></span><span class="op">)</span></span>
@@ -95,24 +95,46 @@
 <p><code>res</code> is a list containing the results of the KDA, including the fitted regression model, variable importance and performance measures, and plots. The most important outcome is the “Importance Performance Map Analysis” (IPMA) plot, which can be accessed like this:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">p</span></span></code></pre></div>
-<p><img src="reference/figures/README-res_plots_ipma_p-1.png" width="100%"></p>
-<p>The data visualized in this plot can be accessed like this:</p>
+<p>If you would like to save the plot, you can use the convenience functions <code>ya_choose_file_path()</code>, which will let you choose a directory to save the provided file name interactively, and <code><a href="reference/ya_save_plot.html">ya_save_plot()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu">ya_choose_file_path</span><span class="op">(</span><span class="st">"ipma_plot.jpeg"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/ya_save_plot.html">ya_save_plot</a></span><span class="op">(</span></span>
+<span>  plot <span class="op">=</span> <span class="va">res</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">p</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="va">file_path</span>,</span>
+<span>  width <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>  height <span class="op">=</span> <span class="fl">20</span>,</span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This will result in the following plot being saved to your chosen directory:</p>
+<figure><img src="reference/figures/ipma_scatterPlot.jpeg" alt="IPMA Scatter Plot"><figcaption aria-hidden="true">
+IPMA Scatter Plot
+</figcaption></figure><p>The data visualized in this plot can be accessed like this:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">d</span></span>
-<span><span class="co">#&gt; # A tibble: 8 × 13</span></span>
-<span><span class="co">#&gt;   predictor Importance_Raw Importance_Ratio Importance_Percent Importance_Rank</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;              &lt;dbl&gt;            &lt;dbl&gt;              &lt;dbl&gt;           &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 F800_1            0.0259           0.0722               7.22               8</span></span>
-<span><span class="co">#&gt; 2 F800_2            0.0498           0.139               13.9                2</span></span>
-<span><span class="co">#&gt; 3 F800_3            0.0456           0.127               12.7                4</span></span>
-<span><span class="co">#&gt; 4 F800_4            0.0590           0.165               16.5                1</span></span>
-<span><span class="co">#&gt; 5 F800_5            0.0449           0.125               12.5                5</span></span>
-<span><span class="co">#&gt; 6 F800_6            0.0405           0.113               11.3                7</span></span>
-<span><span class="co">#&gt; 7 F800_7            0.0442           0.123               12.3                6</span></span>
-<span><span class="co">#&gt; 8 F800_8            0.0487           0.136               13.6                3</span></span>
-<span><span class="co">#&gt; # ℹ 8 more variables: Performance_Raw &lt;dbl&gt;, Performance_Ratio &lt;dbl&gt;,</span></span>
-<span><span class="co">#&gt; #   Performance_Percent &lt;dbl&gt;, Performance_Rank &lt;int&gt;, recommendation &lt;fct&gt;,</span></span>
-<span><span class="co">#&gt; #   predictor_nr &lt;int&gt;, label &lt;chr&gt;, label_withPred &lt;chr&gt;</span></span></code></pre></div>
+<span><span class="co">#&gt; # A tibble: 8 × 12</span></span>
+<span><span class="co">#&gt;   predictor_nr predictor label    recommendation Importance_Raw Importance_Ratio</span></span>
+<span><span class="co">#&gt;          &lt;int&gt; &lt;chr&gt;     &lt;chr&gt;    &lt;fct&gt;                   &lt;dbl&gt;            &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt; 1            1 F800_1    Sicherh… Possible over…         0.0259           0.0722</span></span>
+<span><span class="co">#&gt; 2            2 F800_2    Karrier… Concentrate h…         0.0498           0.139 </span></span>
+<span><span class="co">#&gt; 3            3 F800_3    Sinnvol… Keep up the g…         0.0456           0.127 </span></span>
+<span><span class="co">#&gt; 4            4 F800_4    Gute Zu… Concentrate h…         0.0590           0.165 </span></span>
+<span><span class="co">#&gt; 5            5 F800_5    Vereinb… Concentrate h…         0.0449           0.125 </span></span>
+<span><span class="co">#&gt; 6            6 F800_6    Moderne… Possible over…         0.0405           0.113 </span></span>
+<span><span class="co">#&gt; 7            7 F800_7    Attrakt… Low priority           0.0442           0.123 </span></span>
+<span><span class="co">#&gt; 8            8 F800_8    Gute Fü… Concentrate h…         0.0487           0.136 </span></span>
+<span><span class="co">#&gt; # ℹ 6 more variables: Importance_Percent &lt;dbl&gt;, Importance_Rank &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   Performance_Raw &lt;dbl&gt;, Performance_Ratio &lt;dbl&gt;, Performance_Percent &lt;dbl&gt;,</span></span>
+<span><span class="co">#&gt; #   Performance_Rank &lt;int&gt;</span></span></code></pre></div>
+<p>There are a lot more plots and outputs available from <code>res</code>, so you are encouraged to explore the object and check out the vignettes for more details on how to use the package for KDA. Below you find all available plots in the <code>res</code> object:</p>
+<p><code>res$plots$diagnostics_correlation</code></p>
+<p><img src="reference/figures/diagnostics_corelation.jpeg"></p>
+<p><code>res$plots$diagnostics_model</code></p>
+<p><img src="reference/figures/diagnostics_model.jpeg"></p>
+<p><code>res$plots$model_forestPlot</code></p>
+<p><img src="reference/figures/model_forestPlot.jpeg"></p>
+<p><code>res$plots$importance_barPlot</code></p>
+<p><img src="reference/figures/importance_barPlot.jpeg"></p>
+<p><code>res$plots$performance_barPlot</code></p>
+<p><img src="reference/figures/performance_barPlot.jpeg"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

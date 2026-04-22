@@ -57,8 +57,6 @@ performance_obj <- kda_performance(m)
 ipma_obj <- kda_ipma(importance_obj, performance_obj)
 # Create IPMA scatter plot
 ipma_plot <- kda_ipma_scatterPlot(m, ipma_obj)
-#> Error in loadNamespace(x): there is no package called ‘ggrepel’
 # Access IPMA plot
 print(ipma_plot$p)
-#> Error: object 'ipma_plot' not found
 ```

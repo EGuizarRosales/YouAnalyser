@@ -31,6 +31,11 @@ kda_importance_barPlot(
 
   Optional. A single string specifying the bar color.
 
+- label_size:
+
+  Optional. A numeric value specifying the size of the labels on the
+  bars. Defaults to 3.
+
 ## Value
 
 A list with elements `d` (a data frame of plot data) and `p` (a ggplot2

@@ -28,6 +28,11 @@ kda_performance_barPlot(
 
   Optional. A single string specifying the bar color.
 
+- label_size:
+
+  Optional. A numeric value specifying the size of the labels on the
+  bars. Defaults to 3.
+
 ## Value
 
 A list with two elements: `d`, a data frame containing the plot data,
