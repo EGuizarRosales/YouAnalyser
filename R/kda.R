@@ -651,6 +651,7 @@ kda_performance_barPlot <- function(
 #' @param ipma_obj An IPMA results object, i.e., the output from [YouAnalyser::kda_ipma()].
 #' @param show_labels Optional. A logical indicating whether to display predictor labels on the plot. Defaults to `TRUE`.
 #' @param quadrant_colors Optional. A named character vector of colors for the four quadrants. Defaults to a set of predefined colors.
+#' @param geom_point_size Optional. A numeric value specifying the size of the points on the scatter plot. Defaults to 8.
 #'
 #' @returns
 #' A list containing:
@@ -678,7 +679,8 @@ kda_ipma_scatterPlot <- function(
     "Keep up the good work" = yougov_colors[["Purple 1"]],
     "Possible overkill" = yougov_colors[["Teal 1"]],
     "Low priority" = yougov_colors[["Blue 1"]]
-  )
+  ),
+  geom_point_size = 6
 ) {
   # Extract data used in model
   data <- insight::get_data(model, source = "mf")
@@ -710,17 +712,18 @@ kda_ipma_scatterPlot <- function(
           size = 3,
           box.padding = 0.5,
           point.padding = 0.5,
+          min.segment.length = 0,
           show.legend = FALSE
         )
       }
     } +
     ggplot2::geom_point(
       ggplot2::aes(color = recommendation),
-      size = 3
+      size = geom_point_size
     ) +
     ggplot2::geom_text(
       ggplot2::aes(label = predictor_nr),
-      size = 3,
+      size = geom_point_size - 2,
       color = "white"
     ) +
     ggplot2::scale_x_continuous(labels = scales::label_percent()) +
@@ -760,8 +763,19 @@ kda_ipma_scatterPlot <- function(
     ggplot2::theme_classic() +
     ggplot2::theme(legend.position = "bottom")
 
+  # Select only relevant data for output
+  d <- d_plot |>
+    dplyr::select(
+      predictor_nr,
+      predictor,
+      label,
+      recommendation,
+      starts_with("Importance"),
+      starts_with("Performance")
+    )
+
   return(list(
-    d = d_plot,
+    d = d,
     p = p_plot
   ))
 }
@@ -849,12 +863,12 @@ kda_regression <- function(
       correlation_type = "auto"
     )
     p_model_diagnostics <- performance::check_model(model)
-    p_diagnostics <- list(
-      correlation = p_correlation,
-      model_diagnostics = p_model_diagnostics
-    )
+    diagnostics_corelation <- p_correlation
+    diagnostics_model <- p_model_diagnostics
+    diagnostics_model$p <- diagnostics_model
   } else {
-    p_diagnostics <- NULL
+    diagnostics_corelation <- NULL
+    diagnostics_model <- NULL
   }
 
   # ---- 4. Variable Importance & Performance ----
@@ -907,7 +921,8 @@ kda_regression <- function(
     performance = perf_obj,
     ipma = ipma_obj,
     plots = list(
-      diagnostics = p_diagnostics,
+      diagnostics_corelation = diagnostics_corelation,
+      diagnostics_model = diagnostics_model,
       model_forestPlot = p_forestPlot,
       importance_barPlot = p_imp,
       performance_barPlot = p_perf,

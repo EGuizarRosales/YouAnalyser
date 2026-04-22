@@ -18,8 +18,10 @@ A temporary html summary table of the data, which is displayed in the browser.
 Generate a summary table of the data, including variable types, missing values, and basic statistics. The summary is displayed in the browser for easy inspection.
 }
 \examples{
+\dontshow{if (requireNamespace("haven", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Inspect a subset of variables in the data
 eda_summary(bkw_raw, variables = c("F600", "F800_1", "F800_2"))
 # Inspect all variables in the data
 eda_summary(bkw_processed)
+\dontshow{\}) # examplesIf}
 }

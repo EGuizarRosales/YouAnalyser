@@ -30,9 +30,9 @@ You can install the development version of YouAnalyser from [GitHub](https://git
 pak::pak("EGuizarRosales/YouAnalyser")
 ```
 
-## Example
+## Key Driver Analysis (KDA)
 
-This is a basic example which shows you how to conduct a End-2-End Key Driver Analysis using the `YouAnalyser` package. For a more detailed walkthrough, please refer to the vignettes included in the package, which provide step-by-step guides on how to use the various functions for KDA:
+This is a basic example which shows you how to conduct a End-2-End Key Driver Analysis using the YouAnalyser package. For a more detailed walkthrough, please refer to the vignettes included in the package (use `vignette("kda", package = "YouAnalyser")`), which provide step-by-step guides on how to use the various functions for KDA.
 
 ```{r kda_regression_example}
 library(YouAnalyser)
@@ -49,9 +49,44 @@ res <- kda_regression(
 
 `res` is a list containing the results of the KDA, including the fitted regression model, variable importance and performance measures, and plots. The most important outcome is the "Importance Performance Map Analysis" (IPMA) plot, which can be accessed like this:
 
-```{r res_plots_ipma_p, fig.width = 12, fig.height = 12, out.width = "100%"}
+```{r res_plots_ipma_p, fig.width = 12, fig.height = 12, out.width = "100%", eval = FALSE}
 res$plots$ipma_scatterPlot$p
 ```
+
+If you would like to save the plot, you can use the convenience functions `ya_choose_file_path()`, which will let you choose a directory to save the provided file name interactively, and `ya_save_plot()`:
+
+```{r save_available_kda_plots, include = FALSE}
+purrr::iwalk(
+  .x = res$plots,
+  .f = \(x, name) {
+    ya_save_plot(
+      plot = x$p,
+      file_path = paste0(
+        "./man/figures/",
+        name,
+        ".jpeg"
+      ),
+      width = 30,
+      height = 20,
+      verbose = FALSE
+    )
+  }
+)
+```
+
+```{r save_ipma_plot, eval = FALSE}
+file_path <- ya_choose_file_path("ipma_plot.jpeg")
+ya_save_plot(
+  plot = res$plots$ipma_scatterPlot$p,
+  file_path = file_path,
+  width = 30,
+  height = 20,
+)
+```
+
+This will result in the following plot being saved to your chosen directory:
+
+![IPMA Scatter Plot](man/figures/ipma_scatterPlot.jpeg)
 
 The data visualized in this plot can be accessed like this:
 
@@ -59,3 +94,24 @@ The data visualized in this plot can be accessed like this:
 res$plots$ipma_scatterPlot$d
 ```
 
+There are a lot more plots and outputs available from `res`, so you are encouraged to explore the object and check out the vignettes for more details on how to use the package for KDA. Below you find all available plots in the `res` object:
+
+`res$plots$diagnostics_correlation`
+
+![](man/figures/diagnostics_corelation.jpeg)
+
+`res$plots$diagnostics_model`
+
+![](man/figures/diagnostics_model.jpeg)
+
+`res$plots$model_forestPlot`
+
+![](man/figures/model_forestPlot.jpeg)
+
+`res$plots$importance_barPlot`
+
+![](man/figures/importance_barPlot.jpeg)
+
+`res$plots$performance_barPlot`
+
+![](man/figures/performance_barPlot.jpeg)

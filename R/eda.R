@@ -9,7 +9,7 @@
 #' @returns A temporary html summary table of the data, which is displayed in the browser.
 #'
 #' @export
-#' @examples
+#' @examplesIf requireNamespace("haven", quietly = TRUE)
 #' # Inspect a subset of variables in the data
 #' eda_summary(bkw_raw, variables = c("F600", "F800_1", "F800_2"))
 #' # Inspect all variables in the data

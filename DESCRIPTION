@@ -19,6 +19,7 @@ Imports:
     forcats,
     fs (>= 2.0.1),
     GGally (>= 2.4.0),
+    ggrepel (>= 0.9.6),
     haven,
     insight,
     iopsych (>= 0.90.1),

@@ -17,6 +17,8 @@ kda_importance_barPlot(
 \item{importance_obj}{An importance object, i.e., the output from \code{\link[=kda_importance_sumOfCoefficients]{kda_importance_sumOfCoefficients()}}, \code{\link[=kda_importance_domir]{kda_importance_domir()}}, or \code{\link[=kda_importance_jrw]{kda_importance_jrw()}}.}
 
 \item{color}{Optional. A single string specifying the bar color.}
+
+\item{label_size}{Optional. A numeric value specifying the size of the labels on the bars. Defaults to 3.}
 }
 \value{
 A list with elements \code{d} (a data frame of plot data) and \code{p} (a ggplot2 object).
