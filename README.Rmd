@@ -80,7 +80,7 @@ ya_save_plot(
   plot = res$plots$ipma_scatterPlot$p,
   file_path = file_path,
   width = 30,
-  height = 20,
+  height = 20
 )
 ```
 
@@ -93,6 +93,21 @@ The data visualized in this plot can be accessed like this:
 ```{r res_plots_ipma_d, fig.width = 12, fig.height = 12, out.width = "100%"}
 res$plots$ipma_scatterPlot$d
 ```
+
+We can also export this data to an Excel file that can be used for reporting in a PowerPoint report:
+
+```{r export_ipma_data, eval = FALSE}
+file_path <- ya_choose_file_path("ipma_data.xlsx")
+ya_save_data_for_chart(
+  ipma_scatterPlot_data = res$plots$ipma_scatterPlot$d,
+  file_path = file_path
+)
+```
+
+This will result in a file that looks like this when opened in Excel:
+
+![Screenshot of ipma_data.xlsx](man/figures/ipma_data_screenshot.png)
+
 
 There are a lot more plots and outputs available from `res`, so you are encouraged to explore the object and check out the vignettes for more details on how to use the package for KDA. Below you find all available plots in the `res` object:
 

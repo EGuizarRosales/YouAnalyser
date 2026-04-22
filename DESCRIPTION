@@ -23,6 +23,7 @@ Imports:
     haven,
     insight,
     iopsych (>= 0.90.1),
+    openxlsx (>= 4.2.8.1),
     parameters,
     performance,
     psych (>= 2.6.3),

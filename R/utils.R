@@ -27,9 +27,19 @@ ya_get_predictor_labels <- function(model) {
 #' @examplesIf interactive()
 #' ya_choose_file_path("my_plot.jpg")
 ya_choose_file_path <- function(file_name) {
-  choose.dir() |>
-    normalizePath(winslash = "/", mustWork = TRUE) |>
-    file.path(file_name)
+  # Get directory path
+  dir_path <- choose.dir()
+
+  # Check if directory selection was cancelled or failed
+  if (is.na(dir_path) || is.null(dir_path)) {
+    stop("Directory selection was cancelled or failed.", call. = FALSE)
+  }
+
+  # Normalize path and combine with filename
+  file.path(
+    normalizePath(dir_path, winslash = "/", mustWork = TRUE),
+    file_name
+  )
 }
 
 #' Save a plot to JPEG
@@ -93,6 +103,52 @@ ya_save_plot <- function(
   if (use_showtext) {
     showtext::showtext_auto(FALSE)
   }
+}
+
+#' Save data for chart in Excel template
+#'
+#' @param ipma_scatterPlot_data The data frame containing the data used for the IPMA scatter plot. This should be the output of the `ipma_scatterPlot` element in the list returned by `kda_regression()`.
+#' @param file_path A single string specifying the file path where the Excel file will be saved.
+#'
+#' @returns NULL, invisibly. The data is saved to an Excel file at the specified path, using a predefined template. If the directory does not exist, it is created.
+#'
+#' @export
+ya_save_data_for_chart <- function(ipma_scatterPlot_data, file_path) {
+  # Select relevant columns for the chart
+  data_for_chart <- ipma_scatterPlot_data |>
+    dplyr::select(
+      predictor_nr,
+      label,
+      Importance_Ratio,
+      Performance_Ratio
+    )
+
+  # Read in the xlsx template
+  template_wb <- ya_example("kda_chart_template.xlsx") |>
+    openxlsx::loadWorkbook()
+
+  # Write the data to the template
+  openxlsx::writeData(
+    template_wb,
+    sheet = "Sheet1",
+    x = data_for_chart,
+    startCol = 1,
+    startRow = 5,
+    colNames = FALSE
+  )
+
+  # Save the filled template to the specified file path
+  openxlsx::saveWorkbook(
+    template_wb,
+    file_path,
+    overwrite = TRUE
+  )
+
+  cli::cli_inform(
+    c(
+      "v" = "Data saved to {.path {fs::path_norm(file_path)}}"
+    )
+  )
 }
 
 # Re-exports -------------------------------------------------------------------

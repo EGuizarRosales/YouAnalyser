@@ -67,7 +67,7 @@ ya_save_plot(
   plot = res$plots$ipma_scatterPlot$p,
   file_path = file_path,
   width = 30,
-  height = 20,
+  height = 20
 )
 ```
 
@@ -98,6 +98,25 @@ res$plots$ipma_scatterPlot$d
 #> #   Performance_Raw <dbl>, Performance_Ratio <dbl>, Performance_Percent <dbl>,
 #> #   Performance_Rank <int>
 ```
+
+We can also export this data to an Excel file that can be used for
+reporting in a PowerPoint report:
+
+``` r
+file_path <- ya_choose_file_path("ipma_data.xlsx")
+ya_save_data_for_chart(
+  ipma_scatterPlot_data = res$plots$ipma_scatterPlot$d,
+  file_path = file_path
+)
+```
+
+This will result in a file that looks like this when opened in Excel:
+
+<figure>
+<img src="man/figures/ipma_data_screenshot.png"
+alt="Screenshot of ipma_data.xlsx" />
+<figcaption aria-hidden="true">Screenshot of ipma_data.xlsx</figcaption>
+</figure>
 
 There are a lot more plots and outputs available from `res`, so you are
 encouraged to explore the object and check out the vignettes for more

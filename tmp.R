@@ -45,24 +45,29 @@ ggplotify::as.ggplot(
 
 ################################################################################
 
-# Sticker
-img <- normalizePath(file.choose(), winslash = "/", mustWork = TRUE)
-s <- hexSticker::sticker(
-  img,
-  s_x = 1,
-  s_y = 0.75,
-  s_width = 0.3,
-  s_height = 0.4,
-  package = "YouAnalyser",
-  p_x = 1,
-  p_y = 1.4,
-  p_size = 18,
-  p_color = "white",
-  h_size = 1.2,
-  h_fill = yougov_colors[["Red 1"]],
-  h_color = "white",
-  url = "eguizarrosales.github.io/YouAnalyser/",
-  u_size = 3,
-  u_color = "white",
-  filename = stringr::str_replace(img, ".png", "_sticker.png")
+res <- kda_regression(
+  data = bkw_processed,
+  outcome = "F600",
+  predictors = paste0("F800_", 1:8),
+  diagnostics = TRUE,
+  importance_method = "auto"
+)
+
+res$plots$ipma_scatterPlot$d |>
+  rio::export(file = ya_choose_file_path("myData.xlsx"))
+
+wb <- openxlsx::loadWorkbook("C:/Users/EGU/Downloads/myTemplate.xlsx")
+
+openxlsx::writeData(
+  wb,
+  sheet = "Sheet1",
+  x = res$plots$ipma_scatterPlot$d$predictor_nr,
+  startCol = 1,
+  startRow = 5,
+)
+
+openxlsx::saveWorkbook(
+  wb,
+  "C:/Users/EGU/Downloads/myTemplate_filled.xlsx",
+  overwrite = TRUE
 )
