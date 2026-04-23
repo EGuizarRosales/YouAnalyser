@@ -2,3 +2,53 @@ url: https://eguizarrosales.github.io/YouAnalyser/
 template:
   bootstrap: 5
 
+reference:
+- title: Data Processing & Exploratory Data Analysis
+  desc: >
+    This section includes functions for data processing and
+    exploratory data analysis (EDA). These functions help you to prepare your
+    data for analysis, as well as to explore and understand the characteristics
+    of your data.
+- contents:
+  - starts_with("eda_")
+- title: Key Driver Analysis
+  desc: >
+    This section includes functions for conducting Key Driver Analysis (KDA).
+    These functions allow you to identify the key drivers of a target variable
+    based on a set of predictor variables, and to visualize the results in an
+    IPMA chart.
+- subtitle: KDA Helper Functions
+  desc: >
+    This section includes helper functions for Key Driver Analysis (KDA). These
+    functions allow for more customized workflows than the main
+    `kda_regression()` function, which is a wrapper designed to be an
+    end-to-end solution for KDA. Use these helper functions if you want to have
+    more control over the individual steps of the KDA process.
+- contents:
+  - starts_with("kda_")
+  - -kda_regression
+- subtitle: KDA Main Function
+  desc: >
+    This section includes the main function for conducting Key Driver Analysis
+    (KDA), which is `kda_regression()`. This function is designed to be an
+    end-to-end solution for KDA, as it includes all the necessary steps from
+    data preparation to model fitting and visualization. Use this function if
+    you want a streamlined workflow for conducting KDA.
+- contents:
+  - kda_regression
+- title: YouAnalyser (YA) Helper Functions
+  desc: >
+    This section includes helper functions for the YouAnalyser package. These
+    functions are designed to assist with various tasks related to the package,
+    such as copying templates for PowerPoint and Excel files, which can be
+    used for visualizing the results of analyses conducted with the package.
+- contents:
+  - starts_with("ya_")
+- title: Example Data
+  desc: >
+    This section includes example datasets that are included in the YouAnalyser
+    package. These datasets can be used for testing and demonstrating the
+    functions in the package, as well as for learning how to use the package
+    effectively.
+- contents:
+  - starts_with("bkw_")
