@@ -68,6 +68,12 @@ package, such as copying templates for PowerPoint and Excel files, which
 can be used for visualizing the results of analyses conducted with the
 package.
 
+- [`ya_choose_file_path()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file_path.md)
+  : Choose a directory and create a file path
+- [`ya_copy_template()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_copy_template.md)
+  : Copy PowerPoint template to specified file path
+- [`ya_save_data_for_chart()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_data_for_chart.md)
+  : Save data for chart in Excel template
 - [`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md)
   : Save a plot to JPEG
 

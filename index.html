@@ -105,12 +105,12 @@
 <p>If you would like to save a plot, you can use two convenience functions:</p>
 <ul>
 <li>
-<code>ya_choose_file_path()</code>: This function will open a dialog box that allows you to choose a directory where you would like to save the plot. You only need to additionally provide a file name (<code>"ipma_plot.jpeg"</code> in the example below), and the function will take care of the rest.</li>
+<code><a href="reference/ya_choose_file_path.html">ya_choose_file_path()</a></code>: This function will open a dialog box that allows you to choose a directory where you would like to save the plot. You only need to additionally provide a file name (<code>"ipma_plot.jpeg"</code> in the example below), and the function will take care of the rest.</li>
 <li>
 <code><a href="reference/ya_save_plot.html">ya_save_plot()</a></code>: This function allows you to save a plot to a specified file path, with options to set the width and height (in centimeters) of the saved plot.</li>
 </ul>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu">ya_choose_file_path</span><span class="op">(</span><span class="st">"ipma_plot.jpeg"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"ipma_plot.jpeg"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/ya_save_plot.html">ya_save_plot</a></span><span class="op">(</span></span>
 <span>  plot <span class="op">=</span> <span class="va">res</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">p</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="va">file_path</span>,</span>
@@ -139,18 +139,18 @@ IPMA Scatter Plot
 <span><span class="co">#&gt; #   Performance_Rank &lt;int&gt;</span></span></code></pre></div>
 <p>We can also export this data to an Excel file that can be used for reporting in a PowerPoint report:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu">ya_choose_file_path</span><span class="op">(</span><span class="st">"ipma_data.xlsx"</span><span class="op">)</span></span>
-<span><span class="fu">ya_save_data_for_chart</span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"ipma_data.xlsx"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/ya_save_data_for_chart.html">ya_save_data_for_chart</a></span><span class="op">(</span></span>
 <span>  ipma_scatterPlot_data <span class="op">=</span> <span class="va">res</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">d</span>,</span>
 <span>  file_path <span class="op">=</span> <span class="va">file_path</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>This will result in a file that looks like this when opened in Excel:</p>
 <figure><img src="reference/figures/ipma_data_screenshot.png" alt="Screenshot of ipma_data.xlsx"><figcaption aria-hidden="true">
 Screenshot of ipma_data.xlsx
-</figcaption></figure><p>This file has the right structure and contains all the information needed to update a pre-formatted PowerPoint template that you can use for reporting. You can copy the PowerPoint template to your desired location using the <code>ya_copy_template()</code> function:</p>
+</figcaption></figure><p>This file has the right structure and contains all the information needed to update a pre-formatted PowerPoint template that you can use for reporting. You can copy the PowerPoint template to your desired location using the <code><a href="reference/ya_copy_template.html">ya_copy_template()</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu">ya_choose_file_path</span><span class="op">(</span><span class="st">"ipma_chart.pptx"</span><span class="op">)</span></span>
-<span><span class="fu">ya_copy_template</span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"ipma_chart.pptx"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/ya_copy_template.html">ya_copy_template</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span></span></code></pre></div>
 <p>Follow these steps to update the PowerPoint template with the exported data:</p>
 <ol style="list-style-type: decimal">
 <li>Open the ipma data saved in the Excel, i.e. <code>ipma_data.xlsx</code> in this example.</li>

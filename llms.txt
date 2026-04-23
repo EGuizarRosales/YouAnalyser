@@ -59,11 +59,11 @@ res$plots$ipma_scatterPlot$p
 
 If you would like to save a plot, you can use two convenience functions:
 
-- `ya_choose_file_path()`: This function will open a dialog box that
-  allows you to choose a directory where you would like to save the
-  plot. You only need to additionally provide a file name
-  (`"ipma_plot.jpeg"` in the example below), and the function will take
-  care of the rest.
+- [`ya_choose_file_path()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file_path.md):
+  This function will open a dialog box that allows you to choose a
+  directory where you would like to save the plot. You only need to
+  additionally provide a file name (`"ipma_plot.jpeg"` in the example
+  below), and the function will take care of the rest.
 - [`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md):
   This function allows you to save a plot to a specified file path, with
   options to set the width and height (in centimeters) of the saved
@@ -127,7 +127,9 @@ Screenshot of ipma_data.xlsx
 This file has the right structure and contains all the information
 needed to update a pre-formatted PowerPoint template that you can use
 for reporting. You can copy the PowerPoint template to your desired
-location using the `ya_copy_template()` function:
+location using the
+[`ya_copy_template()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_copy_template.md)
+function:
 
 ``` r
 file_path <- ya_choose_file_path("ipma_chart.pptx")
@@ -281,6 +283,12 @@ package, such as copying templates for PowerPoint and Excel files, which
 can be used for visualizing the results of analyses conducted with the
 package.
 
+- [`ya_choose_file_path()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file_path.md)
+  : Choose a directory and create a file path
+- [`ya_copy_template()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_copy_template.md)
+  : Copy PowerPoint template to specified file path
+- [`ya_save_data_for_chart()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_data_for_chart.md)
+  : Save data for chart in Excel template
 - [`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md)
   : Save a plot to JPEG
 
