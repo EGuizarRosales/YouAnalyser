@@ -22,10 +22,12 @@ pak::pak("EGuizarRosales/YouAnalyser")
 
 ## Key Driver Analysis (KDA)
 
+### Basic Example
+
 This is a basic example which shows you how to conduct a End-2-End Key
 Driver Analysis using the YouAnalyser package. For a more detailed
 walkthrough, please refer to the vignettes included in the package (use
-[`vignette("kda", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/kda.md)),
+e.g. [`vignette("kda", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/kda.md)),
 which provide step-by-step guides on how to use the various functions
 for KDA.
 
@@ -53,10 +55,19 @@ Analysis” (IPMA) plot, which can be accessed like this:
 res$plots$ipma_scatterPlot$p
 ```
 
-If you would like to save the plot, you can use the convenience
-functions `ya_choose_file_path()`, which will let you choose a directory
-to save the provided file name interactively, and
-[`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md):
+### Charts and Reporting
+
+If you would like to save a plot, you can use two convenience functions:
+
+- `ya_choose_file_path()`: This function will open a dialog box that
+  allows you to choose a directory where you would like to save the
+  plot. You only need to additionally provide a file name
+  (`"ipma_plot.jpeg"` in the example below), and the function will take
+  care of the rest.
+- [`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md):
+  This function allows you to save a plot to a specified file path, with
+  options to set the width and height (in centimeters) of the saved
+  plot.
 
 ``` r
 file_path <- ya_choose_file_path("ipma_plot.jpeg")
@@ -113,6 +124,68 @@ ipma_data.xlsx](reference/figures/ipma_data_screenshot.png)
 
 Screenshot of ipma_data.xlsx
 
+This file has the right structure and contains all the information
+needed to update a pre-formatted PowerPoint template that you can use
+for reporting. You can copy the PowerPoint template to your desired
+location using the `ya_copy_template()` function:
+
+``` r
+file_path <- ya_choose_file_path("ipma_chart.pptx")
+ya_copy_template(file_path)
+```
+
+Follow these steps to update the PowerPoint template with the exported
+data:
+
+1.  Open the ipma data saved in the Excel, i.e. `ipma_data.xlsx` in this
+    example.
+2.  Select the data in the grey box, i.e. **A5:D12** in this example,
+    and copy it (Ctrl + C).
+3.  Open the PowerPoint template, i.e. `ipma_chart.pptx` in this
+    example.
+4.  Go to the slide with the IPMA chart, right-click on the chart, and
+    select “Edit Data” \> “Edit Data in Excel”. This will open the
+    “Chart in Microsoft PowerPoint” window, which looks just like Excel.
+5.  In the “Chart in Microsoft PowerPoint” window, select the Cell
+    **A5**, right-click, and paste values only (Ctrl + Shift + V). The
+    chart in the PowerPoint will automatically update based on the
+    pasted data. You can close the “Chart in Microsoft PowerPoint”
+    window after pasting the data.
+6.  In the IPMA chart, we need to update part of the chart that is
+    displayed as well as the cross defining the quadrants. For this,
+    arrange the PowerPoint (`ipma_chart.pptx`) and the Excel
+    (`ipma_data.xlsx`) window side by side.
+    - Double-click on the horizontal line in the PowerPoint chart. This
+      will open the “Format Axis” pane on the right-hand-side (see
+      screenshot below). Copy and paste (Ctrl + C and Ctrl + V) the
+      value in Cell **L10** of the Excel sheet (X-Achsenminimum) to the
+      “Bounds: Minimum” field in the “Format Axis” pane. Now copy and
+      paste the value in Cell **L9** (X-Achsenmaximum) to the “Bounds:
+      Maximum” field in the “Format Axis” pane. Finally, copy and paste
+      the value in Cell **L8** (X-Achsenwert) to the “Vertical axis
+      crosses: Axis value” field in the “Format Axis” pane.
+    - Double-click on the vertical line in the PowerPoint chart. This
+      will open the “Format Axis” pane on the right-hand-side. Copy and
+      paste (Ctrl + C and Ctrl + V) the value in Cell **M10** of the
+      Excel sheet (Y-Achsenminimum) to the “Bounds: Minimum” field in
+      the “Format Axis” pane. Now copy and paste the value in Cell
+      **M9** (Y-Achsenmaximum) to the “Bounds: Maximum” field in the
+      “Format Axis” pane. Finally, copy and paste the value in Cell
+      **M8** (Y-Achsenwert) to the “Horizontal axis crosses: Axis value”
+      field in the “Format Axis” pane.
+7.  Update the right-hand side legend of the chart with the item numbers
+    and statements. Use the information summarised in the Excel file in
+    **O5:V35** to do this.
+
+![“Format Axis” pane in PowerPoint that opens if you double-click on the
+horizontal line in the
+chart.](reference/figures/format_axis_pane_screenshot.png)
+
+“Format Axis” pane in PowerPoint that opens if you double-click on the
+horizontal line in the chart.
+
+### Additional Outputs
+
 There are a lot more plots and outputs available from `res`, so you are
 encouraged to explore the object and check out the vignettes for more
 details on how to use the package for KDA. Below you find all available
@@ -140,22 +213,34 @@ plots in the `res` object:
 
 # Package index
 
-## All functions
+## Data Processing & Exploratory Data Analysis
 
-- [`bkw_bin`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin.md)
-  : BKW Employer Brand Positioning Study Data (Binary)
-- [`bkw_bin_outcome`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_outcome.md)
-  : BKW Employer Brand Positioning Study Data (Binary Outcome)
-- [`bkw_bin_predictors`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_predictors.md)
-  : BKW Employer Brand Positioning Study Data (Binary Predictors)
-- [`bkw_processed`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_processed.md)
-  : BKW Employer Brand Positioning Study Data (Processed)
-- [`bkw_raw`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_raw.md)
-  : BKW Employer Brand Positioning Study Data (Raw)
+This section includes functions for data processing and exploratory data
+analysis (EDA). These functions help you to prepare your data for
+analysis, as well as to explore and understand the characteristics of
+your data.
+
 - [`eda_correlation()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_correlation.md)
   : Exploratory data analysis: correlation
 - [`eda_summary()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_summary.md)
   : Exploratory data analysis: summary of data
+
+## Key Driver Analysis
+
+This section includes functions for conducting Key Driver Analysis
+(KDA). These functions allow you to identify the key drivers of a target
+variable based on a set of predictor variables, and to visualize the
+results in an IPMA chart.
+
+### KDA Helper Functions
+
+This section includes helper functions for Key Driver Analysis (KDA).
+These functions allow for more customized workflows than the main
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function, which is a wrapper designed to be an end-to-end solution for
+KDA. Use these helper functions if you want to have more control over
+the individual steps of the KDA process.
+
 - [`kda_forestPlot()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_forestPlot.md)
   : Create a forest plot for model coefficients
 - [`kda_importance_barPlot()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_barPlot.md)
@@ -174,10 +259,48 @@ plots in the `res` object:
   : Calculate KDA performance
 - [`kda_performance_barPlot()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_performance_barPlot.md)
   : Create a KDA performance bar plot
+
+### KDA Main Function
+
+This section includes the main function for conducting Key Driver
+Analysis (KDA), which is
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md).
+This function is designed to be an end-to-end solution for KDA, as it
+includes all the necessary steps from data preparation to model fitting
+and visualization. Use this function if you want a streamlined workflow
+for conducting KDA.
+
 - [`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
   : Conduct KDA regression analysis
+
+## YouAnalyser (YA) Helper Functions
+
+This section includes helper functions for the YouAnalyser package.
+These functions are designed to assist with various tasks related to the
+package, such as copying templates for PowerPoint and Excel files, which
+can be used for visualizing the results of analyses conducted with the
+package.
+
 - [`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md)
   : Save a plot to JPEG
+
+## Example Data
+
+This section includes example datasets that are included in the
+YouAnalyser package. These datasets can be used for testing and
+demonstrating the functions in the package, as well as for learning how
+to use the package effectively.
+
+- [`bkw_bin`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin.md)
+  : BKW Employer Brand Positioning Study Data (Binary)
+- [`bkw_bin_outcome`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_outcome.md)
+  : BKW Employer Brand Positioning Study Data (Binary Outcome)
+- [`bkw_bin_predictors`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_predictors.md)
+  : BKW Employer Brand Positioning Study Data (Binary Predictors)
+- [`bkw_processed`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_processed.md)
+  : BKW Employer Brand Positioning Study Data (Processed)
+- [`bkw_raw`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_raw.md)
+  : BKW Employer Brand Positioning Study Data (Raw)
 
 # Articles
 

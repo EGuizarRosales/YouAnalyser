@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">YouAnalyser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,9 +35,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="data-processing-exploratory-data-analysis">Data Processing &amp; Exploratory Data Analysis<a class="anchor" aria-label="anchor" href="#data-processing-exploratory-data-analysis"></a></h2>
 
-
+      <div class="section-desc"><p>This section includes functions for data processing and exploratory data analysis (EDA). These functions help you to prepare your data for analysis, as well as to explore and understand the characteristics of your data.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -45,41 +45,6 @@
 
 
       <dl><dt>
-
-          <code><a href="bkw_bin.html">bkw_bin</a></code>
-
-        </dt>
-        <dd>BKW Employer Brand Positioning Study Data (Binary)</dd>
-
-        <dt>
-
-          <code><a href="bkw_bin_outcome.html">bkw_bin_outcome</a></code>
-
-        </dt>
-        <dd>BKW Employer Brand Positioning Study Data (Binary Outcome)</dd>
-
-        <dt>
-
-          <code><a href="bkw_bin_predictors.html">bkw_bin_predictors</a></code>
-
-        </dt>
-        <dd>BKW Employer Brand Positioning Study Data (Binary Predictors)</dd>
-
-        <dt>
-
-          <code><a href="bkw_processed.html">bkw_processed</a></code>
-
-        </dt>
-        <dd>BKW Employer Brand Positioning Study Data (Processed)</dd>
-
-        <dt>
-
-          <code><a href="bkw_raw.html">bkw_raw</a></code>
-
-        </dt>
-        <dd>BKW Employer Brand Positioning Study Data (Raw)</dd>
-
-        <dt>
 
           <code><a href="eda_correlation.html">eda_correlation()</a></code>
 
@@ -92,8 +57,22 @@
 
         </dt>
         <dd>Exploratory data analysis: summary of data</dd>
+      </dl></div><div class="section level2">
+      <h2 id="key-driver-analysis">Key Driver Analysis<a class="anchor" aria-label="anchor" href="#key-driver-analysis"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>This section includes functions for conducting Key Driver Analysis (KDA). These functions allow you to identify the key drivers of a target variable based on a set of predictor variables, and to visualize the results in an IPMA chart.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="kda-helper-functions">KDA Helper Functions<a class="anchor" aria-label="anchor" href="#kda-helper-functions"></a></h3>
+      <div class="section-desc"><p>This section includes helper functions for Key Driver Analysis (KDA). These functions allow for more customized workflows than the main <code><a href="../reference/kda_regression.html">kda_regression()</a></code> function, which is a wrapper designed to be an end-to-end solution for KDA. Use these helper functions if you want to have more control over the individual steps of the KDA process.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="kda_forestPlot.html">kda_forestPlot()</a></code>
 
@@ -155,22 +134,85 @@
 
         </dt>
         <dd>Create a KDA performance bar plot</dd>
+      </dl></div><div class="section level2">
 
-        <dt>
+      <h3 id="kda-main-function">KDA Main Function<a class="anchor" aria-label="anchor" href="#kda-main-function"></a></h3>
+      <div class="section-desc"><p>This section includes the main function for conducting Key Driver Analysis (KDA), which is <code><a href="../reference/kda_regression.html">kda_regression()</a></code>. This function is designed to be an end-to-end solution for KDA, as it includes all the necessary steps from data preparation to model fitting and visualization. Use this function if you want a streamlined workflow for conducting KDA.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="kda_regression.html">kda_regression()</a></code>
 
         </dt>
         <dd>Conduct KDA regression analysis</dd>
+      </dl></div><div class="section level2">
+      <h2 id="youanalyser-ya-helper-functions">YouAnalyser (YA) Helper Functions<a class="anchor" aria-label="anchor" href="#youanalyser-ya-helper-functions"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>This section includes helper functions for the YouAnalyser package. These functions are designed to assist with various tasks related to the package, such as copying templates for PowerPoint and Excel files, which can be used for visualizing the results of analyses conducted with the package.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
 
           <code><a href="ya_save_plot.html">ya_save_plot()</a></code>
 
         </dt>
         <dd>Save a plot to JPEG</dd>
+      </dl></div><div class="section level2">
+      <h2 id="example-data">Example Data<a class="anchor" aria-label="anchor" href="#example-data"></a></h2>
+
+      <div class="section-desc"><p>This section includes example datasets that are included in the YouAnalyser package. These datasets can be used for testing and demonstrating the functions in the package, as well as for learning how to use the package effectively.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="bkw_bin.html">bkw_bin</a></code>
+
+        </dt>
+        <dd>BKW Employer Brand Positioning Study Data (Binary)</dd>
+
+        <dt>
+
+          <code><a href="bkw_bin_outcome.html">bkw_bin_outcome</a></code>
+
+        </dt>
+        <dd>BKW Employer Brand Positioning Study Data (Binary Outcome)</dd>
+
+        <dt>
+
+          <code><a href="bkw_bin_predictors.html">bkw_bin_predictors</a></code>
+
+        </dt>
+        <dd>BKW Employer Brand Positioning Study Data (Binary Predictors)</dd>
+
+        <dt>
+
+          <code><a href="bkw_processed.html">bkw_processed</a></code>
+
+        </dt>
+        <dd>BKW Employer Brand Positioning Study Data (Processed)</dd>
+
+        <dt>
+
+          <code><a href="bkw_raw.html">bkw_raw</a></code>
+
+        </dt>
+        <dd>BKW Employer Brand Positioning Study Data (Raw)</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
