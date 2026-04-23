@@ -32,7 +32,9 @@ pak::pak("EGuizarRosales/YouAnalyser")
 
 ## Key Driver Analysis (KDA)
 
-This is a basic example which shows you how to conduct a End-2-End Key Driver Analysis using the YouAnalyser package. For a more detailed walkthrough, please refer to the vignettes included in the package (use `vignette("kda", package = "YouAnalyser")`), which provide step-by-step guides on how to use the various functions for KDA.
+### Basic Example
+
+This is a basic example which shows you how to conduct a End-2-End Key Driver Analysis using the YouAnalyser package. For a more detailed walkthrough, please refer to the vignettes included in the package (use e.g. `vignette("kda", package = "YouAnalyser")`), which provide step-by-step guides on how to use the various functions for KDA.
 
 ```{r kda_regression_example}
 library(YouAnalyser)
@@ -53,9 +55,14 @@ res <- kda_regression(
 res$plots$ipma_scatterPlot$p
 ```
 
-If you would like to save the plot, you can use the convenience functions `ya_choose_file_path()`, which will let you choose a directory to save the provided file name interactively, and `ya_save_plot()`:
+### Charts and Reporting
 
-```{r save_available_kda_plots, include = FALSE}
+If you would like to save a plot, you can use two convenience functions:
+
+- `ya_choose_file_path()`: This function will open a dialog box that allows you to choose a directory where you would like to save the plot. You only need to additionally provide a file name (`"ipma_plot.jpeg"` in the example below), and the function will take care of the rest.
+- `ya_save_plot()`: This function allows you to save a plot to a specified file path, with options to set the width and height (in centimeters) of the saved plot.
+
+```{r save_available_kda_plots, include = FALSE, eval = FALSE}
 purrr::iwalk(
   .x = res$plots,
   .f = \(x, name) {
@@ -108,6 +115,28 @@ This will result in a file that looks like this when opened in Excel:
 
 ![Screenshot of ipma_data.xlsx](man/figures/ipma_data_screenshot.png)
 
+This file has the right structure and contains all the information needed to update a pre-formatted PowerPoint template that you can use for reporting. You can copy the PowerPoint template to your desired location using the `ya_copy_template()` function:
+
+```{r copy_pptx_template, eval = FALSE}
+file_path <- ya_choose_file_path("ipma_chart.pptx")
+ya_copy_template(file_path)
+```
+
+Follow these steps to update the PowerPoint template with the exported data:
+
+1. Open the ipma data saved in the Excel, i.e. `ipma_data.xlsx` in this example.
+2. Select the data in the grey box, i.e. **A5:D12** in this example, and copy it (Ctrl + C).
+3. Open the PowerPoint template, i.e. `ipma_chart.pptx` in this example.
+4. Go to the slide with the IPMA chart, right-click on the chart, and select "Edit Data" > "Edit Data in Excel". This will open the "Chart in Microsoft PowerPoint" window, which looks just like Excel.
+5. In the "Chart in Microsoft PowerPoint" window, select the Cell **A5**, right-click, and paste values only (Ctrl + Shift + V). The chart in the PowerPoint will automatically update based on the pasted data. You can close the "Chart in Microsoft PowerPoint" window after pasting the data.
+6. In the IPMA chart, we need to update part of the chart that is displayed as well as the cross defining the quadrants. For this, arrange the PowerPoint (`ipma_chart.pptx`) and the Excel (`ipma_data.xlsx`) window side by side.
+    - Double-click on the horizontal line in the PowerPoint chart. This will open the "Format Axis" pane on the right-hand-side (see screenshot below). Copy and paste (Ctrl + C and Ctrl + V) the value in Cell **L10** of the Excel sheet (X-Achsenminimum) to the "Bounds: Minimum" field in the "Format Axis" pane. Now copy and paste the value in Cell **L9** (X-Achsenmaximum) to the "Bounds: Maximum" field in the "Format Axis" pane. Finally, copy and paste the value in Cell **L8** (X-Achsenwert) to the "Vertical axis crosses: Axis value" field in the "Format Axis" pane.
+    - Double-click on the vertical line in the PowerPoint chart. This will open the "Format Axis" pane on the right-hand-side. Copy and paste (Ctrl + C and Ctrl + V) the value in Cell **M10** of the Excel sheet (Y-Achsenminimum) to the "Bounds: Minimum" field in the "Format Axis" pane. Now copy and paste the value in Cell **M9** (Y-Achsenmaximum) to the "Bounds: Maximum" field in the "Format Axis" pane. Finally, copy and paste the value in Cell **M8** (Y-Achsenwert) to the "Horizontal axis crosses: Axis value" field in the "Format Axis" pane.
+7. Update the right-hand side legend of the chart with the item numbers and statements. Use the information summarised in the Excel file in **O5:V35** to do this.
+
+!["Format Axis" pane in PowerPoint that opens if you double-click on the horizontal line in the chart.](man/figures/format_axis_pane_screenshot.png)
+
+### Additional Outputs
 
 There are a lot more plots and outputs available from `res`, so you are encouraged to explore the object and check out the vignettes for more details on how to use the package for KDA. Below you find all available plots in the `res` object:
 

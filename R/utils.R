@@ -124,7 +124,7 @@ ya_save_data_for_chart <- function(ipma_scatterPlot_data, file_path) {
     )
 
   # Read in the xlsx template
-  template_wb <- ya_example("kda_chart_template.xlsx") |>
+  template_wb <- ya_example("kda_template.xlsx") |>
     openxlsx::loadWorkbook()
 
   # Write the data to the template
@@ -147,6 +147,23 @@ ya_save_data_for_chart <- function(ipma_scatterPlot_data, file_path) {
   cli::cli_inform(
     c(
       "v" = "Data saved to {.path {fs::path_norm(file_path)}}"
+    )
+  )
+}
+
+#' Copy PowerPoint template to specified file path
+#'
+#' @param file_path A single string specifying the file path where the PowerPoint template will be copied to.
+#'
+#' @returns NULL, invisibly. The PowerPoint template is copied to the specified file path. If the directory does not exist, it is created.
+#'
+#' @export
+ya_copy_template <- function(file_path) {
+  template_path <- ya_example("kda_template.pptx")
+  fs::file_copy(template_path, file_path, overwrite = TRUE)
+  cli::cli_inform(
+    c(
+      "v" = "PowerPoint template copied to {.path {fs::path_norm(file_path)}}"
     )
   )
 }

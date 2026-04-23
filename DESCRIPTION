@@ -1,11 +1,19 @@
 Package: YouAnalyser
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Provide Standardized Analytics Products for YouGov DACH
+Version: 0.9
 Authors@R: 
-    person("Emmanuel", "Guizar Rosales", , "emmanuel.guizar@yougov.ch", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person(
+        "Emmanuel", "Guizar Rosales",
+        email = "emmanuel.guizar@yougov.ch",
+        role = c("aut", "cre"),
+        comment = c(Position = "Data & Analytics Innovation Scientist")
+    )
+Description: A collection of functions that serve as tools for
+    YouGov DACH Analytics Partners. The function currently provides functions
+    for Key Driver Analysis. Planned addtions include
+    Structural Equation Modeling, Implicit Association Tests,
+    Segmentation (Cluster Analysis), and MaxDiff.
+License: file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
