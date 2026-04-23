@@ -45,7 +45,12 @@ ya_choose_file_path <- function(file_name) {
 #' Save a plot to JPEG
 #'
 #' @description
-#' A short description...
+#' Saves a plot object as a JPEG file to the specified file path.
+#' The function ensures that the directory exists (creating it if necessary)
+#' and provides options for customizing the plot dimensions, resolution,
+#' and whether to use the showtext package for rendering unicode characters.
+#' Informative messages about the saved plot can also be printed if `verbose`
+#' is set to TRUE.
 #'
 #' @param plot A plot object.
 #' @param file_path A single string specifying the file path.

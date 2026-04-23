@@ -10,7 +10,8 @@ kda_ipma_scatterPlot(
   show_labels = TRUE,
   quadrant_colors = c(`Concentrate here` = yougov_colors[["Red 1"]],
     `Keep up the good work` = yougov_colors[["Purple 1"]], `Possible overkill` =
-    yougov_colors[["Teal 1"]], `Low priority` = yougov_colors[["Blue 1"]])
+    yougov_colors[["Teal 1"]], `Low priority` = yougov_colors[["Blue 1"]]),
+  geom_point_size = 6
 )
 }
 \arguments{
@@ -21,6 +22,8 @@ kda_ipma_scatterPlot(
 \item{show_labels}{Optional. A logical indicating whether to display predictor labels on the plot. Defaults to \code{TRUE}.}
 
 \item{quadrant_colors}{Optional. A named character vector of colors for the four quadrants. Defaults to a set of predefined colors.}
+
+\item{geom_point_size}{Optional. A numeric value specifying the size of the points on the scatter plot. Defaults to 8.}
 }
 \value{
 A list containing:

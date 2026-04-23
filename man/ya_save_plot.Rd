@@ -6,18 +6,18 @@
 \usage{
 ya_save_plot(
   plot,
-  fileName,
+  file_path,
   width = 30,
   height = 15,
   resolution = 300,
   use_showtext = FALSE,
-  verbose = FALSE
+  verbose = TRUE
 )
 }
 \arguments{
 \item{plot}{A plot object.}
 
-\item{fileName}{A single string specifying the file path.}
+\item{file_path}{A single string specifying the file path.}
 
 \item{width}{Optional. A numeric value for plot width in centimeters. Defaults to 30 cm.}
 
@@ -33,5 +33,10 @@ ya_save_plot(
 NULL, invisibly. The plot is saved as a JPEG file to the specified path. If the directory does not exist, it is created.
 }
 \description{
-A short description...
+Saves a plot object as a JPEG file to the specified file path.
+The function ensures that the directory exists (creating it if necessary)
+and provides options for customizing the plot dimensions, resolution,
+and whether to use the showtext package for rendering unicode characters.
+Informative messages about the saved plot can also be printed if \code{verbose}
+is set to TRUE.
 }
