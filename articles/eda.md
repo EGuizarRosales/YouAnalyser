@@ -90,11 +90,10 @@ Example summary table
 
 ## 2. Variable Correlations
 
-The
-[`eda_correlation()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_correlation.md)
-function computes and visualizes the correlation matrix for a set of
-variables. It supports different correlation methods (e.g., Pearson,
-Spearman) and provides a heatmap visualization of the correlations.
+The `eda_correlations()` function computes and visualizes the
+correlation matrix for a set of variables. It supports different
+correlation methods (e.g., Pearson, Spearman) and provides a heatmap
+visualization of the correlations.
 
 ``` r
 out <- eda_correlation(
@@ -183,6 +182,9 @@ GGally::ggpairs(
     values = c("#ff412c", "#31caa8"),
   ) +
   ggplot2::theme_bw()
+#> `stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+#> `stat_bin()` using `bins = 30`. Pick better value `binwidth`.
+#> `stat_bin()` using `bins = 30`. Pick better value `binwidth`.
 ```
 
 ![](eda_files/figure-html/ggpairs-example-1.png)
