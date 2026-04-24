@@ -2,14 +2,28 @@
 % Please edit documentation in R/eda.R
 \name{eda_summary}
 \alias{eda_summary}
-\title{Exploratory data analysis: summary of data}
+\title{Exploratory data analysis: Summary of data}
 \usage{
-eda_summary(data, variables = NULL)
+eda_summary(
+  data,
+  variables = NULL,
+  console_output = TRUE,
+  browser_output = TRUE,
+  describe_distribution_args = list(iqr = FALSE, quartiles = TRUE, by = NULL)
+)
 }
 \arguments{
 \item{data}{A data frame to be inspected.}
 
 \item{variables}{An optional vector of variable names to include in the inspection. If NULL, all variables are included.}
+
+\item{console_output}{A logical value indicating whether to print descriptive statistics in the console. Defaults to TRUE.}
+
+\item{browser_output}{A logical value indicating whether to display the summary table in the browser. Defaults to TRUE.}
+
+\item{describe_distribution_args}{A list of additional arguments passed to \code{\link[datawizard:describe_distribution]{datawizard::describe_distribution()}}.}
+
+\item{dfSummary_args}{A list of additional arguments passed to \code{\link[summarytools:dfSummary]{summarytools::dfSummary()}}.}
 }
 \value{
 A temporary html summary table of the data, which is displayed in the browser.
@@ -20,8 +34,6 @@ Generate a summary table of the data, including variable types, missing values, 
 \examples{
 \dontshow{if (requireNamespace("haven", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Inspect a subset of variables in the data
-eda_summary(bkw_raw, variables = c("F600", "F800_1", "F800_2"))
-# Inspect all variables in the data
-eda_summary(bkw_processed)
+eda_summary(data = bkw_raw, variables = c("F600", "F800_1", "F800_2"), console_output = TRUE, browser_output = TRUE)
 \dontshow{\}) # examplesIf}
 }

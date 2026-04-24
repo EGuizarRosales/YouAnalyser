@@ -1,29 +1,61 @@
-#' Exploratory data analysis: summary of data
+#' Exploratory data analysis: Summary of data
 #'
 #' @description
 #' Generate a summary table of the data, including variable types, missing values, and basic statistics. The summary is displayed in the browser for easy inspection.
 #'
 #' @param data A data frame to be inspected.
 #' @param variables An optional vector of variable names to include in the inspection. If NULL, all variables are included.
+#' @param console_output A logical value indicating whether to print descriptive statistics in the console. Defaults to TRUE.
+#' @param browser_output A logical value indicating whether to display the summary table in the browser. Defaults to TRUE.
+#' @param dfSummary_args A list of additional arguments passed to [summarytools::dfSummary()].
+#' @param describe_distribution_args A list of additional arguments passed to [datawizard::describe_distribution()].
 #'
 #' @returns A temporary html summary table of the data, which is displayed in the browser.
 #'
 #' @export
 #' @examplesIf requireNamespace("haven", quietly = TRUE)
 #' # Inspect a subset of variables in the data
-#' eda_summary(bkw_raw, variables = c("F600", "F800_1", "F800_2"))
-#' # Inspect all variables in the data
-#' eda_summary(bkw_processed)
-eda_summary <- function(data, variables = NULL) {
+#' eda_summary(data = bkw_raw, variables = c("F600", "F800_1", "F800_2"), console_output = TRUE, browser_output = FALSE)
+eda_summary <- function(
+  data,
+  variables = NULL,
+  console_output = TRUE,
+  browser_output = TRUE,
+  describe_distribution_args = list(iqr = FALSE, quartiles = TRUE, by = NULL)
+) {
   if (!is.null(variables)) {
     data <- data[variables]
   }
 
   # Create summary table
-  d_summary <- summarytools::dfSummary(data)
+  d_summary <- summarytools::dfSummary(x = data, varnumbers = FALSE)
 
-  # Display summary table in browser
-  summarytools::view(d_summary, method = "browser")
+  if (browser_output) {
+    cli::cli_h1("Data Frame Summary")
+    cli::cli_alert_info(
+      "Summary table is displayed in the browser. Please check your browser windows or tabs."
+    )
+    # Display summary table in browser
+    summarytools::view(d_summary, method = "browser", silent = TRUE)
+  }
+
+  if (console_output) {
+    # Print summary table in console
+    if (!browser_output) {
+      cli::cli_h1("Data Frame Summary")
+      print(d_summary)
+    }
+
+    # Create descriptive statistics table
+    d_descriptive <- do.call(
+      datawizard::describe_distribution,
+      c(list(x = haven::zap_labels(data)), describe_distribution_args)
+    )
+
+    # Print descriptive statistics table in console
+    cli::cli_h1("Descriptive Statistics")
+    print(d_descriptive)
+  }
 }
 
 #' Exploratory data analysis: correlation
@@ -33,7 +65,7 @@ eda_summary <- function(data, variables = NULL) {
 #'
 #' @param data A data frame.
 #' @param variables Optional. A character vector of variable names to include in the correlation analysis. If `NULL`, all variables are used.
-#' @param correlation_type Optional. Can be `"pearson"`, `"spearman"`, or `"tetrachoric"` (useful if variables are binary). See [correlation::correlation()] to see all options. Defaults to `"pearson"`.
+#' @param correlation_type Optional. Can be `"pearson"`, `"spearman"`, or `"tetrachoric"` (useful if variables are binary) among others. Check `method` argument in [correlation::correlation()] to see all options. Defaults to `"pearson"`.
 #' @param correlation_args Optional. A list of additional arguments passed to [correlation::correlation()].
 #' @param ggcorr_args Optional. A list of arguments passed to [GGally::ggcorr()].
 #'
