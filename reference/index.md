@@ -85,3 +85,10 @@ Example datasets included in the YouAnalyser package.
   : BKW Employer Brand Positioning Study Data (Raw)
 - [`bkw_unlabelled`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_unlabelled.md)
   : BKW Employer Brand Positioning Study Data (Unlabelled Data)
+
+## Other Functions
+
+Other functions or data that do not fit into the above categories.
+
+- [`yougov_colors`](https://eguizarrosales.github.io/YouAnalyser/reference/yougov_colors.md)
+  : YouGov Colors

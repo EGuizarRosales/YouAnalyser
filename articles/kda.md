@@ -106,7 +106,7 @@ You need to provide at least the following arguments to the
 [`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
 function:
 
-- `data`, `outcome`, and `predictors`:
+- Option 1: `data`, `outcome`, and `predictors`
   - `data`: A data frame containing the outcome and predictors. The data
     needs to be in a
     [`haven::labelled()`](https://haven.tidyverse.org/reference/labelled.html)
@@ -115,4 +115,47 @@ function:
     [`vignette("dp", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/dp.md)
     vignette on Data Processing for how to convert your data into a
     labelled format.
-  - `outcome`: The name of the outcome variable (as a string).
+  - `outcome`: A single string naming the outcome variable.
+  - `predictors`: A character vector of predictor variable names. You
+    can use e.g. `paste0("F800_", 1:8)` to specify a sequence of
+    variables with similar names.
+- Option 2: `model`: Instead of providing the `data`, `outcome`, and
+  `predictors` arguments, you can also directly provide a fitted
+  regression model object from [`lm()`](https://rdrr.io/r/stats/lm.html)
+  or [`glm()`](https://rdrr.io/r/stats/glm.html) to the `model` argument
+  (intended for advanced users.)
+
+The
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function also has several other options. These have recommended default
+values and do not need to be changed in most cases:
+
+- `diagnostics = FALSE`: A logical indicating whether to compute model
+  diagnostics. This is not necessary for the KDA itself, but can be
+  useful for checking the assumptions of the regression model. If set to
+  `TRUE`, diagnostic plots will be included in the output.
+- `importance_method = "auto"`: The method to calculate variable
+  importance. The default “auto” will conduct a dominance analysis if
+  the number of predictors is less than 15. Otherwise, it will use the
+  “jrw” method, which is a computationally efficient method for
+  calculating variable importance in larger models. See below for more
+  information on the available variable importance methods.
+- `importance_barPlots_args = list()`: A list of additional arguments
+  passed to the importance bar plot function. See
+  [`kda_importance_barPlot()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_barPlot.md)
+  for details.
+- `performance_barPlot_args = list()`: A list of additional arguments
+  passed to the performance bar plot function. See
+  [`kda_performance_barPlot()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_performance_barPlot.md)
+  for details.
+- `ipma_scatterPlot_args = list()`: A list of additional arguments
+  passed to the IPMA scatter plot function. See
+  [`kda_ipma_scatterPlot()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_ipma_scatterPlot.md)
+  for details.
+
+Regarding the `_args` arguments, you can use these to customize the
+appearance of the plots. For example, you can change the default color
+of the performance_barPlot from YouGov Red 1 to Teal 1 like this:
+`performance_barPlot_args = list(color = yougov_colors[["Teal 1"]])`.
+For more information on the available arguments, please refer to the
+documentation of the respective plotting functions.

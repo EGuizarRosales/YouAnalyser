@@ -167,9 +167,8 @@ your R console.</p>
 <p>You need to provide at least the following arguments to the
 <code><a href="../reference/kda_regression.html">kda_regression()</a></code> function:</p>
 <ul>
-<li>
-<code>data</code>, <code>outcome</code>, and
-<code>predictors</code>:
+<li>Option 1: <code>data</code>, <code>outcome</code>, and
+<code>predictors</code>
 <ul>
 <li>
 <code>data</code>: A data frame containing the outcome and
@@ -179,11 +178,57 @@ the <code><a href="../articles/dp.html">vignette("dp", package = "YouAnalyser")<
 Data Processing for how to convert your data into a labelled
 format.</li>
 <li>
-<code>outcome</code>: The name of the outcome variable (as a
-string).</li>
+<code>outcome</code>: A single string naming the outcome
+variable.</li>
+<li>
+<code>predictors</code>: A character vector of predictor variable
+names. You can use e.g. <code>paste0("F800_", 1:8)</code> to specify a
+sequence of variables with similar names.</li>
 </ul>
 </li>
+<li>Option 2: <code>model</code>: Instead of providing the
+<code>data</code>, <code>outcome</code>, and <code>predictors</code>
+arguments, you can also directly provide a fitted regression model
+object from <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> or <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm()</a></code> to the
+<code>model</code> argument (intended for advanced users.)</li>
 </ul>
+<p>The <code><a href="../reference/kda_regression.html">kda_regression()</a></code> function also has several other
+options. These have recommended default values and do not need to be
+changed in most cases:</p>
+<ul>
+<li>
+<code>diagnostics = FALSE</code>: A logical indicating whether to
+compute model diagnostics. This is not necessary for the KDA itself, but
+can be useful for checking the assumptions of the regression model. If
+set to <code>TRUE</code>, diagnostic plots will be included in the
+output.</li>
+<li>
+<code>importance_method = "auto"</code>: The method to calculate
+variable importance. The default “auto” will conduct a dominance
+analysis if the number of predictors is less than 15. Otherwise, it will
+use the “jrw” method, which is a computationally efficient method for
+calculating variable importance in larger models. See below for more
+information on the available variable importance methods.</li>
+<li>
+<code>importance_barPlots_args = list()</code>: A list of additional
+arguments passed to the importance bar plot function. See
+<code><a href="../reference/kda_importance_barPlot.html">kda_importance_barPlot()</a></code> for details.</li>
+<li>
+<code>performance_barPlot_args = list()</code>: A list of additional
+arguments passed to the performance bar plot function. See
+<code><a href="../reference/kda_performance_barPlot.html">kda_performance_barPlot()</a></code> for details.</li>
+<li>
+<code>ipma_scatterPlot_args = list()</code>: A list of additional
+arguments passed to the IPMA scatter plot function. See
+<code><a href="../reference/kda_ipma_scatterPlot.html">kda_ipma_scatterPlot()</a></code> for details.</li>
+</ul>
+<p>Regarding the <code>_args</code> arguments, you can use these to
+customize the appearance of the plots. For example, you can change the
+default color of the performance_barPlot from YouGov Red 1 to Teal 1
+like this:
+<code>performance_barPlot_args = list(color = yougov_colors[["Teal 1"]])</code>.
+For more information on the available arguments, please refer to the
+documentation of the respective plotting functions.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
