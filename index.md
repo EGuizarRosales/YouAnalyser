@@ -109,7 +109,7 @@ reporting in a PowerPoint report:
 
 ``` r
 file_path <- ya_choose_file_path("ipma_data.xlsx")
-ya_save_data_for_chart(
+kda_save_data_for_chart(
   ipma_scatterPlot_data = res$plots$ipma_scatterPlot$d,
   file_path = file_path
 )

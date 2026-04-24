@@ -29,7 +29,7 @@ eda_correlation(
 - correlation_type:
 
   Optional. Can be `"pearson"`, `"spearman"`, or `"tetrachoric"` (useful
-  if variables are binary). See
+  if variables are binary) among others. Check `method` argument in
   [`correlation::correlation()`](https://easystats.github.io/correlation/reference/correlation.html)
   to see all options. Defaults to `"pearson"`.
 

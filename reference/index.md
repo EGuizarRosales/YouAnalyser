@@ -52,6 +52,8 @@ specific steps of the KDA process.
   : Create a KDA performance bar plot
 - [`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
   : Conduct KDA regression analysis
+- [`kda_save_data_for_chart()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_save_data_for_chart.md)
+  : Save KDA data for chart in Excel template
 
 ## YouAnalyser (YA) Utility Functions
 
@@ -61,8 +63,6 @@ Miscellaneous utility functions for the YouAnalyser package.
   : Choose a file and return its path
 - [`ya_choose_file_path()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file_path.md)
   : Choose a directory and create a file path
-- [`ya_save_data_for_chart()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_data_for_chart.md)
-  : Save data for chart in Excel template
 - [`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md)
   : Save a plot to JPEG
 
