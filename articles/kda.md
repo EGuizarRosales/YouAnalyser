@@ -1,8 +1,68 @@
-# Key Driver Analysis: Vignette
+# Key Driver Analysis
 
 ``` r
 library(YouAnalyser)
 library(haven)
+```
+
+## Recommended Workflow
+
+The following minimal and basic workflow is recommended for performing
+Key Driver Analysis (KDA) using the `YouAnalyser` package. This workflow
+includes the following steps:
+
+1.  Exploratory Data Analysis (EDA)
+2.  Key Driver Analysis (KDA)
+3.  Visualize and interpret the results
+
+It is assumed that the data is already in a
+[`haven::labelled()`](https://haven.tidyverse.org/reference/labelled.html)
+format. If your data is not in this format, you may need to perform some
+data processing steps to convert it before using `YouAnalyser`. For an
+example of how to do this, please refer to the
+[`vignette("dp", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/dp.md)
+vignette on Data Processing.
+
+``` r
+#---- 1. EDA -------------------------------------------------------------------
+
+# Load your data
+# myData <- haven::read_sav("path/to/your/data.sav")
+# Here, we will use the example data included in the package:
+myData <- YouAnalyser::bkw_processed
+
+# Get an overview of the data. Confirm there are no unexpected values
+# (e.g., values like "99") and no missing values.
+eda_summary(myData)
+
+# Inspect correlations among the variables.
+# Are all predictors positively correlated with the outcome variable?
+# Are there any high correlations among the predictors that may indicate
+# multicollinearity issues?
+eda_corrs <- eda_correlation(myData)
+print(eda_corrs$p)
+
+#---- 2. KDA -------------------------------------------------------------------
+
+# Perform Key Driver Analysis
+kda <- kda_regression(
+  data = myData,
+  outcome = "F600",
+  predictors = paste0("F800_", 1:8)
+)
+
+#---- 3. Visualize and interpret results ---------------------------------------
+
+# Inspect the Importance Performance Matrix Analysis (IPMA) plot
+print(kda$plots$ipma_scatterPlot$p)
+
+# Save the IPMA plot as a file
+ya_save_plot(
+  plot = kda$plots$ipma_scatterPlot$p,
+  file_path = ya_choose_file_path("myPlotName.jpeg"),
+  width = 30,
+  height = 20
+)
 ```
 
 ## Exploratory Data Analysis (EDA)
@@ -13,9 +73,11 @@ identify any potential issues before performing Key Driver Analysis
 (KDA). `YouAnalyser` provides conventient functions for EDA, all
 starting with *eda\_*:
 [`eda_summary()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_summary.md)
-and `eda_correlations()`. These functions can help you get a quick
-overview of your data and identify any necessary preprocessing steps.
-But first, we need some data!
+and
+[`eda_correlation()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_correlation.md).
+These functions can help you get a quick overview of your data and
+identify any necessary preprocessing steps. But first, we need some
+data!
 
 ### Reading in the data
 
