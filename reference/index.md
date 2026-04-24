@@ -20,7 +20,7 @@ including summary statistics and correlations.
 - [`eda_correlation()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_correlation.md)
   : Exploratory data analysis: correlation
 - [`eda_summary()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_summary.md)
-  : Exploratory data analysis: summary of data
+  : Exploratory data analysis: Summary of data
 
 ## Key Driver Analysis (KDA)
 
