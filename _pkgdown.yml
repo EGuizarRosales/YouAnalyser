@@ -32,3 +32,8 @@ reference:
       Example datasets included in the YouAnalyser package.
   - contents:
       - starts_with("bkw_")
+  - title: Other Functions
+    desc: >
+      Other functions or data that do not fit into the above categories.
+  - contents:
+      - yougov_colors
