@@ -32,7 +32,7 @@ pak::pak("EGuizarRosales/YouAnalyser")
 This is a basic example which shows you how to conduct a End-2-End Key
 Driver Analysis using the YouAnalyser package. For a more detailed
 walkthrough, please refer to the vignettes included in the package (use
-e.g. `browseVignettes(package = "YouAnalyser")`), which provide
+e.g. `vignette("kda", package = "YouAnalyser")`), which provide
 step-by-step guides on how to use the various functions for KDA.
 
 ``` r
