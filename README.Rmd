@@ -113,13 +113,13 @@ ya_save_data_for_chart(
 
 This will result in a file that looks like this when opened in Excel:
 
-![Screenshot of ipma_data.xlsx](man/figures/ipma_data_screenshot.png)
+![Screenshot of ipma_data.xlsx (right-click -> "Open image in new tab" to zoom in)](man/figures/ipma_data_screenshot.png)
 
-This file has the right structure and contains all the information needed to update a pre-formatted PowerPoint template that you can use for reporting. You can copy the PowerPoint template to your desired location using the `ya_copy_template()` function:
+This file has the right structure and contains all the information needed to update a pre-formatted PowerPoint template that you can use for reporting. You can copy the PowerPoint template to your desired location using the `kda_copy_pptx_template()` function:
 
 ```{r copy_pptx_template, eval = FALSE}
 file_path <- ya_choose_file_path("ipma_chart.pptx")
-ya_copy_template(file_path)
+kda_copy_pptx_template(file_path)
 ```
 
 Follow these steps to update the PowerPoint template with the exported data:

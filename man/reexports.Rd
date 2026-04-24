@@ -4,6 +4,7 @@
 \name{reexports}
 \alias{reexports}
 \alias{model_parameters}
+\alias{data_codebook}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -11,6 +12,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
+  \item{datawizard}{\code{\link[datawizard]{data_codebook}}}
+
   \item{parameters}{\code{\link[parameters]{model_parameters}}}
 }}
 

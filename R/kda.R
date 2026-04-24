@@ -30,6 +30,23 @@ kda_model_reg <- function(data, formula_obj) {
   }
 }
 
+#' Copy PowerPoint template to specified file path
+#'
+#' @param file_path A single string specifying the file path where the PowerPoint template will be copied to.
+#'
+#' @returns NULL, invisibly. The PowerPoint template is copied to the specified file path. If the directory does not exist, it is created.
+#'
+#' @export
+kda_copy_pptx_template <- function(file_path) {
+  template_path <- ya_example("kda_template.pptx")
+  fs::file_copy(template_path, file_path, overwrite = TRUE)
+  cli::cli_inform(
+    c(
+      "v" = "KDA PowerPoint template copied to {.path {fs::path_norm(file_path)}}"
+    )
+  )
+}
+
 # ---- Variable Importance  ----------------------------------------------------
 
 #' Calculate feature importance using sum of coefficients
@@ -88,8 +105,6 @@ kda_importance_domir <- function(
   partial_domir <- purrr::partial(
     domir::domir,
     .adj = FALSE,
-    .cdl = FALSE,
-    .cpt = FALSE,
     .prg = FALSE,
     !!!domir_args
   )

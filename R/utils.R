@@ -42,6 +42,19 @@ ya_choose_file_path <- function(file_name) {
   )
 }
 
+#' Choose a file and return its path
+#'
+#' @returns A single string representing the full file path of the chosen file. The function normalizes the file path to use forward slashes and ensures that the selected file exists.
+#'
+#' @export
+ya_choose_file <- function() {
+  file_path <- file.choose()
+  if (is.na(file_path) || is.null(file_path)) {
+    stop("File selection was cancelled or failed.", call. = FALSE)
+  }
+  normalizePath(file_path, winslash = "/", mustWork = TRUE)
+}
+
 #' Save a plot to JPEG
 #'
 #' @description
@@ -156,25 +169,12 @@ ya_save_data_for_chart <- function(ipma_scatterPlot_data, file_path) {
   )
 }
 
-#' Copy PowerPoint template to specified file path
-#'
-#' @param file_path A single string specifying the file path where the PowerPoint template will be copied to.
-#'
-#' @returns NULL, invisibly. The PowerPoint template is copied to the specified file path. If the directory does not exist, it is created.
-#'
-#' @export
-ya_copy_template <- function(file_path) {
-  template_path <- ya_example("kda_template.pptx")
-  fs::file_copy(template_path, file_path, overwrite = TRUE)
-  cli::cli_inform(
-    c(
-      "v" = "PowerPoint template copied to {.path {fs::path_norm(file_path)}}"
-    )
-  )
-}
-
 # Re-exports -------------------------------------------------------------------
 
 #' @importFrom parameters model_parameters
 #' @export
 parameters::model_parameters
+
+#' @importFrom datawizard data_codebook
+#' @export
+datawizard::data_codebook

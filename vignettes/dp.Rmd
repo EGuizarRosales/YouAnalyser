@@ -1,0 +1,216 @@
+---
+title: "Data Processing"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Data Processing}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(YouAnalyser)
+library(haven)
+```
+
+## Labelled Survey Data
+
+In a best case scenario, survey data is collected in a format that preserves the metadata of the survey, such as variable labels and value labels. This is often the case when data is collected using YouGov's own **Gryphon** or other software solutions like **Quantilope**,  **Qualtrics** or **SurveyMonkey**, which can export data in formats that retain this information, most commonly SPSS `.sav` files.  
+
+In this case, not only the names of the variables (e.g. "F600") and the values (e.g. "1", "2", "3") are preserved, but also the labels that describe what these variables and values represent:
+
+- **Variable labels:** These provide a human-readable description of what each variable represents. For example, a variable named "F600" might have a label like *"Wie attraktiv finden Sie die BKW als Arbeitgeberin?"*, which makes it clear what the question was participants answered.
+- **Value labels:** These provide a human-readable description of what each value represents. For example, a value of "1" for the variable "F600" might have a label like *"1 - Überhaupt nicht attraktiv"*, which makes it clear what the response option was for participants.
+
+When you import such a labelled dataset into R using the `haven::read_sav()` function, you can easily access both the variable labels and value labels. The `YouAnalyser` package provides functions to work with this metadata, allowing you to quickly understand and analyze your survey data without having to manually decode the variable and value names.
+
+```{r read-data-example, eval = FALSE}
+# Provide a file path to your labelled survey data in SPSS .sav format.
+# Here we accesss the example data shipped with the `YouAnalyser` package.
+file_path <- system.file(
+  "extdata",
+  "bkw.sav",
+  package = "YouAnalyser",
+  mustWork = FALSE
+)
+
+# Read in the data using haven::read_sav() and filter/select relevant variables
+myData <- haven::read_sav(file = file_path) |>
+  # Filter out missing values for the dependent variable F600
+  dplyr::filter(!is.na(F600)) |>
+  # Select only the dependent variable F600 and the independent variables F800
+  dplyr::select("F600", dplyr::starts_with("F800_"))
+```
+
+```{r read-data, include = FALSE, echo = FALSE}
+myData <- bkw_processed
+```
+
+```{r inspect-data}
+# Inspect the structure of the data for the first two variables. Take note of
+# the attributes "@label" (variable label) and "@labels" (value labels).
+str(myData[, 1:2])
+```
+
+There are different ways you can inspect the variable and value labels in R, e.g.:
+
+```{r, inspect-lables-attributes}
+# Access variable label
+attr(myData$F600, "label")
+
+# Access value labels
+attr(myData$F600, "labels")
+
+# Prettier with the haven::print_labels() function
+haven::print_labels(myData$F600)
+```
+
+`YouAnalyser` provides the `dp_inspect_codebook()` function to print a codebook of your labelled data to your console, which includes the variable labels and value labels in a tidy format:
+
+```{r, inspect-codebook-function}
+# Print codebook for the first two variables
+dp_inspect_codebook(myData[, 1:2])
+```
+
+## Convert Unlabelled to Labelled Data
+
+Sometimes, your data comes in an unlabelled format, for example if you receive a `.csv` or a `.xlsx` file. Then, this data looks like this:
+
+```{r read-unlabelled-data-example, eval = FALSE}
+# Provide a file path to your unlabelled survey data in Excel .xlsx format.
+# Here we accesss the example data shipped with the `YouAnalyser` package.
+file_path <- system.file(
+  "extdata",
+  "bkw_unlabelled.xlsx",
+  package = "YouAnalyser",
+  mustWork = TRUE
+)
+
+# Read in the unlabelled data using openxlsx::read.xlsx() and convert it to a tibble
+myData_unlabelled <- openxlsx::read.xlsx(file_path) |>
+  tibble::as_tibble()
+```
+
+```{r read-unlabelled-data, include = FALSE, echo = FALSE}
+myData_unlabelled <- bkw_unlabelled
+```
+
+```{r inspect-unlabelled-dat}
+# Inspect the structure of the data for the first two variables.
+# Note that there are no variable labels or value labels.
+str(myData_unlabelled[, 1:2])
+
+# `dp_inspect_codebook()` also confirms that there are no variable labels or
+#  value labels in the unlabelled data.
+dp_inspect_codebook(myData_unlabelled)
+
+# The missing variable and value labels are also confirmed by the haven::is.labelled()
+# function, which returns FALSE for all variables in the unlabelled data.
+haven::is.labelled(myData_unlabelled)
+```
+
+In this case, you can use the `dp_convert_to_labelled()` function to convert your unlabelled data into a labelled format, which will allow you to work with variable and value labels in R and in `YouAnalyser`.  
+
+To do this, you need to provide the data as well as a **codebook** that contains the variable labels and value labels for your data. The codebook should be in a tidy format, with one row per variable and columns for the variable name, variable label, and value labels. This codebook can be created manually using a spreadsheet software like Excel. Use the following code to save a copy of the codebook template provided with `YouAnalyser`:
+
+```{r copy-codebook-template, eval = FALSE}
+# Choose interactively where the template should be copied to
+file_path <- ya_choose_file_path("my_codebook.xlsx")
+
+# Copy the template
+dp_copy_codebook_template(file_path)
+```
+
+Keep the first row unchanged, as it contains the required column names. Then, fill in the codebook with the variable names, variable labels and value labels for your data. Import the codebook into R and inspect it to make sure it looks correct.
+
+```{r read-codebook-template-example, eval = FALSE}
+# Choose the codebook file you just edited
+codebook_file_path <- ya_choose_file()
+
+# Read in the codebook
+myCodebook <- openxlsx::read.xlsx(codebook_file_path) |>
+  tibble::as_tibble()
+
+# Display the first few rows of the codebook
+head(myCodebook, n = 3 * 7) |>
+  print(n = Inf)
+```
+
+```{r read-codebook-example, include = FALSE}
+# Choose the codebook file you just edited
+codebook_file_path <- system.file(
+  "extdata",
+  "bkw_labels.xlsx",
+  package = "YouAnalyser",
+  mustWork = TRUE
+)
+
+# Read in the codebook
+myCodebook <- openxlsx::read.xlsx(codebook_file_path) |>
+  tibble::as_tibble()
+```
+
+```{r read-codebook, include = FALSE, echo = FALSE}
+myCodebook <- bkw_labels
+```
+
+```{r inspect-codebook}
+# Display the first few rows of the codebook
+head(myCodebook, n = 3 * 7) |>
+  print(n = Inf)
+```
+
+Once your codebook is ready, you can use the `dp_convert_to_labelled()` function to convert your unlabelled data into a labelled format:
+
+```{r convert-to-labelled}
+# Convert unlabelled data to labelled format using the codebook
+myData_labelled <- dp_convert_to_labelled(
+  data = myData_unlabelled,
+  codebook = myCodebook
+)
+
+# Confirm that labelling worked (only show the first 3 variables for brevity)
+dp_inspect_codebook(myData_unlabelled[, 1:3])
+dp_inspect_codebook(myData_labelled[, 1:3])
+```
+
+### Summary
+
+If your data is unlabelled (`.csv`, `.xlsx`), use the following code snippets to convert it to a labelled format:
+
+```{r summary, eval = FALSE}
+# Read in your .xlsx data
+file_path <- ya_choose_file()
+myData_unlabelled <- openxlsx::read.xlsx(file_path) |>
+  tibble::as_tibble()
+
+# Create a codebook for your data using the provided template
+file_path <- ya_choose_file_path("my_codebook.xlsx")
+dp_copy_codebook_template(file_path)
+
+#### EDIT THE CODEBOOK TEMPLATE IN EXCEL ####
+
+# After having edited the codebook template in Excel, you can read it back into R
+file_path <- ya_choose_file()
+myCodebook <- openxlsx::read.xlsx(file_path) |>
+  tibble::as_tibble()
+
+# Use the unlabelled data and the codebook to convert the unlabelled data into a labelled format
+myData_labelled <- dp_convert_to_labelled(
+  data = myData_unlabelled,
+  codebook = myCodebook
+)
+
+# Confirm that the data is now labelled
+dp_inspect_codebook(myData_labelled)
+
+# Save the labelled data as a .sav file to preserve the variable and value labels for future use
+file_path <- ya_choose_file_path("my_labelled_data.sav")
+haven::write_sav(myData_labelled, file_path)
+```

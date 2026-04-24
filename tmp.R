@@ -45,29 +45,20 @@ ggplotify::as.ggplot(
 
 ################################################################################
 
-res <- kda_regression(
+out1 <- domir::domir(
+  .obj = F600 ~ F800_1 + F800_2 + F800_3 + F800_4 + F800_5,
+  .fct = function(formula, data) {
+    performance::r2(lm(formula, data = data))$R2
+  },
   data = bkw_processed,
-  outcome = "F600",
-  predictors = paste0("F800_", 1:8),
-  diagnostics = TRUE,
-  importance_method = "auto"
+  .cpt = FALSE,
+  .cdl = FALSE
 )
 
-res$plots$ipma_scatterPlot$d |>
-  rio::export(file = ya_choose_file_path("myData.xlsx"))
-
-wb <- openxlsx::loadWorkbook("C:/Users/EGU/Downloads/myTemplate.xlsx")
-
-openxlsx::writeData(
-  wb,
-  sheet = "Sheet1",
-  x = res$plots$ipma_scatterPlot$d$predictor_nr,
-  startCol = 1,
-  startRow = 5,
-)
-
-openxlsx::saveWorkbook(
-  wb,
-  "C:/Users/EGU/Downloads/myTemplate_filled.xlsx",
-  overwrite = TRUE
+out2 <- domir::domir(
+  .obj = F600 ~ F800_1 + F800_2 + F800_3 + F800_4 + F800_5,
+  .fct = function(formula, data) {
+    performance::r2(lm(formula, data = data))$R2
+  },
+  data = bkw_processed
 )
