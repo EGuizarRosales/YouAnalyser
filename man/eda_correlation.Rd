@@ -18,7 +18,7 @@ eda_correlation(
 
 \item{variables}{Optional. A character vector of variable names to include in the correlation analysis. If \code{NULL}, all variables are used.}
 
-\item{correlation_type}{Optional. Can be \code{"pearson"}, \code{"spearman"}, or \code{"tetrachoric"} (useful if variables are binary). See \code{\link[correlation:correlation]{correlation::correlation()}} to see all options. Defaults to \code{"pearson"}.}
+\item{correlation_type}{Optional. Can be \code{"pearson"}, \code{"spearman"}, or \code{"tetrachoric"} (useful if variables are binary) among others. Check \code{method} argument in \code{\link[correlation:correlation]{correlation::correlation()}} to see all options. Defaults to \code{"pearson"}.}
 
 \item{correlation_args}{Optional. A list of additional arguments passed to \code{\link[correlation:correlation]{correlation::correlation()}}.}
 

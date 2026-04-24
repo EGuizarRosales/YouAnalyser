@@ -34,6 +34,6 @@ Generate a summary table of the data, including variable types, missing values, 
 \examples{
 \dontshow{if (requireNamespace("haven", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Inspect a subset of variables in the data
-eda_summary(data = bkw_raw, variables = c("F600", "F800_1", "F800_2"), console_output = TRUE, browser_output = TRUE)
+eda_summary(data = bkw_raw, variables = c("F600", "F800_1", "F800_2"), console_output = TRUE, browser_output = FALSE)
 \dontshow{\}) # examplesIf}
 }

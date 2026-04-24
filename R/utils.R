@@ -86,6 +86,10 @@ ya_save_plot <- function(
   use_showtext = FALSE,
   verbose = TRUE
 ) {
+  if (!grepl("\\.jpeg$", file_path, ignore.case = TRUE)) {
+    cli::cli_abort("{.arg file_path} must end with {.val .jpeg}.")
+  }
+
   # Ensure the directory exists
   dir_path <- fs::path_dir(file_path)
   if (!fs::dir_exists(dir_path)) {
@@ -121,52 +125,6 @@ ya_save_plot <- function(
   if (use_showtext) {
     showtext::showtext_auto(FALSE)
   }
-}
-
-#' Save data for chart in Excel template
-#'
-#' @param ipma_scatterPlot_data The data frame containing the data used for the IPMA scatter plot. This should be the output of the `ipma_scatterPlot` element in the list returned by `kda_regression()`.
-#' @param file_path A single string specifying the file path where the Excel file will be saved.
-#'
-#' @returns NULL, invisibly. The data is saved to an Excel file at the specified path, using a predefined template. If the directory does not exist, it is created.
-#'
-#' @export
-ya_save_data_for_chart <- function(ipma_scatterPlot_data, file_path) {
-  # Select relevant columns for the chart
-  data_for_chart <- ipma_scatterPlot_data |>
-    dplyr::select(
-      predictor_nr,
-      label,
-      Importance_Ratio,
-      Performance_Ratio
-    )
-
-  # Read in the xlsx template
-  template_wb <- ya_example("kda_template.xlsx") |>
-    openxlsx::loadWorkbook()
-
-  # Write the data to the template
-  openxlsx::writeData(
-    template_wb,
-    sheet = "Sheet1",
-    x = data_for_chart,
-    startCol = 1,
-    startRow = 5,
-    colNames = FALSE
-  )
-
-  # Save the filled template to the specified file path
-  openxlsx::saveWorkbook(
-    template_wb,
-    file_path,
-    overwrite = TRUE
-  )
-
-  cli::cli_inform(
-    c(
-      "v" = "Data saved to {.path {fs::path_norm(file_path)}}"
-    )
-  )
 }
 
 # Re-exports -------------------------------------------------------------------

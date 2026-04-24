@@ -30,6 +30,53 @@ kda_model_reg <- function(data, formula_obj) {
   }
 }
 
+
+#' Save KDA data for chart in Excel template
+#'
+#' @param ipma_scatterPlot_data The data frame containing the data used for the IPMA scatter plot. This should be the output of the `ipma_scatterPlot` element in the list returned by `kda_regression()`.
+#' @param file_path A single string specifying the file path where the Excel file will be saved.
+#'
+#' @returns NULL, invisibly. The data is saved to an Excel file at the specified path, using a predefined template. If the directory does not exist, it is created.
+#'
+#' @export
+kda_save_data_for_chart <- function(ipma_scatterPlot_data, file_path) {
+  # Select relevant columns for the chart
+  data_for_chart <- ipma_scatterPlot_data |>
+    dplyr::select(
+      predictor_nr,
+      label,
+      Importance_Ratio,
+      Performance_Ratio
+    )
+
+  # Read in the xlsx template
+  template_wb <- ya_example("kda_template.xlsx") |>
+    openxlsx::loadWorkbook()
+
+  # Write the data to the template
+  openxlsx::writeData(
+    template_wb,
+    sheet = "Sheet1",
+    x = data_for_chart,
+    startCol = 1,
+    startRow = 5,
+    colNames = FALSE
+  )
+
+  # Save the filled template to the specified file path
+  openxlsx::saveWorkbook(
+    template_wb,
+    file_path,
+    overwrite = TRUE
+  )
+
+  cli::cli_inform(
+    c(
+      "v" = "Data saved to {.path {fs::path_norm(file_path)}}"
+    )
+  )
+}
+
 #' Copy PowerPoint template to specified file path
 #'
 #' @param file_path A single string specifying the file path where the PowerPoint template will be copied to.
@@ -839,6 +886,17 @@ kda_regression <- function(
         "x" = "{.arg model} is {.val NULL} and one or more of {.arg data}, {.arg outcome}, {.arg predictors} is missing."
       )
     )
+  }
+
+  if (!is.null(data)) {
+    non_labelled_vars <- names(data)[!purrr::map_lgl(data, haven::is.labelled)]
+
+    if (length(non_labelled_vars) > 0) {
+      cli::cli_abort(c(
+        "{.arg data} needs to be in {.fn haven::labelled} format.",
+        "x" = "The following variable{?s} {?is/are} not in this format: {.val {non_labelled_vars}}"
+      ))
+    }
   }
 
   # Get or define model

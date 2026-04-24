@@ -105,7 +105,7 @@ We can also export this data to an Excel file that can be used for reporting in 
 
 ```{r export_ipma_data, eval = FALSE}
 file_path <- ya_choose_file_path("ipma_data.xlsx")
-ya_save_data_for_chart(
+kda_save_data_for_chart(
   ipma_scatterPlot_data = res$plots$ipma_scatterPlot$d,
   file_path = file_path
 )
