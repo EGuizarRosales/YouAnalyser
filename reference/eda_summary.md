@@ -35,7 +35,7 @@ eda_summary(bkw_raw, variables = c("F600", "F800_1", "F800_2"))
 #> Warning: unable to open connection to X11 display ''
 #> Warning: unable to open connection to X11 display ''
 #> Warning: unable to open connection to X11 display ''
-#> Output file written: /tmp/RtmpXC3Afd/file1b974f168a11.html
+#> Output file written: /tmp/Rtmp8EpjGS/file1bf6592c248b.html
 # Inspect all variables in the data
 eda_summary(bkw_processed)
 #> Warning: unable to open connection to X11 display ''
@@ -53,5 +53,5 @@ eda_summary(bkw_processed)
 #> Warning: unable to open connection to X11 display ''
 #> Warning: unable to open connection to X11 display ''
 #> Warning: unable to open connection to X11 display ''
-#> Output file written: /tmp/RtmpXC3Afd/file1b97215c7c5d.html
+#> Output file written: /tmp/Rtmp8EpjGS/file1bf61ae5ee43.html
 ```

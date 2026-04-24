@@ -42,8 +42,6 @@ res <- kda_regression(
   diagnostics = TRUE,
   importance_method = "auto"
 )
-#> Warning: '.cpt' and '.cdl' are depreciated arguments to 'domir' as of version 1.3.
-#> Use '.cdl' and '.cpt' as arguments to 'print()' instead.
 ```
 
 `res` is a list containing the results of the KDA, including the fitted
@@ -119,21 +117,22 @@ ya_save_data_for_chart(
 
 This will result in a file that looks like this when opened in Excel:
 
-![Screenshot of
-ipma_data.xlsx](reference/figures/ipma_data_screenshot.png)
+![Screenshot of ipma_data.xlsx (right-click -\> “Open image in new tab”
+to zoom in)](reference/figures/ipma_data_screenshot.png)
 
-Screenshot of ipma_data.xlsx
+Screenshot of ipma_data.xlsx (right-click -\> “Open image in new tab” to
+zoom in)
 
 This file has the right structure and contains all the information
 needed to update a pre-formatted PowerPoint template that you can use
 for reporting. You can copy the PowerPoint template to your desired
 location using the
-[`ya_copy_template()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_copy_template.md)
+[`kda_copy_pptx_template()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_copy_pptx_template.md)
 function:
 
 ``` r
 file_path <- ya_choose_file_path("ipma_chart.pptx")
-ya_copy_template(file_path)
+kda_copy_pptx_template(file_path)
 ```
 
 Follow these steps to update the PowerPoint template with the exported

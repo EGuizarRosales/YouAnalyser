@@ -41,7 +41,8 @@
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="articles/kda-article.html">Key Driver Analysis: Article</a></li>
+<li><a class="dropdown-item" href="articles/dp.html">Data Processing</a></li>
+    <li><a class="dropdown-item" href="articles/kda-article.html">Key Driver Analysis: Article</a></li>
     <li><a class="dropdown-item" href="articles/kda.html">Key Driver Analysis: Vignette</a></li>
   </ul>
 </li>
@@ -92,9 +93,7 @@
 <span>  predictors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span>,</span>
 <span>  diagnostics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  importance_method <span class="op">=</span> <span class="st">"auto"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: '.cpt' and '.cdl' are depreciated arguments to 'domir' as of version 1.3.</span></span>
-<span><span class="co">#&gt; Use '.cdl' and '.cpt' as arguments to 'print()' instead.</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p><code>res</code> is a list containing the results of the KDA, including the fitted regression model, variable importance and performance measures, and plots. The most important outcome is the “Importance Performance Map Analysis” (IPMA) plot, which can be accessed like this:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">res</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">p</span></span></code></pre></div>
@@ -145,12 +144,12 @@ IPMA Scatter Plot
 <span>  file_path <span class="op">=</span> <span class="va">file_path</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>This will result in a file that looks like this when opened in Excel:</p>
-<figure><img src="reference/figures/ipma_data_screenshot.png" alt="Screenshot of ipma_data.xlsx"><figcaption aria-hidden="true">
-Screenshot of ipma_data.xlsx
-</figcaption></figure><p>This file has the right structure and contains all the information needed to update a pre-formatted PowerPoint template that you can use for reporting. You can copy the PowerPoint template to your desired location using the <code><a href="reference/ya_copy_template.html">ya_copy_template()</a></code> function:</p>
+<figure><img src="reference/figures/ipma_data_screenshot.png" alt="Screenshot of ipma_data.xlsx (right-click -&gt; “Open image in new tab” to zoom in)"><figcaption aria-hidden="true">
+Screenshot of ipma_data.xlsx (right-click -&gt; “Open image in new tab” to zoom in)
+</figcaption></figure><p>This file has the right structure and contains all the information needed to update a pre-formatted PowerPoint template that you can use for reporting. You can copy the PowerPoint template to your desired location using the <code><a href="reference/kda_copy_pptx_template.html">kda_copy_pptx_template()</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"ipma_chart.pptx"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/ya_copy_template.html">ya_copy_template</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/kda_copy_pptx_template.html">kda_copy_pptx_template</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span></span></code></pre></div>
 <p>Follow these steps to update the PowerPoint template with the exported data:</p>
 <ol style="list-style-type: decimal">
 <li>Open the ipma data saved in the Excel, i.e. <code>ipma_data.xlsx</code> in this example.</li>

@@ -1,6 +1,7 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/404.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/LICENSE-text.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/articles/dp.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/articles/index.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/articles/kda-article.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/articles/kda.html</loc></url>
@@ -10,11 +11,17 @@
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_outcome.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_predictors.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_labels.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_processed.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_raw.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_unlabelled.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/dp_convert_to_labelled.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/dp_copy_codebook_template.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/dp_inspect_codebook.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/eda_correlation.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/eda_summary.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/index.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_copy_pptx_template.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_forestPlot.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_barPlot.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_domir.html</loc></url>
@@ -26,8 +33,8 @@
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_performance_barPlot.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/reexports.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file_path.html</loc></url>
-<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_copy_template.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_data_for_chart.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.html</loc></url>
 </urlset>
