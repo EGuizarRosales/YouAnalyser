@@ -55,6 +55,83 @@ ya_choose_file <- function() {
   normalizePath(file_path, winslash = "/", mustWork = TRUE)
 }
 
+#' Set up a standardized folder structure for a project
+#'
+#' @description Set up a standardized folder structure for a project, including subfolders for input data, scripts, and output. Optionally, copy a template script into the scripts folder and create an R project file in the main folder. The function provides informative messages about the created folder structure and any actions taken.
+#'
+#' @param base_path A single string specifying the base directory where the folder structure should be created.
+#' @param folder_name A single string specifying the name of the main folder to be created within the base directory. This folder will contain the standardized subfolder structure for organizing project files.
+#' @param template Optional. A single string specifying the name of the template file to be copied into the scripts folder. The template should be an R script located in the "templates" directory of the YouAnalyser package. Currently, `"kda"` is supported
+#' @param make_rproj Optional. A logical value indicating whether to create an R project file in the main folder. Defaults to TRUE.
+#'
+#' @returns NULL, invisibly. The function creates a standardized folder structure for a project at the specified location and optionally copies a template script and creates an R project file. Informative messages about the created folder structure are printed to the console.
+#'
+#' @export
+ya_setup_folder_structure <- function(
+  base_path,
+  folder_name,
+  template = NULL,
+  make_rproj = TRUE
+) {
+  base_path <- fs::path(base_path, folder_name)
+
+  # Data
+  fs::dir_create(
+    fs::path(base_path, "01_input", "data", "raw"),
+    recurse = TRUE
+  )
+  fs::dir_create(
+    fs::path(base_path, "01_input", "data", "processed"),
+    recurse = TRUE
+  )
+  # Scripts
+  fs::dir_create(fs::path(base_path, "02_scripts"), recurse = TRUE)
+
+  if (!is.null(template)) {
+    template <- paste0(template, ".R")
+    template_path <- system.file("templates", template, package = "YouAnalyser")
+    if (template_path == "") {
+      cli::cli_abort(
+        "Template {.val {template}} not found in YouAnalyser package."
+      )
+    }
+    fs::file_copy(
+      path = template_path,
+      new_path = fs::path(base_path, "02_scripts", template)
+    )
+  }
+
+  # Output
+  fs::dir_create(fs::path(base_path, "03_output", "data"), recurse = TRUE)
+  fs::dir_create(fs::path(base_path, "03_output", "plots"), recurse = TRUE)
+
+  # Make the projet an R project
+  if (make_rproj) {
+    usethis::create_project(
+      path = base_path,
+      rstudio = rstudioapi::isAvailable(),
+      open = rlang::is_interactive()
+    )
+  }
+
+  # Feedback to user
+  cli::cli_inform(
+    c(
+      "v" = "Folder structure created:",
+      "i" = "Folder tree:"
+    )
+  )
+  fs::dir_tree(base_path)
+
+  if (!is.null(template)) {
+    cli::cli_inform(
+      c(
+        "i" = "Open the {.val {template}} template to get started: {.path {fs::path(base_path, '02_scripts', template)}}"
+      )
+    )
+  }
+}
+
 #' Save a plot to JPEG
 #'
 #' @description

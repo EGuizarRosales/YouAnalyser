@@ -31,7 +31,7 @@ eda_summary <- function(
   d_summary <- summarytools::dfSummary(x = data, varnumbers = FALSE)
 
   if (browser_output) {
-    cli::cli_h1("Data Frame Summary")
+    cli::cli_h3("Data Frame Summary")
     cli::cli_alert_info(
       "Summary table is displayed in the browser. Please check your browser windows or tabs."
     )
@@ -42,7 +42,7 @@ eda_summary <- function(
   if (console_output) {
     # Print summary table in console
     if (!browser_output) {
-      cli::cli_h1("Data Frame Summary")
+      cli::cli_h3("Data Frame Summary")
       print(d_summary)
     }
 
@@ -53,7 +53,7 @@ eda_summary <- function(
     )
 
     # Print descriptive statistics table in console
-    cli::cli_h1("Descriptive Statistics")
+    cli::cli_h3("Descriptive Statistics")
     print(d_descriptive)
   }
 }

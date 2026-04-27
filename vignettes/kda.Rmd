@@ -31,7 +31,7 @@ The following minimal and basic workflow is recommended for performing Key Drive
 2. Key Driver Analysis (KDA)
 3. Visualize and interpret the results
 
-It is assumed that the data is already in a `haven::labelled()` format. If your data is not in this format, you may need to perform some data processing steps to convert it before using `YouAnalyser`. For an example of how to do this, please refer to the `vignette("dp", package = "YouAnalyser")` vignette on Data Processing.
+It is assumed that the data is already in a `haven::labelled()` format. If your data is not in this format, you may need to perform some data processing steps to convert it before using the code below. For an example of how to do this, please refer to the `vignette("dp", package = "YouAnalyser")` vignette on Data Processing.
 
 ```{r basic-workflow-example, eval = FALSE}
 #---- 1. EDA -------------------------------------------------------------------
