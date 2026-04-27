@@ -15,7 +15,7 @@
 #' @export
 #' @examplesIf requireNamespace("haven", quietly = TRUE)
 #' # Inspect a subset of variables in the data
-#' eda_summary(data = bkw_raw, variables = c("F600", "F800_1", "F800_2"), console_output = TRUE, browser_output = FALSE)
+#' eda_summary(data = bkw_missings, variables = c("F600", "F800_1", "F800_2"), console_output = TRUE, browser_output = FALSE)
 eda_summary <- function(
   data,
   variables = NULL,

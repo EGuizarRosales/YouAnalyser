@@ -1,45 +1,56 @@
-#' BKW Employer Brand Positioning Study Data (Raw)
+#' Synthetic BKW Employer Brand Positioning Study Data (Synthetic)
 #'
-#' Raw data from the BKW Employer Brand Positioning Study conducted in 2026 (14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026).
+#' Synthetic data generated from the BKW Employer Brand Positioning Study conducted in 2026 (14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026).
 #' Key Driver Analyses (linear regression with dominance analysis) were performed.
 #' The data includes the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model.
+#' Additional grouping variables (country and cluster) are included to allow for subgroup analyses.
 #'
-#' @format ## `bkw_raw`
-#' A data frame with 5,523 rows and 220 columns:
+#' @format ## `bkw_synthetic`
+#' A data frame with 1,216 rows and 18 columns:
 #' \describe{
-#'   \item{RecordNo}{Record number, starting from 0}
-#'   \item{caseid}{unique identifier for each case}
-#'   \item{endtime}{End time of the survey}
-#'   ...
+#'   \item{id}{unique identifier for each respondent, starting from 1}
+#'   \item{country}{country of the respondent}
+#'   \item{cluster}{segmentation-based cluster the respondent belongs to}
+#'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
+#'   \item{F800_1, ..., F800_14}{Independent variables used in the regression model. Main question: Wie gut passt die BKW Ihrer Meinung nach zu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
 #' }
-"bkw_raw"
+"bkw_synthetic"
 
-#' BKW Employer Brand Positioning Study Data (Processed)
+#' Synthetic BKW Employer Brand Positioning Study Data (With Missing Values)
 #'
-#' Processed data from the BKW Employer Brand Positioning Study conducted in 2026 (14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026).
-#' Key Driver Analyses (linear regression with dominance analysis) were performed.
-#' The data was processed to only include the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model.
-#' All NA values in the dependent variable (F600) were removed to ensure the data is ready for analysis.
+#' Data synthetically created based on [YouAnalyser::bkw_synthetic]. 5% NA values were introduced in all variables to mimic missing values.
+#'
+#' @format ## `bkw_missings`
+#' A data frame with 1,216 rows and 18 columns:
+#' \describe{
+#'   \item{id}{unique identifier for each respondent, starting from 1}
+#'   \item{country}{country of the respondent}
+#'   \item{cluster}{segmentation-based cluster the respondent belongs to}
+#'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
+#'   \item{F800_1, ..., F800_14}{Independent variables used in the regression model. Main question: Wie gut passt die BKW Ihrer Meinung nach zu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
+#' }
+"bkw_missings"
+
+#' Synthetic BKW Employer Brand Positioning Study Data (Processed)
+#'
+#' Processed data created based on [YouAnalyser::bkw_missings].
+#' Only the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model are included. All NA values in these variables were removed to ensure the data is ready for analysis.
 #'
 #' @format ## `bkw_processed`
-#' A data frame with 1,216 rows and 15 columns:
+#' A data frame with 1,171 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
-#'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
-#'   ...
+#'   \item{F800_1, ..., F800_14}{Independent variables used in the regression model. Main question: Wie gut passt die BKW Ihrer Meinung nach zu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
 #' }
 "bkw_processed"
 
-#' BKW Employer Brand Positioning Study Data (Binary)
+#' Synthetic BKW Employer Brand Positioning Study Data (Binary)
 #'
-#' Binary data from the BKW Employer Brand Positioning Study conducted in 2026 (14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026).
-#' Key Driver Analyses (linear regression with dominance analysis) were performed.
-#' The data was processed to only include the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model.
-#' All NA values in the dependent variable (F600) were removed to ensure the data is ready for analysis.
+#' Binary data based on [YouAnalyser::bkw_processed].
 #' The dependent variable (F600) was dichotomized into a binary variable (0: "Nicht attraktiv", 1: "Attraktiv") based on a cutoff of 4. The independent variables (F800_1 to F800_14) were also dichotomized into binary variables (0: "Nicht gut", 1: "Gut") based on a cutoff of 4.
 #'
 #' @format ## `bkw_bin`
-#' A data frame with 1,216 rows and 15 columns:
+#' A data frame with 1,171 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (0: Nicht attraktiv, 1: Attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (0: Nicht gut, 1: Gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -49,14 +60,11 @@
 
 #' BKW Employer Brand Positioning Study Data (Binary Outcome)
 #'
-#' Data from the BKW Employer Brand Positioning Study conducted in 2026 (14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026) with binarized outcome.
-#' Key Driver Analyses (linear regression with dominance analysis) were performed.
-#' The data was processed to only include the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model.
-#' All NA values in the dependent variable (F600) were removed to ensure the data is ready for analysis.
+#' Data based on [YouAnalyser::bkw_processed] with a binary dependent variable.
 #' The dependent variable (F600) was dichotomized into a binary variable (0: "Nicht attraktiv", 1: "Attraktiv") based on a cutoff of 4.
 #'
 #' @format ## `bkw_bin_outcome`
-#' A data frame with 1,216 rows and 15 columns:
+#' A data frame with 1,171 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (0: Nicht attraktiv, 1: Attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -66,14 +74,11 @@
 
 #' BKW Employer Brand Positioning Study Data (Binary Predictors)
 #'
-#' Data from the BKW Employer Brand Positioning Study conducted in 2026 (14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026) with binarized predictors.
-#' Originally, Key Driver Analyses (linear regression with dominance analysis) were performed.
-#' The data was processed to only include the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model.
-#' All NA values in the dependent variable (F600) were removed to ensure the data is ready for analysis.
+#' Data based on [YouAnalyser::bkw_processed] with binary independent variables.
 #' The independent variables (F800_1 to F800_14) were dichotomized into binary variables (0: "Nicht gut", 1: "Gut") based on a cutoff of 4.
 #'
 #' @format ## `bkw_bin_predictors`
-#' A data frame with 1,216 rows and 15 columns:
+#' A data frame with 1,171 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (0: Nicht gut, 1: Gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -83,14 +88,12 @@
 
 #' BKW Employer Brand Positioning Study Data (Unlabelled Data)
 #'
-#' Processed data from the BKW Employer Brand Positioning Study conducted in 2026 (14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026).
-#' Key Driver Analyses (linear regression with dominance analysis) were performed.
-#' The data was processed to only include the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model.
-#' All NA values in the dependent variable (F600) were removed to ensure the data is ready for analysis. The data contains no variable labels or value labels, mimicking
+#' Data based on [YouAnalyser::bkw_processed] with unlabelled variables.
+#' The data contains no variable labels or value labels, mimicking
 #' a typical dataset that user might have read in from a .csv or .xlsx file.
 #'
 #' @format ## `bkw_unlabelled`
-#' A data frame with 1,216 rows and 15 columns:
+#' A data frame with 1,171 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -100,14 +103,11 @@
 
 #' BKW Employer Brand Positioning Study Data (Variable and Value Labels)
 #'
-#' Variable and value labels for data from the BKW Employer Brand Positioning Study conducted in 2026 (14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026).
-#' Key Driver Analyses (linear regression with dominance analysis) were performed.
-#' The data was processed to only include the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model.
-#' All NA values in the dependent variable (F600) were removed to ensure the data is ready for analysis.
+#' Data based on [YouAnalyser::bkw_processed] with variable and value labels.
 #' The data only contains variable labels and value labels, providing a codebook additionally needed if unlabelled data is read in, e.g. using .xlsx or .csv files..
 #'
 #' @format ## `bkw_labels`
-#' A data frame with 1,216 rows and 15 columns:
+#' A data frame with 1,171 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}

@@ -32,6 +32,7 @@ Imports:
     haven,
     insight,
     iopsych (>= 0.90.1),
+    mice (>= 3.19.0),
     openxlsx (>= 4.2.8.1),
     parameters,
     performance,
@@ -49,6 +50,7 @@ LazyData: true
 Suggests: 
     hexSticker (>= 0.5.1),
     knitr,
-    rmarkdown
+    rmarkdown,
+    synthpop
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown

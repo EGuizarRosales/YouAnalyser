@@ -8,3 +8,5 @@ inst/doc
 docs
 
 /.quarto/
+
+inst/extdata/bkw_realData.sav

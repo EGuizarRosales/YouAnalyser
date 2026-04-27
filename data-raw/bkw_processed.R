@@ -1,5 +1,5 @@
 bkw_processed <- haven::read_sav(ya_example(
-  "bkw.sav"
+  "bkw_missings.sav"
 )) |>
   # Select only the variables used in the regression model
   dplyr::select(
@@ -19,7 +19,7 @@ bkw_processed <- haven::read_sav(ya_example(
     F800_13,
     F800_14
   ) |>
-  # Filter for rows with non-missing values in the dependent variable (F600)
-  dplyr::filter(!is.na(F600))
+  # Filter for rows with non-missing values in the outcome or predictor varialbes
+  tidyr::drop_na()
 
 usethis::use_data(bkw_processed, overwrite = TRUE)

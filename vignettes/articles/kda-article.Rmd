@@ -43,17 +43,17 @@ example_data <- haven::read_sav(system.file(
   package = "YouAnalyser"
 ))
 
-# This will be equivalent to `example_data <- YouAnalyser::bkw_raw` but using `haven::read_sav()` allows us to see how to read in our own data in the same format.
+# This will be equivalent to `example_data <- YouAnalyser::bkw_missings` but using `haven::read_sav()` allows us to see how to read in our own data in the same format.
 ```
 
 ```{r include = FALSE}
-example_data <- YouAnalyser::bkw_raw
+example_data <- YouAnalyser::bkw_missings
 ```
 
-`example_data` contains our outcome variable `F600` and 14 predictor variables `F800_1` to `F800_14`. To get more information about this included dataset, you can run `?YouAnalyser::bkw_raw` in the R console:
+`example_data` contains our outcome variable `F600` and 14 predictor variables `F800_1` to `F800_14`. To get more information about this included dataset, you can run `?YouAnalyser::bkw_missings` in the R console:
 
 ```{r eval = FALSE}
-help(YouAnalyser::bkw_raw)
+help(YouAnalyser::bkw_missings)
 ```
 
 We will select only the variables of interest:

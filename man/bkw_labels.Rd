@@ -7,7 +7,7 @@
 \format{
 \subsection{\code{bkw_labels}}{
 
-A data frame with 1,216 rows and 15 columns:
+A data frame with 1,171 rows and 15 columns:
 \describe{
 \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
 \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -19,10 +19,7 @@ A data frame with 1,216 rows and 15 columns:
 bkw_labels
 }
 \description{
-Variable and value labels for data from the BKW Employer Brand Positioning Study conducted in 2026 (14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026).
-Key Driver Analyses (linear regression with dominance analysis) were performed.
-The data was processed to only include the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model.
-All NA values in the dependent variable (F600) were removed to ensure the data is ready for analysis.
+Data based on \link{bkw_processed} with variable and value labels.
 The data only contains variable labels and value labels, providing a codebook additionally needed if unlabelled data is read in, e.g. using .xlsx or .csv files..
 }
 \keyword{datasets}
