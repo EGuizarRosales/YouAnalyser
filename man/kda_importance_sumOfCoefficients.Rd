@@ -4,10 +4,12 @@
 \alias{kda_importance_sumOfCoefficients}
 \title{Calculate feature importance using sum of coefficients}
 \usage{
-kda_importance_sumOfCoefficients(model)
+kda_importance_sumOfCoefficients(model, standardize = TRUE)
 }
 \arguments{
 \item{model}{A fitted model object.}
+
+\item{standardize}{Logical. Whether to standardize the coefficients before calculating importance. Defaults to \code{TRUE}.}
 }
 \value{
 A list with two elements: \code{out}, a tibble with predictor names and importance

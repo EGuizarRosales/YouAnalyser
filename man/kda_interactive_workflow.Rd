@@ -8,17 +8,20 @@ kda_interactive_workflow(
   path_to_data,
   outcome,
   predictors,
-  preparePPTX = FALSE
+  preparePPTX = FALSE,
+  importance_method = "auto"
 )
 }
 \arguments{
-\item{path_to_data}{A string specifying the file path to the data file (e.g., a .sav file). The data will be copied to the project folder and read from there.}
+\item{path_to_data}{A string specifying the file path to the SPSS data file (a .sav file). The data will be copied to the project folder and read from there.}
 
 \item{outcome}{A string specifying the outcome variable for the KDA.}
 
 \item{predictors}{A character vector specifying the predictor variables for the KDA.}
 
 \item{preparePPTX}{A logical value indicating whether to prepare a PowerPoint presentation with the results. Defaults to \code{FALSE}.}
+
+\item{importance_method}{One of \code{"auto"}, \code{"domir"}, \code{"jrw"}, or \code{"sumOfCoefficients"}. Defaults to \code{"auto"}. This argument is passed to the KDA function to specify the method for calculating variable importance.}
 }
 \value{
 NULL (invisible) after guiding the user through the workflow and saving the results. The function will open the EDA summary in the browser and display the correlation matrix as a plot. After confirmation, it will run the KDA and save all generated plots to the project folder.

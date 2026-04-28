@@ -25,7 +25,7 @@ kda_regression(
 
 \item{model}{A fitted regression model object. Optional if \code{data}, \code{outcome}, and \code{predictors} are provided.}
 
-\item{diagnostics}{A logical indicating whether to compute model diagnostics. Defaults to \code{FALSE}.}
+\item{diagnostics}{A logical indicating whether to compute model diagnostics. Defaults to \code{FALSE}. If \code{TRUE}, see \href{https://easystats.github.io/performance/articles/check_model.html#linear-models-are-all-assumptions-for-linear-models-met}{here} for interpretation and possible solutions.}
 
 \item{importance_method}{One of \code{"auto"}, \code{"domir"}, \code{"jrw"}, or \code{"sumOfCoefficients"}. Defaults to \code{"auto"}.}
 

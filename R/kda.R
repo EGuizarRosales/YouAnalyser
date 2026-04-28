@@ -102,14 +102,15 @@ kda_copy_pptx_template <- function(file_path) {
 #' A short description...
 #'
 #' @param model A fitted model object.
+#' @param standardize Logical. Whether to standardize the coefficients before calculating importance. Defaults to `TRUE`.
 #'
 #' @returns
 #' A list with two elements: `out`, a tibble with predictor names and importance
 #' metrics (raw, ratio, percent, and rank), and `coef`, the model parameters table.
 #'
 #' @export
-kda_importance_sumOfCoefficients <- function(model) {
-  coef <- parameters::model_parameters(model)
+kda_importance_sumOfCoefficients <- function(model, standardize = TRUE) {
+  coef <- parameters::model_parameters(model, standardize = standardize)
   out <- coef |>
     tibble::as_tibble() |>
     dplyr::filter(Parameter != "(Intercept)") |>
@@ -853,7 +854,7 @@ kda_ipma_scatterPlot <- function(
 #' @param outcome A single string naming the outcome variable. Optional if `model` is provided.
 #' @param predictors A character vector of predictor variable names. Optional if `model` is provided.
 #' @param model A fitted regression model object. Optional if `data`, `outcome`, and `predictors` are provided.
-#' @param diagnostics A logical indicating whether to compute model diagnostics. Defaults to `FALSE`.
+#' @param diagnostics A logical indicating whether to compute model diagnostics. Defaults to `FALSE`. If `TRUE`, see [here](https://easystats.github.io/performance/articles/check_model.html#linear-models-are-all-assumptions-for-linear-models-met) for interpretation and possible solutions.
 #' @param importance_method One of `"auto"`, `"domir"`, `"jrw"`, or `"sumOfCoefficients"`. Defaults to `"auto"`.
 #' @param importance_barPlot_args Optional. A list of additional arguments passed to the importance bar plot function. See [YouAnalyser::kda_importance_barPlot()] for details..
 #' @param performance_barPlot_args Optional. A list of additional arguments passed to the performance bar plot function. See [YouAnalyser::kda_performance_barPlot()] for details..
@@ -1009,10 +1010,11 @@ kda_regression <- function(
 #' @description This function guides the user through an interactive Key Driver Analysis (KDA) workflow in the console, including exploratory data analysis (EDA), and KDA execution.
 #' Note that the function expects to be called within a project set up using `ya_setup_folder_structure()` with `template = "kda"`.
 #'
-#' @param path_to_data A string specifying the file path to the data file (e.g., a .sav file). The data will be copied to the project folder and read from there.
+#' @param path_to_data A string specifying the file path to the SPSS data file (a .sav file). The data will be copied to the project folder and read from there.
 #' @param outcome A string specifying the outcome variable for the KDA.
 #' @param predictors A character vector specifying the predictor variables for the KDA.
 #' @param preparePPTX A logical value indicating whether to prepare a PowerPoint presentation with the results. Defaults to `FALSE`.
+#' @param importance_method One of `"auto"`, `"domir"`, `"jrw"`, or `"sumOfCoefficients"`. Defaults to `"auto"`. This argument is passed to the KDA function to specify the method for calculating variable importance.
 #'
 #' @returns NULL (invisible) after guiding the user through the workflow and saving the results. The function will open the EDA summary in the browser and display the correlation matrix as a plot. After confirmation, it will run the KDA and save all generated plots to the project folder.
 #'
@@ -1021,9 +1023,36 @@ kda_interactive_workflow <- function(
   path_to_data,
   outcome,
   predictors,
-  preparePPTX = FALSE
+  preparePPTX = FALSE,
+  importance_method = "auto"
 ) {
   #---- 1. Project Setup and Read in Data --------------------------------------
+
+  # Check that path_to_data is a single non-missing string
+  if (
+    !is.character(path_to_data) ||
+      length(path_to_data) != 1L ||
+      is.na(path_to_data)
+  ) {
+    cli::cli_abort(
+      c(
+        "{.arg path_to_data} must be a single non-missing string.",
+        "x" = "Received type {.val {typeof(path_to_data)}} with length {.val {length(path_to_data)}}."
+      )
+    )
+  }
+
+  # Check that a valid .sav file is provided
+  is_sav_file <- tolower(fs::path_ext(path_to_data)) == "sav"
+  if (!is_sav_file) {
+    cli::cli_abort(
+      c(
+        "Invalid input file type.",
+        "x" = "{.arg path_to_data} must point to an SPSS file ending in {.val .sav}.",
+        "i" = "Received: {.path {path_to_data}}"
+      )
+    )
+  }
 
   # Copy raw data to project folder
   new_path_to_data <- fs::path(
@@ -1132,12 +1161,14 @@ kda_interactive_workflow <- function(
     outcome = outcome,
     predictors = predictors,
     diagnostics = TRUE,
-    importance_method = "auto"
+    importance_method = importance_method
   )
 
   cli::cli_alert_success("KDA completed successfully!")
 
   # Systematic checking of KDA results
+
+  # Check R² and provide recommendations based on thresholds
   r2 <- performance::r2(kda$model$model)
   print(r2)
   if (r2$R2 < 0.2) {
@@ -1176,6 +1207,31 @@ kda_interactive_workflow <- function(
       c(
         "v" = "High R² detected (R² ≥ 0.4): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
         "i" = "This suggests that your model is capturing a substantial portion of the variance in the outcome variable."
+      )
+    )
+    cli::cli_end()
+  }
+
+  # Check for any predictors with negative coefficients
+  model <- kda$model$model
+  params <- parameters::model_parameters(model)
+  negative_sig_coeffs <- params |>
+    dplyr::filter(Parameter != "(Intercept)") |>
+    dplyr::filter(Coefficient < 0, p < 0.05) |>
+    dplyr::pull(Parameter)
+
+  if (length(negative_sig_coeffs) > 0L) {
+    cli::cli_div(
+      theme = list(
+        .bullet = list(color = "orange")
+      )
+    )
+    cli::cli_bullets(
+      c(
+        "!" = "Statistically significant negative coefficient{?s} detected: {.val {negative_sig_coeffs}}",
+        "i" = "If simple correlations were positive, this might indicate suppression effects or multicollinearity.",
+        "i" = "The default method {.arg importance_method} 'domir' or 'jrw'} can help mitigate this issue.",
+        ">" = "After the creation of plots, check {.file ./03_output/plots/model_forestPlot.jpeg} for a visual representation of the coefficients and their confidence intervals."
       )
     )
     cli::cli_end()

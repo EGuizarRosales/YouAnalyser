@@ -5,16 +5,16 @@
 \title{Set up a standardized folder structure for a project}
 \usage{
 ya_setup_folder_structure(
-  base_path,
   folder_name,
+  base_path = tcltk::tk_choose.dir(),
   template = NULL,
   make_rproj = TRUE
 )
 }
 \arguments{
-\item{base_path}{A single string specifying the base directory where the folder structure should be created.}
-
 \item{folder_name}{A single string specifying the name of the main folder to be created within the base directory. This folder will contain the standardized subfolder structure for organizing project files.}
+
+\item{base_path}{A single string specifying the base directory where the folder structure should be created.}
 
 \item{template}{Optional. A single string specifying the name of the template file to be copied into the scripts folder. The template should be an R script located in the "templates" directory of the YouAnalyser package. Currently, \code{"kda"} is supported}
 

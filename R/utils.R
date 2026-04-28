@@ -28,7 +28,7 @@ ya_get_predictor_labels <- function(model) {
 #' ya_choose_file_path("my_plot.jpg")
 ya_choose_file_path <- function(file_name) {
   # Get directory path
-  dir_path <- choose.dir()
+  dir_path <- tcltk::tk_choose.dir()
 
   # Check if directory selection was cancelled or failed
   if (is.na(dir_path) || is.null(dir_path)) {
