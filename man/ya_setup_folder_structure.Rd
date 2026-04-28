@@ -24,5 +24,5 @@ ya_setup_folder_structure(
 NULL, invisibly. The function creates a standardized folder structure for a project at the specified location and optionally copies a template script and creates an R project file. Informative messages about the created folder structure are printed to the console.
 }
 \description{
-Set up a standardized folder structure for a project
+Set up a standardized folder structure for a project, including subfolders for input data, scripts, and output. Optionally, copy a template script into the scripts folder and create an R project file in the main folder. The function provides informative messages about the created folder structure and any actions taken.
 }

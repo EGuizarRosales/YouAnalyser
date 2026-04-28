@@ -104,6 +104,7 @@ ya_setup_folder_structure <- function(
   # Output
   fs::dir_create(fs::path(base_path, "03_output", "data"), recurse = TRUE)
   fs::dir_create(fs::path(base_path, "03_output", "plots"), recurse = TRUE)
+  fs::dir_create(fs::path(base_path, "03_output", "reports"), recurse = TRUE)
 
   # Make the projet an R project
   if (make_rproj) {

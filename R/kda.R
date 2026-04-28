@@ -152,7 +152,7 @@ kda_importance_domir <- function(
   partial_domir <- purrr::partial(
     domir::domir,
     .adj = FALSE,
-    .prg = FALSE,
+    .prg = TRUE,
     !!!domir_args
   )
 
@@ -1002,4 +1002,220 @@ kda_regression <- function(
       ipma_scatterPlot = p_ipma
     )
   ))
+}
+
+#' Conduct an interactive KDA workflow in the console
+#'
+#' @description This function guides the user through an interactive Key Driver Analysis (KDA) workflow in the console, including exploratory data analysis (EDA), and KDA execution.
+#' Note that the function expects to be called within a project set up using `ya_setup_folder_structure()` with `template = "kda"`.
+#'
+#' @param path_to_data A string specifying the file path to the data file (e.g., a .sav file). The data will be copied to the project folder and read from there.
+#' @param outcome A string specifying the outcome variable for the KDA.
+#' @param predictors A character vector specifying the predictor variables for the KDA.
+#' @param preparePPTX A logical value indicating whether to prepare a PowerPoint presentation with the results. Defaults to `FALSE`.
+#'
+#' @returns NULL (invisible) after guiding the user through the workflow and saving the results. The function will open the EDA summary in the browser and display the correlation matrix as a plot. After confirmation, it will run the KDA and save all generated plots to the project folder.
+#'
+#' @export
+kda_interactive_workflow <- function(
+  path_to_data,
+  outcome,
+  predictors,
+  preparePPTX = FALSE
+) {
+  #---- 1. Project Setup and Read in Data --------------------------------------
+
+  # Copy raw data to project folder
+  new_path_to_data <- fs::path(
+    ".",
+    "01_input",
+    "data",
+    "raw",
+    basename(path_to_data)
+  )
+  fs::file_copy(
+    path = path_to_data,
+    new_path = new_path_to_data,
+    overwrite = TRUE
+  )
+
+  # Read in data, select only outcome and predictors
+  data <- haven::read_sav(new_path_to_data) |>
+    dplyr::select(
+      all_of(outcome),
+      all_of(predictors)
+    )
+
+  #---- 2. EDA -----------------------------------------------------------------
+
+  cli::cli_h1("Exploratory Data Analysis (EDA)")
+
+  # Summary
+  eda_summary(data, console_output = FALSE)
+
+  # Correlation matrix
+  eda_corrs <- eda_correlation(data)
+  tmp_file <- tempfile(fileext = ".jpeg")
+  ya_save_plot(
+    plot = eda_corrs$p,
+    file_path = tmp_file,
+    width = 30,
+    height = 20,
+    verbose = FALSE
+  )
+  browseURL(tmp_file)
+
+  # Systematic checking
+  cols_with_missing <- names(data)[vapply(data, \(x) any(is.na(x)), logical(1))]
+  if (!length(cols_with_missing) == 0L) {
+    cli::cli_abort(
+      c(
+        "Missing values detected.",
+        "i" = "Affected variable{?s}: {.val {cols_with_missing}}"
+      )
+    )
+  }
+  cols_with_negative_corr <- eda_corrs$d |>
+    dplyr::filter(Parameter1 == outcome) |>
+    dplyr::filter(r < 0) |>
+    dplyr::pull(Parameter2)
+  if (!length(cols_with_negative_corr) == 0L) {
+    cli::cli_abort(
+      c(
+        "Negative correlations detected.",
+        "i" = "Affected variable{?s}: {.val {cols_with_negative_corr}}"
+      )
+    )
+  }
+
+  # Interactive checking
+  cli::cli_text("")
+  cli::cli_div(
+    theme = list(
+      .alert = list(color = "blue"),
+      li = list(color = "blue")
+    )
+  )
+  cli::cli_alert_info(
+    "Check the data summary (browser) and correlation matrix (picture) and confirm the following:"
+  )
+  cli::cli_ol(
+    items = c(
+      "Are there no unexpected values (e.g., values like {.val 99}) and no missing values in the data?",
+      "Are all predictors positively correlated with the outcome variable? (bottom row in correlation matrix)"
+    )
+  )
+  cli::cli_end()
+
+  # Ask for confirmation
+  run_kda <- menu(
+    choices = c("Yes!", "No, I need to work on my data again."),
+    title = "\nCould you confirm the above points? Are you ready to run the KDA?"
+  )
+
+  if (run_kda == 2L) {
+    cli::cli_abort("KDA canceled by user.")
+  }
+
+  if (run_kda == 0L) {
+    cli::cli_abort("No option selected. KDA canceled.")
+  }
+
+  #---- 3. KDA -----------------------------------------------------------------
+
+  cli::cli_h1("Key Driver Analysis (KDA)")
+  cli::cli_alert_info("Running {.fun kda_regression} with default settings...")
+
+  # Perform Key Driver Analysis
+  kda <- kda_regression(
+    data = data,
+    outcome = outcome,
+    predictors = predictors,
+    diagnostics = TRUE,
+    importance_method = "auto"
+  )
+
+  cli::cli_alert_success("KDA completed successfully!")
+
+  # Save plots
+  cli::cli_alert_info(
+    "Saving all created plots ..."
+  )
+
+  suppressMessages(
+    purrr::iwalk(
+      .x = kda$plots,
+      .f = \(x, name) {
+        ya_save_plot(
+          plot = x$p,
+          file_path = paste0(
+            "./03_output/plots/",
+            name,
+            ".jpeg"
+          ),
+          width = 30,
+          height = 20,
+          verbose = FALSE
+        )
+      }
+    )
+  )
+
+  cli::cli_alert_success(
+    "All plots saved successfully to the folder {.path ./03_output/plots}!"
+  )
+
+  # Inspect the Importance Performance Matrix Analysis (IPMA) plot
+  cli::cli_h2("Your Main Output: The IPMA Plot")
+  print(kda$plots$ipma_scatterPlot$p)
+  cli::cli_alert(
+    "Have a look at the IPMA plot in your plots pane, also saved here: {.file ./03_output/plots/ipma_scatterPlot.jpeg}"
+  )
+
+  if (preparePPTX) {
+    cli::cli_h1("Charting in PowerPoint")
+    cli::cli_text()
+    cli::cli_text("How would you like to name your PowerPoint Reporting file?")
+    cli::cli_text()
+    file_name <- readline(
+      prompt = "Enter the file name (without extension, no special characters, no spaces): "
+    )
+
+    kda_save_data_for_chart(
+      ipma_scatterPlot_data = kda$plots$ipma_scatterPlot$d,
+      file_path = paste0(
+        "./03_output/data/",
+        paste0(file_name, ".xlsx")
+      )
+    )
+    kda_copy_pptx_template(
+      file_path = paste0(
+        "./03_output/reports/",
+        paste0(file_name, ".pptx")
+      )
+    )
+
+    cli::cli_bullets(
+      c(
+        "v" = "Setup for PowerPoint reporting has been created successfully!",
+        "i" = "Open {.file ./03_output/data/{file_name}.xlsx} to copy the data for the IPMA scatter plot into the PowerPoint template.",
+        "i" = "Open the PowerPoint template {.file ./03_output/reports/{file_name}.pptx} and paste the data using 'Edit Data' > 'Edit Data in Excel'."
+      )
+    )
+  }
+
+  cli::cli_text()
+  cli::cli_div(
+    theme = list(
+      .alert = list(color = "green")
+    )
+  )
+  cli::cli_alert_success("Workflow completed successfully!")
+  cli::cli_end()
+  cli::cli_text()
+  cli::cli_alert(
+    "You can now find all outputs in the {.path ./03_output} folder."
+  )
+  cli::cli_text()
+  cli::cli_rule()
 }
