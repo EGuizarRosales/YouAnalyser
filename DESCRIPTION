@@ -54,3 +54,5 @@ Suggests:
     synthpop
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown
+Remotes:
+    allengoebl/iopsych

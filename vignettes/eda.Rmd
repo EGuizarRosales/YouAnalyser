@@ -2,7 +2,7 @@
 title: "Exploratory Data Analysis (EDA)"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Exploratory Data Analysis (EDA}
+  %\VignetteIndexEntry{Exploratory Data Analysis (EDA)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
