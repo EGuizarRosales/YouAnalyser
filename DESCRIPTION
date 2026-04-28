@@ -39,6 +39,7 @@ Imports:
     psych (>= 2.6.3),
     purrr,
     rlang,
+    see (>= 0.13.0),
     showtext (>= 0.9.8),
     sjlabelled,
     stringr,
