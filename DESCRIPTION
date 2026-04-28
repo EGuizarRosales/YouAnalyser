@@ -31,7 +31,6 @@ Imports:
     ggrepel (>= 0.9.6),
     haven,
     insight,
-    iopsych (>= 0.90.1),
     mice (>= 3.19.0),
     openxlsx (>= 4.2.8.1),
     parameters,
@@ -39,6 +38,7 @@ Imports:
     psych (>= 2.6.3),
     purrr,
     rlang,
+    rwa (>= 0.1.1),
     see (>= 0.13.0),
     showtext (>= 0.9.8),
     sjlabelled,
@@ -55,5 +55,3 @@ Suggests:
     synthpop
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown
-Remotes:
-    allengoebl/iopsych

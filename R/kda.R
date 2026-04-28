@@ -205,72 +205,48 @@ kda_importance_domir <- function(
 #' more than ~15 predictors, this function scales better to larger models.
 #'
 #' For linear regression models, relative importance is computed from each
-#' predictor's contribution to model \(R^2\). For logistic regression models,
+#' predictor's contribution to model $(R^2)$. For logistic regression models,
 #' relative importance is computed from each predictor's contribution to
-#' pseudo-\(R^2\).
+#' pseudo-$(R^2)$.
 #'
-#' @seealso [kda_importance_domir()]
+#' @seealso [kda_importance_domir()], [rwa::rwa()]
 #' @param model A model object.
-#' @param correlation_method Optional. One of `"polychoric"` or `"pearson"`. Defaults to `"polychoric"` for binomial models and `"pearson"` otherwise.
 #'
 #' @returns
 #' A list containing:
 #' - `out`: A tibble with predictor importance metrics (raw, ratio, percent, and rank).
-#' - `jrw`: The Johnson's Relative Weights object.
+#' - `jrw`: The Johnson's Relative Weights object computed using [rwa::rwa()].
 #'
 #' @export
-kda_importance_jrw <- function(
-  model,
-  correlation_method = if (insight::model_info(model)$is_binomial) {
-    "polychoric"
-  } else {
-    "pearson"
-  }
-) {
+kda_importance_jrw <- function(model) {
   # Get model data
-  data <- dplyr::bind_cols(
-    insight::get_data(model, source = "mf")[,
-      insight::find_variables(model)$response
-    ],
-    insight::get_data(model, source = "mf")[,
-      insight::find_variables(model)$conditional
-    ]
-  )
-
-  if (insight::model_info(model)$is_binomial) {
-    data <- data |>
-      dplyr::mutate(dplyr::across(dplyr::everything(), as.numeric))
-  }
-
-  # Calculate correlation matrix
-  corr <- correlation::correlation(
-    data,
-    method = correlation_method,
-    use = "pairwise.complete.obs"
-  )
-  corr_mat <- as.matrix(corr)
+  data <- insight::get_data(model, source = "mf")
+  outcome <- insight::find_variables(model)$response
+  predictors <- insight::find_variables(model)$conditional
 
   # Calculate Johnson's Relative Weights
-  jrw <- iopsych::relWt(
-    corr_mat,
-    y_col = 1,
-    x_col = 2:ncol(corr_mat)
+  jrw <- rwa::rwa(
+    df = data,
+    outcome = outcome,
+    predictors = predictors,
+    applysigns = FALSE,
+    bootstrap = FALSE,
+    n_bootstrap = 1000,
+    conf_level = 0.95,
+    focal = NULL,
+    comprehensive = FALSE,
+    include_rescaled_ci = FALSE
   )
 
   # Define primary output
-  out <- tibble::as_tibble(jrw$eps, rownames = "predictor") |>
+  out <- tibble::as_tibble(jrw$result) |>
+    dplyr::rename(predictor = Variables) |>
     dplyr::mutate(
-      Importance_Raw = EPS,
-      Importance_Ratio = EPS / sum(EPS),
+      Importance_Raw = Raw.RelWeight,
+      Importance_Ratio = Raw.RelWeight / sum(Raw.RelWeight),
       Importance_Percent = Importance_Ratio * 100,
-      Importance_Rank = dplyr::row_number(dplyr::desc(EPS))
-    ) |>
-    # Make sure that Importance_Raw values sum up to the models R squared
-    # (important for glm models)
-    dplyr::mutate(
-      Importance_Raw = performance::r2(model)$R2 * Importance_Ratio
-    ) |>
-    dplyr::select(-EPS)
+      Importance_Rank = dplyr::row_number(dplyr::desc(Raw.RelWeight))
+    )
   attr(out, "importance_type") <- "R²"
 
   return(list(

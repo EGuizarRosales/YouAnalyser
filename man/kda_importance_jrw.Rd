@@ -4,26 +4,16 @@
 \alias{kda_importance_jrw}
 \title{Calculate Importance using Johnson's Relative Weights}
 \usage{
-kda_importance_jrw(
-  model,
-  correlation_method = if (insight::model_info(model)$is_binomial) {
-     "polychoric"
- }
-    else {
-     "pearson"
- }
-)
+kda_importance_jrw(model)
 }
 \arguments{
 \item{model}{A model object.}
-
-\item{correlation_method}{Optional. One of \code{"polychoric"} or \code{"pearson"}. Defaults to \code{"polychoric"} for binomial models and \code{"pearson"} otherwise.}
 }
 \value{
 A list containing:
 \itemize{
 \item \code{out}: A tibble with predictor importance metrics (raw, ratio, percent, and rank).
-\item \code{jrw}: The Johnson's Relative Weights object.
+\item \code{jrw}: The Johnson's Relative Weights object computed using \code{\link[rwa:rwa]{rwa::rwa()}}.
 }
 }
 \description{
@@ -32,10 +22,10 @@ This function is a more efficient, though less precise, alternative to
 more than ~15 predictors, this function scales better to larger models.
 
 For linear regression models, relative importance is computed from each
-predictor's contribution to model \(R^2\). For logistic regression models,
+predictor's contribution to model $(R^2)$. For logistic regression models,
 relative importance is computed from each predictor's contribution to
-pseudo-\(R^2\).
+pseudo-$(R^2)$.
 }
 \seealso{
-\code{\link[=kda_importance_domir]{kda_importance_domir()}}
+\code{\link[=kda_importance_domir]{kda_importance_domir()}}, \code{\link[rwa:rwa]{rwa::rwa()}}
 }
