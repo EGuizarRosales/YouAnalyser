@@ -43,7 +43,9 @@ kda_regression(
 - diagnostics:
 
   A logical indicating whether to compute model diagnostics. Defaults to
-  `FALSE`.
+  `FALSE`. If `TRUE`, see
+  [here](https://easystats.github.io/performance/articles/check_model.html#linear-models-are-all-assumptions-for-linear-models-met)
+  for interpretation and possible solutions.
 
 - importance_method:
 

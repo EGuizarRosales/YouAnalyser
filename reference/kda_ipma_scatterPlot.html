@@ -91,8 +91,6 @@
 <span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">F600</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">bkw_processed</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Fit importance and performance objects</span></span></span>
 <span class="r-in"><span><span class="va">importance_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="kda_importance_jrw.html">kda_importance_jrw</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> New names:</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> `` -&gt; `...1`</span>
 <span class="r-in"><span><span class="va">performance_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="kda_performance.html">kda_performance</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ipma_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="kda_ipma.html">kda_ipma</a></span><span class="op">(</span><span class="va">importance_obj</span>, <span class="va">performance_obj</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Create IPMA scatter plot</span></span></span>

@@ -57,8 +57,6 @@ A list containing:
 m <- lm(F600 ~ ., data = bkw_processed)
 # Fit importance and performance objects
 importance_obj <- kda_importance_jrw(m)
-#> New names:
-#> • `` -> `...1`
 performance_obj <- kda_performance(m)
 ipma_obj <- kda_ipma(importance_obj, performance_obj)
 # Create IPMA scatter plot

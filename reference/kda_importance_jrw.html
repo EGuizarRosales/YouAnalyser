@@ -3,15 +3,15 @@
 kda_importance_domir(). While kda_importance_domir() can become computationally intensive with
 more than ~15 predictors, this function scales better to larger models.
 For linear regression models, relative importance is computed from each
-predictor's contribution to model \(R^2\). For logistic regression models,
+predictor's contribution to model $(R^2)$. For logistic regression models,
 relative importance is computed from each predictor's contribution to
-pseudo-\(R^2\)."><meta property="og:description" content="This function is a more efficient, though less precise, alternative to
+pseudo-$(R^2)$."><meta property="og:description" content="This function is a more efficient, though less precise, alternative to
 kda_importance_domir(). While kda_importance_domir() can become computationally intensive with
 more than ~15 predictors, this function scales better to larger models.
 For linear regression models, relative importance is computed from each
-predictor's contribution to model \(R^2\). For logistic regression models,
+predictor's contribution to model $(R^2)$. For logistic regression models,
 relative importance is computed from each predictor's contribution to
-pseudo-\(R^2\)."><meta property="og:image" content="https://eguizarrosales.github.io/YouAnalyser/logo.png"></head><body>
+pseudo-$(R^2)$."><meta property="og:image" content="https://eguizarrosales.github.io/YouAnalyser/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -55,22 +55,14 @@ pseudo-\(R^2\)."><meta property="og:image" content="https://eguizarrosales.githu
 <code><a href="kda_importance_domir.html">kda_importance_domir()</a></code>. While <code><a href="kda_importance_domir.html">kda_importance_domir()</a></code> can become computationally intensive with
 more than ~15 predictors, this function scales better to larger models.</p>
 <p>For linear regression models, relative importance is computed from each
-predictor's contribution to model \(R^2\). For logistic regression models,
+predictor's contribution to model $(R^2)$. For logistic regression models,
 relative importance is computed from each predictor's contribution to
-pseudo-\(R^2\).</p>
+pseudo-$(R^2)$.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">kda_importance_jrw</span><span class="op">(</span></span>
-<span>  <span class="va">model</span>,</span>
-<span>  correlation_method <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/insight/reference/model_info.html" class="external-link">model_info</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">is_binomial</span><span class="op">)</span> <span class="op">{</span></span>
-<span>     <span class="st">"polychoric"</span></span>
-<span> <span class="op">}</span></span>
-<span>    <span class="kw">else</span> <span class="op">{</span></span>
-<span>     <span class="st">"pearson"</span></span>
-<span> <span class="op">}</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">kda_importance_jrw</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -80,19 +72,15 @@ pseudo-\(R^2\).</p>
 <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A model object.</p></dd>
 
-
-<dt id="arg-correlation-method">correlation_method<a class="anchor" aria-label="anchor" href="#arg-correlation-method"></a></dt>
-<dd><p>Optional. One of <code>"polychoric"</code> or <code>"pearson"</code>. Defaults to <code>"polychoric"</code> for binomial models and <code>"pearson"</code> otherwise.</p></dd>
-
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A list containing:</p><ul><li><p><code>out</code>: A tibble with predictor importance metrics (raw, ratio, percent, and rank).</p></li>
-<li><p><code>jrw</code>: The Johnson's Relative Weights object.</p></li>
+<li><p><code>jrw</code>: The Johnson's Relative Weights object computed using <code><a href="https://martinctc.github.io/rwa/reference/rwa.html" class="external-link">rwa::rwa()</a></code>.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="kda_importance_domir.html">kda_importance_domir()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="kda_importance_domir.html">kda_importance_domir()</a></code>, <code><a href="https://martinctc.github.io/rwa/reference/rwa.html" class="external-link">rwa::rwa()</a></code></p></div>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

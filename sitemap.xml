@@ -13,8 +13,9 @@
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_outcome.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_predictors.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_labels.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_missings.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_processed.html</loc></url>
-<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_raw.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_synthetic.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/bkw_unlabelled.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/dp_convert_to_labelled.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/dp_copy_codebook_template.html</loc></url>
@@ -28,6 +29,7 @@
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_domir.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_jrw.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_sumOfCoefficients.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_interactive_workflow.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_ipma.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_ipma_scatterPlot.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_performance.html</loc></url>
@@ -38,6 +40,7 @@
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file_path.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_setup_folder_structure.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/yougov_colors.html</loc></url>
 </urlset>
 

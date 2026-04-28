@@ -256,6 +256,8 @@ specific steps of the KDA process.
   : Calculate Importance using Johnson's Relative Weights
 - [`kda_importance_sumOfCoefficients()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_sumOfCoefficients.md)
   : Calculate feature importance using sum of coefficients
+- [`kda_interactive_workflow()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_interactive_workflow.md)
+  : Conduct an interactive KDA workflow in the console
 - [`kda_ipma()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_ipma.md)
   : Importance-Performance Matrix Analysis
 - [`kda_ipma_scatterPlot()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_ipma_scatterPlot.md)
@@ -279,13 +281,15 @@ Miscellaneous utility functions for the YouAnalyser package.
   : Choose a directory and create a file path
 - [`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md)
   : Save a plot to JPEG
+- [`ya_setup_folder_structure()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_setup_folder_structure.md)
+  : Set up a standardized folder structure for a project
 
 ## Example Data
 
 Example datasets included in the YouAnalyser package.
 
 - [`bkw_bin`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin.md)
-  : BKW Employer Brand Positioning Study Data (Binary)
+  : Synthetic BKW Employer Brand Positioning Study Data (Binary)
 - [`bkw_bin_outcome`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_outcome.md)
   : BKW Employer Brand Positioning Study Data (Binary Outcome)
 - [`bkw_bin_predictors`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_bin_predictors.md)
@@ -293,10 +297,13 @@ Example datasets included in the YouAnalyser package.
 - [`bkw_labels`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_labels.md)
   : BKW Employer Brand Positioning Study Data (Variable and Value
   Labels)
+- [`bkw_missings`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_missings.md)
+  : Synthetic BKW Employer Brand Positioning Study Data (With Missing
+  Values)
 - [`bkw_processed`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_processed.md)
-  : BKW Employer Brand Positioning Study Data (Processed)
-- [`bkw_raw`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_raw.md)
-  : BKW Employer Brand Positioning Study Data (Raw)
+  : Synthetic BKW Employer Brand Positioning Study Data (Processed)
+- [`bkw_synthetic`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_synthetic.md)
+  : Synthetic BKW Employer Brand Positioning Study Data (Synthetic)
 - [`bkw_unlabelled`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_unlabelled.md)
   : BKW Employer Brand Positioning Study Data (Unlabelled Data)
 

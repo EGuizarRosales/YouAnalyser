@@ -2,6 +2,12 @@
 
 ``` r
 library(YouAnalyser)
+#> 
+#> ── Welcome to YouAnalyser! ─────────────────────────────────────────────────────
+#> ✔ Package loaded successfully!
+#> Type `?YouAnalyser` to see the documentation.
+#> Visit the package's website for more information:
+#> <https://eguizarrosales.github.io/YouAnalyser/>
 library(haven)
 ```
 
@@ -57,18 +63,17 @@ myData <- haven::read_sav(file = file_path) |>
 # Inspect the structure of the data for the first two variables. Take note of
 # the attributes "@label" (variable label) and "@labels" (value labels).
 str(myData[, 1:2])
-#> tibble [1,216 × 2] (S3: tbl_df/tbl/data.frame)
-#>  $ F600  : dbl+lbl [1:1216] 4, 2, 2, 4, 4, 5, 4, 3, 6, 2, 6, 5, 4, 6, 4, 4, 3, 3,...
+#> tibble [1,171 × 2] (S3: tbl_df/tbl/data.frame)
+#>  $ F600  : dbl+lbl [1:1171] 5, 3, 6, 2, 4, 5, 5, 5, 5, 5, 5, 4, 3, 4, 4, 5, 4, 4,...
 #>    ..@ label      : chr "Wie attraktiv finden Sie die BKW als Arbeitgeberin?"
-#>    ..@ format.spss: chr "F1.0"
+#>    ..@ format.spss: chr "F8.2"
 #>    ..@ labels     : Named num [1:7] 1 2 3 4 5 6 7
 #>    .. ..- attr(*, "names")= chr [1:7] "1 - Überhaupt nicht attraktiv" "2" "3" "4" ...
-#>  $ F800_1: dbl+lbl [1:1216] 4, 3, 4, 6, 7, 4, 7, 4, 7, 4, 6, 6, 5, 6, 5, 5, 4, 5,...
+#>  $ F800_1: dbl+lbl [1:1171] 6, 6, 7, 5, 4, 6, 4, 5, 7, 6, 7, 7, 3, 4, 6, 7, 5, 4,...
 #>    ..@ label      : chr "Sicherheit und langfristige Stabilität des Arbeitgebers"
-#>    ..@ format.spss: chr "F1.0"
+#>    ..@ format.spss: chr "F8.2"
 #>    ..@ labels     : Named num [1:7] 1 2 3 4 5 6 7
 #>    .. ..- attr(*, "names")= chr [1:7] "Überhaupt nicht gut  1" "2" "3" "4" ...
-#>  - attr(*, "label")= chr "File created by user 'ana-maria.nedelcu' at Wed Feb 11 11:11"
 ```
 
 There are different ways you can inspect the variable and value labels
@@ -112,25 +117,25 @@ which includes the variable labels and value labels in a tidy format:
 ``` r
 # Print codebook for the first two variables
 dp_inspect_codebook(myData[, 1:2])
-#> data (1216 rows and 2 variables, 2 shown)
+#> data (1171 rows and 2 variables, 2 shown)
 #> 
 #> ID | Name   | Label          | Type    | Missings | Values | Value Labels       |           N
 #> ---+--------+----------------+---------+----------+--------+--------------------+------------
-#> 1  | F600   | Wie attraktiv  | numeric | 0 (0.0%) |      1 | 1 - Überhaupt...   |  54 ( 4.4%)
-#>    |        | finden Sie die |         |          |      2 | 2                  |  59 ( 4.9%)
-#>    |        | BKW als        |         |          |      3 | 3                  | 116 ( 9.5%)
-#>    |        | Arbeitgeberin? |         |          |      4 | 4                  | 470 (38.7%)
-#>    |        |                |         |          |      5 | 5                  | 305 (25.1%)
-#>    |        |                |         |          |      6 | 6                  | 132 (10.9%)
-#>    |        |                |         |          |      7 | 7 - Sehr...        |  80 ( 6.6%)
+#> 1  | F600   | Wie attraktiv  | numeric | 0 (0.0%) |      1 | 1 - Überhaupt...   |  43 ( 3.7%)
+#>    |        | finden Sie die |         |          |      2 | 2                  |  50 ( 4.3%)
+#>    |        | BKW als        |         |          |      3 | 3                  | 130 (11.1%)
+#>    |        | Arbeitgeberin? |         |          |      4 | 4                  | 461 (39.4%)
+#>    |        |                |         |          |      5 | 5                  | 303 (25.9%)
+#>    |        |                |         |          |      6 | 6                  | 109 ( 9.3%)
+#>    |        |                |         |          |      7 | 7 - Sehr...        |  75 ( 6.4%)
 #> ---+--------+----------------+---------+----------+--------+--------------------+------------
-#> 2  | F800_1 | Sicherheit und | numeric | 0 (0.0%) |      1 | Überhaupt nicht... |  18 ( 1.5%)
+#> 2  | F800_1 | Sicherheit und | numeric | 0 (0.0%) |      1 | Überhaupt nicht... |  11 ( 0.9%)
 #>    |        | langfristige   |         |          |      2 | 2                  |  19 ( 1.6%)
-#>    |        | Stabilität des |         |          |      3 | 3                  |  61 ( 5.0%)
-#>    |        | Arbeitgebers   |         |          |      4 | 4                  | 310 (25.5%)
-#>    |        |                |         |          |      5 | 5                  | 274 (22.5%)
-#>    |        |                |         |          |      6 | 6                  | 334 (27.5%)
-#>    |        |                |         |          |      7 | Sehr gut  7        | 200 (16.4%)
+#>    |        | Stabilität des |         |          |      3 | 3                  |  66 ( 5.6%)
+#>    |        | Arbeitgebers   |         |          |      4 | 4                  | 301 (25.7%)
+#>    |        |                |         |          |      5 | 5                  | 270 (23.1%)
+#>    |        |                |         |          |      6 | 6                  | 322 (27.5%)
+#>    |        |                |         |          |      7 | Sehr gut  7        | 182 (15.5%)
 #> ---------------------------------------------------------------------------------------------
 ```
 
@@ -158,88 +163,87 @@ myData_unlabelled <- openxlsx::read.xlsx(file_path) |>
 # Inspect the structure of the data for the first two variables.
 # Note that there are no variable labels or value labels.
 str(myData_unlabelled[, 1:2])
-#> tibble [1,216 × 2] (S3: tbl_df/tbl/data.frame)
-#>  $ F600  : num [1:1216] 4 2 2 4 4 5 4 3 6 2 ...
+#> tibble [1,171 × 2] (S3: tbl_df/tbl/data.frame)
+#>  $ F600  : num [1:1171] 5 3 6 2 4 5 5 5 5 5 ...
 #>   ..- attr(*, "label")= chr "Wie attraktiv finden Sie die BKW als Arbeitgeberin?"
-#>   ..- attr(*, "format.spss")= chr "F1.0"
-#>  $ F800_1: num [1:1216] 4 3 4 6 7 4 7 4 7 4 ...
+#>   ..- attr(*, "format.spss")= chr "F8.2"
+#>  $ F800_1: num [1:1171] 6 6 7 5 4 6 4 5 7 6 ...
 #>   ..- attr(*, "label")= chr "Sicherheit und langfristige Stabilität des Arbeitgebers"
-#>   ..- attr(*, "format.spss")= chr "F1.0"
-#>  - attr(*, "label")= chr "File created by user 'ana-maria.nedelcu' at Wed Feb 11 11:11"
+#>   ..- attr(*, "format.spss")= chr "F8.2"
 
 # `dp_inspect_codebook()` also confirms that there are no variable labels or
 #  value labels in the unlabelled data.
 dp_inspect_codebook(myData_unlabelled)
-#> data (1216 rows and 15 variables, 15 shown)
+#> data (1171 rows and 15 variables, 15 shown)
 #> 
 #> ID | Name    | Label                     | Type    | Missings | Values |    N
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 1  | F600    | Wie attraktiv             | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 1  | F600    | Wie attraktiv             | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | finden Sie die            |         |          |        |     
 #>    |         | BKW als                   |         |          |        |     
 #>    |         | Arbeitgeberin?            |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 2  | F800_1  | Sicherheit und            | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 2  | F800_1  | Sicherheit und            | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | langfristige              |         |          |        |     
 #>    |         | Stabilität des            |         |          |        |     
 #>    |         | Arbeitgebers              |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 3  | F800_2  | Karriere- und             | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 3  | F800_2  | Karriere- und             | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | Entwicklungsmöglichkeiten |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 4  | F800_3  | Sinnvolle                 | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 4  | F800_3  | Sinnvolle                 | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | Tätigkeit und             |         |          |        |     
 #>    |         | gesellschaftlicher        |         |          |        |     
 #>    |         | Beitrag                   |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 5  | F800_4  | Gute                      | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 5  | F800_4  | Gute                      | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | Zusammenarbeit            |         |          |        |     
 #>    |         | und Teamkultur            |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 6  | F800_5  | Vereinbarkeit             | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 6  | F800_5  | Vereinbarkeit             | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | von Beruf und             |         |          |        |     
 #>    |         | Privatleben               |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 7  | F800_6  | Moderne                   | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 7  | F800_6  | Moderne                   | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | Arbeitsumgebung           |         |          |        |     
 #>    |         | und                       |         |          |        |     
 #>    |         | Technologien              |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 8  | F800_7  | Attraktive                | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 8  | F800_7  | Attraktive                | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | Vergütung und             |         |          |        |     
 #>    |         | Zusatzleistungen          |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 9  | F800_8  | Gute Führung              | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 9  | F800_8  | Gute Führung              | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | und                       |         |          |        |     
 #>    |         | wertschätzende            |         |          |        |     
 #>    |         | Unternehmenskultur        |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 10 | F800_9  | Verantwortung             | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 10 | F800_9  | Verantwortung             | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | und                       |         |          |        |     
 #>    |         | Gestaltungsspielraum      |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 11 | F800_10 | Zukunftsorientierung      | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 11 | F800_10 | Zukunftsorientierung      | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | und                       |         |          |        |     
 #>    |         | Nachhaltigkeit            |         |          |        |     
 #>    |         | des                       |         |          |        |     
 #>    |         | Unternehmens              |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 12 | F800_11 | Internationales           | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 12 | F800_11 | Internationales           | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | Arbeitsumfeld             |         |          |        |     
 #>    |         | und kulturelle            |         |          |        |     
 #>    |         | Vielfalt                  |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 13 | F800_12 | Innovationskultur         | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 13 | F800_12 | Innovationskultur         | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | und                       |         |          |        |     
 #>    |         | Veränderungsbereitschaft  |         |          |        |     
 #>    |         | des                       |         |          |        |     
 #>    |         | Unternehmens              |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 14 | F800_13 | Arbeitszeit-              | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 14 | F800_13 | Arbeitszeit-              | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | und                       |         |          |        |     
 #>    |         | Arbeitsortflexibilität    |         |          |        |     
 #> ---+---------+---------------------------+---------+----------+--------+-----
-#> 15 | F800_14 | Diversität,               | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 15 | F800_14 | Diversität,               | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |         | Gleichstellung            |         |          |        |     
 #>    |         | und Inklusion             |         |          |        |     
 #> -----------------------------------------------------------------------------
@@ -333,25 +337,25 @@ myData_labelled <- dp_convert_to_labelled(
 
 # Confirm that labelling worked (only show the first 3 variables for brevity)
 dp_inspect_codebook(myData_unlabelled[, 1:3])
-#> data (1216 rows and 3 variables, 3 shown)
+#> data (1171 rows and 3 variables, 3 shown)
 #> 
 #> ID | Name   | Label                     | Type    | Missings | Values |    N
 #> ---+--------+---------------------------+---------+----------+--------+-----
-#> 1  | F600   | Wie attraktiv             | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 1  | F600   | Wie attraktiv             | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |        | finden Sie die            |         |          |        |     
 #>    |        | BKW als                   |         |          |        |     
 #>    |        | Arbeitgeberin?            |         |          |        |     
 #> ---+--------+---------------------------+---------+----------+--------+-----
-#> 2  | F800_1 | Sicherheit und            | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 2  | F800_1 | Sicherheit und            | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |        | langfristige              |         |          |        |     
 #>    |        | Stabilität des            |         |          |        |     
 #>    |        | Arbeitgebers              |         |          |        |     
 #> ---+--------+---------------------------+---------+----------+--------+-----
-#> 3  | F800_2 | Karriere- und             | numeric | 0 (0.0%) | [1, 7] | 1216
+#> 3  | F800_2 | Karriere- und             | numeric | 0 (0.0%) | [1, 7] | 1171
 #>    |        | Entwicklungsmöglichkeiten |         |          |        |     
 #> ----------------------------------------------------------------------------
 dp_inspect_codebook(myData_labelled[, 1:3])
-#> data (1216 rows and 3 variables, 3 shown)
+#> data (1171 rows and 3 variables, 3 shown)
 #> 
 #> ID | Name   | Label                     | Type    | Missings | Values
 #> ---+--------+---------------------------+---------+----------+-------
@@ -382,29 +386,29 @@ dp_inspect_codebook(myData_labelled[, 1:3])
 #> 
 #> ID | Value Labels       |           N
 #> ---+--------------------+------------
-#> 1  | 1 - Überhaupt...   |  54 ( 4.4%)
-#>    | 2                  |  59 ( 4.9%)
-#>    | 3                  | 116 ( 9.5%)
-#>    | 4                  | 470 (38.7%)
-#>    | 5                  | 305 (25.1%)
-#>    | 6                  | 132 (10.9%)
-#>    | 7 - Sehr...        |  80 ( 6.6%)
+#> 1  | 1 - Überhaupt...   |  43 ( 3.7%)
+#>    | 2                  |  50 ( 4.3%)
+#>    | 3                  | 130 (11.1%)
+#>    | 4                  | 461 (39.4%)
+#>    | 5                  | 303 (25.9%)
+#>    | 6                  | 109 ( 9.3%)
+#>    | 7 - Sehr...        |  75 ( 6.4%)
 #> ---+--------------------+------------
-#> 2  | Überhaupt nicht... |  18 ( 1.5%)
+#> 2  | Überhaupt nicht... |  11 ( 0.9%)
 #>    | 2                  |  19 ( 1.6%)
-#>    | 3                  |  61 ( 5.0%)
-#>    | 4                  | 310 (25.5%)
-#>    | 5                  | 274 (22.5%)
-#>    | 6                  | 334 (27.5%)
-#>    | Sehr gut  7        | 200 (16.4%)
+#>    | 3                  |  66 ( 5.6%)
+#>    | 4                  | 301 (25.7%)
+#>    | 5                  | 270 (23.1%)
+#>    | 6                  | 322 (27.5%)
+#>    | Sehr gut  7        | 182 (15.5%)
 #> ---+--------------------+------------
-#> 3  | Überhaupt nicht... |  19 ( 1.6%)
-#>    | 2                  |  24 ( 2.0%)
-#>    | 3                  |  73 ( 6.0%)
-#>    | 4                  | 415 (34.1%)
-#>    | 5                  | 339 (27.9%)
-#>    | 6                  | 240 (19.7%)
-#>    | Sehr gut  7        | 106 ( 8.7%)
+#> 3  | Überhaupt nicht... |  11 ( 0.9%)
+#>    | 2                  |  34 ( 2.9%)
+#>    | 3                  |  70 ( 6.0%)
+#>    | 4                  | 417 (35.6%)
+#>    | 5                  | 316 (27.0%)
+#>    | 6                  | 234 (20.0%)
+#>    | Sehr gut  7        |  89 ( 7.6%)
 #> -------------------------------------
 ```
 

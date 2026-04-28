@@ -73,6 +73,12 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EGuizarRosales/YouAnalyser" class="external-link">YouAnalyser</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Welcome to </span><span style="color: #0000BB; font-weight: bold;">YouAnalyser</span><span style="font-weight: bold;">!</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Package loaded successfully!</span></span>
+<span><span class="co">#&gt; Type `?YouAnalyser` to see the documentation.</span></span>
+<span><span class="co">#&gt; Visit the package's website for more information:</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-style: italic;">&lt;https://eguizarrosales.github.io/YouAnalyser/&gt;</span></span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org" class="external-link">haven</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="recommended-workflow">Recommended Workflow<a class="anchor" aria-label="anchor" href="#recommended-workflow"></a>
@@ -88,66 +94,42 @@ package. This workflow includes the following steps:</p>
 <p>It is assumed that the data is already in a
 <code><a href="https://haven.tidyverse.org/reference/labelled.html" class="external-link">haven::labelled()</a></code> format. If your data is not in this
 format, you may need to perform some data processing steps to convert it
-before using <code>YouAnalyser</code>. For an example of how to do this,
-please refer to the <code><a href="../articles/dp.html">vignette("dp", package = "YouAnalyser")</a></code>
+before using the code below. For an example of how to do this, please
+refer to the <code><a href="../articles/dp.html">vignette("dp", package = "YouAnalyser")</a></code>
 vignette on Data Processing.</p>
+<p>Use the following command to create and open a new R project with a
+suitable folder structure for your KDA:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#---- 1. EDA -------------------------------------------------------------------</span></span>
-<span></span>
-<span><span class="co"># Load your data</span></span>
-<span><span class="co"># myData &lt;- haven::read_sav("path/to/your/data.sav")</span></span>
-<span><span class="co"># Here, we will use the example data included in the package:</span></span>
-<span><span class="va">myData</span> <span class="op">&lt;-</span> <span class="fu">YouAnalyser</span><span class="fu">::</span><span class="va"><a href="../reference/bkw_processed.html">bkw_processed</a></span></span>
-<span></span>
-<span><span class="co"># Get an overview of the data. Confirm there are no unexpected values</span></span>
-<span><span class="co"># (e.g., values like "99") and no missing values.</span></span>
-<span><span class="fu"><a href="../reference/eda_summary.html">eda_summary</a></span><span class="op">(</span><span class="va">myData</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Inspect correlations among the variables.</span></span>
-<span><span class="co"># Are all predictors positively correlated with the outcome variable?</span></span>
-<span><span class="co"># Are there any high correlations among the predictors that may indicate</span></span>
-<span><span class="co"># multicollinearity issues?</span></span>
-<span><span class="va">eda_corrs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/eda_correlation.html">eda_correlation</a></span><span class="op">(</span><span class="va">myData</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">eda_corrs</span><span class="op">$</span><span class="va">p</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#---- 2. KDA -------------------------------------------------------------------</span></span>
-<span></span>
-<span><span class="co"># Perform Key Driver Analysis</span></span>
-<span><span class="va">kda</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kda_regression.html">kda_regression</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">myData</span>,</span>
-<span>  outcome <span class="op">=</span> <span class="st">"F600"</span>,</span>
-<span>  predictors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#---- 3. Visualize and interpret results ---------------------------------------</span></span>
-<span></span>
-<span><span class="co"># Inspect the Importance Performance Matrix Analysis (IPMA) plot</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">kda</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">p</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Save the IPMA plot as a file</span></span>
-<span><span class="fu"><a href="../reference/ya_save_plot.html">ya_save_plot</a></span><span class="op">(</span></span>
-<span>  plot <span class="op">=</span> <span class="va">kda</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">p</span>,</span>
-<span>  file_path <span class="op">=</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"myPlotName.jpeg"</span><span class="op">)</span>,</span>
-<span>  width <span class="op">=</span> <span class="fl">30</span>,</span>
-<span>  height <span class="op">=</span> <span class="fl">20</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># If you need a PowerPoint report:</span></span>
-<span></span>
-<span><span class="co"># 1. Export the KDA results into a formatted Excel template:</span></span>
-<span><span class="fu"><a href="../reference/kda_save_data_for_chart.html">kda_save_data_for_chart</a></span><span class="op">(</span></span>
-<span>  ipma_scatterPlot_data <span class="op">=</span> <span class="va">kda</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">d</span>,</span>
-<span>  file_path <span class="op">=</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"myKDAresults.xlsx"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># 2. Copy the PowerPoint template provided within YouAnalyser to a</span></span>
-<span><span class="co"># location of your choice:</span></span>
-<span><span class="fu"><a href="../reference/kda_copy_pptx_template.html">kda_copy_pptx_template</a></span><span class="op">(</span></span>
-<span>  file_path <span class="op">=</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"myKDAReport.pptx"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Step 1: Create a new project with a suitable folder structure for your KDA analysis:</span></span>
+<span><span class="fu"><a href="../reference/ya_setup_folder_structure.html">ya_setup_folder_structure</a></span><span class="op">(</span></span>
+<span>  folder_name <span class="op">=</span> <span class="st">"myKDAProject"</span>, <span class="co"># Chose a name for your project folder (no spaces or special characters)</span></span>
+<span>  base_path <span class="op">=</span> <span class="fu">tcltk</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tcltk/tk_choose.dir.html" class="external-link">tk_choose.dir</a></span><span class="op">(</span><span class="op">)</span>, <span class="co"># Choose the path interactively. You can also specify a path directly as a string, e.g. "C:/Users/YourAbbreviation/Downloads/"</span></span>
+<span>  template <span class="op">=</span> <span class="st">"kda"</span>, <span class="co"># Use the KDA template, which creates a folder structure suitable for KDA analyses</span></span>
+<span>  make_rproj <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Create an R project file in the main folder of your project</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<p>In your newly opened project, open the file
+<code>./scripts/kda.R</code> (as instructed in the console output):</p>
+<div class="float">
+<img src="fig/kda_workflow.png" alt="Screenshot of the kda.R file"><div class="figcaption">Screenshot of the <code>kda.R</code> file</div>
+</div>
+<p>Then follow these steps:</p>
+<ol style="list-style-type: decimal">
+<li>Select (using your mouse) and run (<code>Ctrl + Enter</code>) the
+first two lines of code to load the necessary libraries.</li>
+<li>Edit lines 12, 15, and 18 to specify the variable names of the
+outcome, the predictors, and whether want to prepare a PPTX report,
+respectively.</li>
+<li>Select and run lines 7 to 18. A file explorer window will open.
+Navigate to the folder where your SPSS data is located, select the file,
+and click “Open”.</li>
+<li>Select and run lines 25 to 30 to conduct a KDA in an interactive
+way. Check your console and follow the instructions.</li>
+</ol>
 <p>For the remainder of this vignette, we will focus on the different
-options for conducting the KDA step (step 2 in the workflow above). For
-a more detailed walkthrough of the EDA step, please refer to the
+options for conducting the KDA with more control over the analysis. Keep
+in mind that you should always conduct an EDA before continuing with a
+KDA (this is taken care of by the steps above). For a more detailed
+walkthrough of the EDA step, please refer to the
 <code><a href="../articles/eda.html">vignette("eda", package = "YouAnalyser")</a></code> vignette on
 Exploratory Data Analysis.</p>
 </div>
@@ -228,7 +210,404 @@ default color of the performance_barPlot from YouGov Red 1 to Teal 1
 like this:
 <code>performance_barPlot_args = list(color = yougov_colors[["Teal 1"]])</code>.
 For more information on the available arguments, please refer to the
-documentation of the respective plotting functions.</p>
+documentation of the respective plotting functions
+<code>?kda_importance_barPlot()</code>,
+<code>?kda_performance_barPlot()</code>, and
+<code>?kda_ipma_scatterPlot()</code>.</p>
+<div class="section level3">
+<h3 id="example-usage-of-kda_regression">Example Usage of <code>kda_regression()</code><a class="anchor" aria-label="anchor" href="#example-usage-of-kda_regression"></a>
+</h3>
+<p>We will use the <code>bkw_processed</code> dataset, a synthetically
+generated dataset based on the structure of real study (call
+<code><a href="../reference/bkw_processed.html">?bkw_processed</a></code> for more information). We want to predict
+the outcome variable <code>F600</code> (BKW employer attractiveness)
+using the 14 predictor variables <code>F800_1</code> to
+<code>F800_14</code> (various aspects of factors thought to affect
+employer attractiveness). We will use JRW method to save compute time.
+We will also set <code>diagnostics = TRUE</code> to include diagnostic
+plots in the output. Finally, we do not want to show variable labels in
+the final plot, so we will set <code>show_labels = FALSE</code> in the
+<code>ipma_scatterPlot_args</code> argument.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">kda</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kda_regression.html">kda_regression</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">bkw_processed</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="st">"F600"</span>,</span>
+<span>  predictors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">14</span><span class="op">)</span>,</span>
+<span>  importance_method <span class="op">=</span> <span class="st">"jrw"</span>,</span>
+<span>  diagnostics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ipma_scatterPlot_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    show_labels <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>We can access the IPMA plot using:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">kda</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">p</span></span></code></pre></div>
+<p><img src="kda_files/figure-html/kda_regression-ipmaPlot-1.png" class="r-plt" alt="" width="100%"></p>
+<p>This is a <code>ggplot</code> object, so you can further customize it
+using <code>ggplot2</code> functions. For example, to apply the
+<code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">ggplot2::theme_bw()</a></code> theme, keep the legend at the bottom,
+don’t show major and minor grids, remove the x- and y-axis ticks,
+labels, and titles, you can do:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">my_ipma_plot</span> <span class="op">&lt;-</span> <span class="va">kda</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">p</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span></span>
+<span>    legend.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
+<span>    panel.grid.major <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    panel.grid.minor <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    axis.ticks <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    axis.text <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    axis.title <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">my_ipma_plot</span><span class="op">)</span></span></code></pre></div>
+<p><img src="kda_files/figure-html/kda_regression-ipmaPlot-custom-1.png" class="r-plt" alt="" width="100%"></p>
+<p>You can save this plot using the convenience function
+<code><a href="../reference/ya_save_plot.html">YouAnalyser::ya_save_plot()</a></code>. This function allows you to
+save a plot to a specified file path, with options to set the width and
+height (in centimeters) of the saved plot. If you want to choose the
+file path interactively, you can use the
+<code><a href="../reference/ya_choose_file_path.html">YouAnalyser::ya_choose_file_path()</a></code> function, which will
+open a dialog box that allows you to choose a directory where you would
+like to save the plot. You only need to additionally provide a file name
+(<code>"ipma_plot.jpeg"</code> in the example below), and the function
+will take care of the rest.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"ipma_plot.jpeg"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/ya_save_plot.html">ya_save_plot</a></span><span class="op">(</span></span>
+<span>  plot <span class="op">=</span> <span class="va">my_ipma_plot</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="va">file_path</span>,</span>
+<span>  width <span class="op">=</span> <span class="fl">30</span>,</span>
+<span>  height <span class="op">=</span> <span class="fl">20</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>If you saved all the plots generated by our call to
+<code><a href="../reference/kda_regression.html">kda_regression()</a></code> above, these would look like this:</p>
+<p><code>kda$plots$diagnostics_correlation</code></p>
+<p><img src="fig/diagnostics_corelation.jpeg"></p>
+<p><code>kda$plots$diagnostics_model</code></p>
+<p><img src="fig/diagnostics_model.jpeg"></p>
+<p><code>kda$plots$model_forestPlot</code></p>
+<p><img src="fig/model_forestPlot.jpeg"></p>
+<p><code>kda$plots$importance_barPlot</code></p>
+<p><img src="fig/importance_barPlot.jpeg"></p>
+<p><code>kda$plots$performance_barPlot</code></p>
+<p><img src="fig/performance_barPlot.jpeg"></p>
+<p>There are a lot of additional outputs saved in the <code>kda</code>
+object, such as the fitted regression model, variable importance and
+performance measures, and diagnostic plots. Try accessing these
+interactively by typing <code>kda$</code> in your console and using
+tab-completion to see the available elements.</p>
+</div>
+<div class="section level3">
+<h3 id="charts-for-powerpoint-reporting">Charts for PowerPoint Reporting<a class="anchor" aria-label="anchor" href="#charts-for-powerpoint-reporting"></a>
+</h3>
+<p><code>YouAnalyser</code> includes functions to facilitate the
+creation of an IPMA chart for reporting in PowerPoint.</p>
+<p>First, we need to save the IPMA plot data in an Excel file with the
+right structure for reporting. We can do this using the
+<code><a href="../reference/kda_save_data_for_chart.html">kda_save_data_for_chart()</a></code> function, which takes the IPMA
+scatter plot data and saves it to an Excel file. You can choose the file
+path interactively using the <code><a href="../reference/ya_choose_file_path.html">ya_choose_file_path()</a></code>
+function.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"ipma_data.xlsx"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/kda_save_data_for_chart.html">kda_save_data_for_chart</a></span><span class="op">(</span></span>
+<span>  ipma_scatterPlot_data <span class="op">=</span> <span class="va">kda</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">d</span>,</span>
+<span>  file_path <span class="op">=</span> <span class="va">file_path</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>This will result in a file that looks like this when opened in
+Excel:</p>
+<div class="float">
+<img src="fig/kda_ipma_data_screenshot.png" alt="Screenshot of ipma_data.xlsx (right-click -&gt; “Open image in new tab” to zoom in)"><div class="figcaption">Screenshot of ipma_data.xlsx (right-click -&gt;
+“Open image in new tab” to zoom in)</div>
+</div>
+<p>This file has the right structure and contains all the information
+needed to update a pre-formatted PowerPoint template that you can use
+for reporting. You can copy the PowerPoint template to your desired
+location using the <code><a href="../reference/kda_copy_pptx_template.html">kda_copy_pptx_template()</a></code> function:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"ipma_chart.pptx"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/kda_copy_pptx_template.html">kda_copy_pptx_template</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span></span></code></pre></div>
+<p>Follow these steps to update the PowerPoint template with the
+exported data:</p>
+<ol style="list-style-type: decimal">
+<li>Open the ipma data saved in the Excel,
+i.e. <code>ipma_data.xlsx</code> in this example.</li>
+<li>Select the data in the grey box, i.e. <strong>A5:D18</strong> in
+this example, and copy it (Ctrl + C).</li>
+<li>Open the PowerPoint template, i.e. <code>ipma_chart.pptx</code> in
+this example.</li>
+<li>Go to the slide with the IPMA chart, right-click on the chart, and
+select “Edit Data” &gt; “Edit Data in Excel”. This will open the “Chart
+in Microsoft PowerPoint” window, which looks just like Excel.</li>
+<li>In the “Chart in Microsoft PowerPoint” window, select the Cell
+<strong>A5</strong>, right-click, and paste values only (Ctrl + Shift +
+V). The chart in the PowerPoint will automatically update based on the
+pasted data. You can close the “Chart in Microsoft PowerPoint” window
+after pasting the data.</li>
+<li>In the IPMA chart, we need to update part of the chart that is
+displayed as well as the cross defining the quadrants. For this, arrange
+the PowerPoint (<code>ipma_chart.pptx</code>) and the Excel
+(<code>ipma_data.xlsx</code>) window side by side.
+<ul>
+<li>Double-click on the horizontal line in the PowerPoint chart. This
+will open the “Format Axis” pane on the right-hand-side (see screenshot
+below). Copy and paste (Ctrl + C and Ctrl + V) the value in Cell
+<strong>L10</strong> of the Excel sheet (X-Achsenminimum) to the
+“Bounds: Minimum” field in the “Format Axis” pane. Now copy and paste
+the value in Cell <strong>L9</strong> (X-Achsenmaximum) to the “Bounds:
+Maximum” field in the “Format Axis” pane. Finally, copy and paste the
+value in Cell <strong>L8</strong> (X-Achsenwert) to the “Vertical axis
+crosses: Axis value” field in the “Format Axis” pane.</li>
+<li>Double-click on the vertical line in the PowerPoint chart. This will
+open the “Format Axis” pane on the right-hand-side. Copy and paste (Ctrl
++ C and Ctrl + V) the value in Cell <strong>M10</strong> of the Excel
+sheet (Y-Achsenminimum) to the “Bounds: Minimum” field in the “Format
+Axis” pane. Now copy and paste the value in Cell <strong>M9</strong>
+(Y-Achsenmaximum) to the “Bounds: Maximum” field in the “Format Axis”
+pane. Finally, copy and paste the value in Cell <strong>M8</strong>
+(Y-Achsenwert) to the “Horizontal axis crosses: Axis value” field in the
+“Format Axis” pane.</li>
+</ul>
+</li>
+<li>Update the right-hand side legend of the chart with the item numbers
+and statements. Use the information summarised in the Excel file in
+<strong>O5:V35</strong> to do this.</li>
+</ol>
+<div class="float">
+<img src="fig/kda_format_axis_pane_screenshot.png" alt="“Format Axis” pane in PowerPoint that opens if you double-click on the horizontal line in the chart."><div class="figcaption">“Format Axis” pane in PowerPoint that opens if
+you double-click on the horizontal line in the chart.</div>
+</div>
+</div>
+<div class="section level3">
+<h3 id="model-diagnostics">Model Diagnostics<a class="anchor" aria-label="anchor" href="#model-diagnostics"></a>
+</h3>
+<p>A short note on model diagnostics. The plot
+<code>kda$plots$diagnostics_model</code>can also be computed like
+this:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">diagnostics</span> <span class="op">&lt;-</span> <span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_model.html" class="external-link">check_model</a></span><span class="op">(</span><span class="va">kda</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">diagnostics</span><span class="op">)</span></span></code></pre></div>
+<p><img src="kda_files/figure-html/model-diagnostics-1.png" class="r-plt" alt="" width="100%"></p>
+<p>This gives you the advantage that you can also access infomation that
+can be helpful to interpret the plot, e.g.:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">diagnostics</span><span class="op">$</span><span class="va">OUTLIERS</span></span>
+<span><span class="co">#&gt; OK: No outliers detected.</span></span>
+<span><span class="co">#&gt; - Based on the following method and threshold: cook (1).</span></span>
+<span><span class="co">#&gt; - For variable: (Whole model)</span></span></code></pre></div>
+<p>Please refer to the following documentation for more information on
+how to interpret the diagnostic plots and what you can do if the
+assumptions underlying the regression model are violated: <a href="https://easystats.github.io/performance/articles/check_model.html#linear-models-are-all-assumptions-for-linear-models-met" class="external-link">Checking
+model assumption - linear models</a>.</p>
+</div>
+<div class="section level3">
+<h3 id="importance-methods">Importance Methods<a class="anchor" aria-label="anchor" href="#importance-methods"></a>
+</h3>
+<p>There are three methods available for calculating variable importance
+in the <code><a href="../reference/kda_regression.html">kda_regression()</a></code> function:</p>
+<ol style="list-style-type: decimal">
+<li>
+<code>"domir"</code> <strong>Dominance Analysis</strong>: This
+method decomposes the R-squared of the regression model into
+contributions from each predictor variable. It provides a comprehensive
+measure of variable importance but can be computationally intensive for
+models with many predictors. This method is also known as <em>Relative
+Importance</em>, <em>LMG</em> or <em>Shapley Value
+Decomposition</em>.</li>
+<li>
+<code>"jrw"</code> <strong>Johnson Relative Weights</strong>:
+Similarly to dominance analysis, this method decomposes the R-squared of
+the regression model into contributions from each predictor variable.
+However, it does so using a heuristic method that is computationally
+more efficient and can handle models with a larger number of
+predictors.</li>
+<li>
+<code>"sumOfCoefficients"</code> <strong>Sum of Absolute
+(Standardized) Coefficients</strong>: This method calculates variable
+importance by taking the sum of the absolute values of the
+(standardized) regression coefficients for each predictor variable. This
+is a simpler and more computationally efficient method, but it does not
+account for the intercorrelations between predictors and may not provide
+as accurate a measure of variable importance as the other two methods.
+It is included for legacy reasons and is not recommended for use in most
+cases.</li>
+</ol>
+<p>Note that the default method is set to <code>"auto"</code>, which
+will automatically choose between <code>"domir"</code> and
+<code>"jrw"</code> based on the number of predictors in the model. If
+you have fewer than 15 predictors, it will use <code>"domir"</code>. If
+you have 15 or more predictors, it will use <code>"jrw"</code>. Set the
+<code>importance_method</code> argument to one of the three methods
+above to override the default behavior and specify a method
+directly.</p>
+<p>For an extended discussion of the <strong>Dominance Analysis</strong>
+and <strong>Johnson Relative Weights</strong> methods, please refer to
+the subsections at the end of this vignette. They are inteded for
+interested readers or as a reference if clients want to know more about
+the methods used in the KDA. For additional ressources, please refer to
+the following resources:</p>
+<ul>
+<li>Vignette of the <code>domir</code> package: <a href="https://cran.r-project.org/web/packages/domir/vignettes/domir_basics.html" class="external-link uri">https://cran.r-project.org/web/packages/domir/vignettes/domir_basics.html</a>
+</li>
+<li>Technical paper for the Dominance Analysis Method: Grömping, Ulrike.
+2007. Estimators of Relative Importance in Linear Regression Based on
+Variance Decomposition. <em>The American Statistician</em> 61 (2):
+139–47. <a href="https://doi.org/10.1198/000313007X188252" class="external-link uri">https://doi.org/10.1198/000313007X188252</a>.</li>
+<li>Technical paper for the <em>Johnson Relative Weights</em> Method:
+Johnson, J. (2000). A heuristic method for estimating the relative
+weight of predictor variables in multiple regression. <em>Multivariate
+Behavioral Research</em>, 35, 1–19 . <a href="https://doi.org/10.1207/S15327906MBR3501_1" class="external-link uri">https://doi.org/10.1207/S15327906MBR3501_1</a>
+</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="section">
+<br><br><a class="anchor" aria-label="anchor" href="#section"></a>
+</h3>
+<p><br><br></p>
+</div>
+<div class="section level3">
+<h3 id="dominance-analysis">Dominance Analysis<a class="anchor" aria-label="anchor" href="#dominance-analysis"></a>
+</h3>
+<div class="section level4">
+<h4 id="practical-relevance">Practical relevance<a class="anchor" aria-label="anchor" href="#practical-relevance"></a>
+</h4>
+<p>In many applied regression settings—particularly with observational
+data—predictors are <strong>correlated</strong>, making it unclear how
+much each predictor truly contributes to the model. Standard regression
+outputs (e.g., standardized coefficients, partial
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+, or
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-statistics)
+depend on the specific set of covariates included and can change
+dramatically under multicollinearity. As a result, they often provide
+<strong>unstable or misleading assessments of predictor
+importance</strong>.</p>
+<p>Dominance analysis addresses this problem by evaluating predictor
+importance <strong>across all possible regression models</strong>,
+rather than conditioning on a single model specification. By averaging
+each predictor’s contribution to explained variance across all relevant
+contexts, dominance analysis provides an importance measure that fully
+reflects <strong>both unique and shared effects</strong> among
+correlated predictors. This makes it especially useful when the goal is
+to <strong>interpret relative contributions</strong> rather than to
+select a parsimonious prediction model.</p>
+<p>In practice, dominance analysis is often viewed as a
+<strong>reference or gold‑standard</strong> method for relative
+importance, against which more computationally efficient approaches can
+be compared.</p>
+</div>
+<div class="section level4">
+<h4 id="methodology">Methodology<a class="anchor" aria-label="anchor" href="#methodology"></a>
+</h4>
+<p>Dominance analysis defines the importance of a predictor as its
+<strong>average marginal contribution to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></strong>
+across all subset models in which it appears.</p>
+<p>Formally, for each predictor
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mi>j</mi></msub><annotation encoding="application/x-tex">X_j</annotation></semantics></math>:</p>
+<ol style="list-style-type: decimal">
+<li>All possible subsets of the remaining predictors are
+considered.</li>
+<li>For each subset
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>,
+the increase in explained variance,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msup><mi>R</mi><mn>2</mn></msup><mo>=</mo><msup><mi>R</mi><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>S</mi><mo>∪</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><msup><mi>R</mi><mn>2</mn></msup><mrow><mo stretchy="true" form="prefix">(</mo><mi>S</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">
+\Delta R^2 = R^2(S \cup {X_j}) - R^2(S)
+</annotation></semantics></math> is computed.</li>
+<li>These incremental contributions are <strong>averaged over all
+subsets</strong>, yielding a non‑negative importance value for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mi>j</mi></msub><annotation encoding="application/x-tex">X_j</annotation></semantics></math>.</li>
+</ol>
+<p>The resulting dominance statistics <strong>sum exactly to the total
+model
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></strong>
+and can be expressed as percentages of explained variance. Dominance
+analysis is mathematically equivalent to the <strong>LMG / Shapley value
+decomposition</strong> of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
+ensuring a fair and order‑independent allocation of shared variance. Its
+principal drawback is computational complexity, as the number of subset
+models grows exponentially with the number of predictors.</p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="johnsons-relative-weights-jrw">Johnson’s Relative Weights (JRW)<a class="anchor" aria-label="anchor" href="#johnsons-relative-weights-jrw"></a>
+</h3>
+<div class="section level4">
+<h4 id="practical-relevance-1">Practical relevance<a class="anchor" aria-label="anchor" href="#practical-relevance-1"></a>
+</h4>
+<p>Relative weights analysis was developed to solve the <strong>same
+interpretational problem as dominance analysis</strong>—namely, how to
+allocate explained variance among <strong>correlated
+predictors</strong>—but in a way that is <strong>computationally
+feasible for larger models</strong>. In real data, predictors frequently
+measure overlapping constructs, and treating them as if they compete for
+variance (as regression coefficients do) can exaggerate differences or
+produce suppressor effects that are difficult to interpret.</p>
+<p>Johnson’s relative weights redistribute explained variance so that
+predictors which are conceptually similar and similarly related to the
+outcome receive <strong>similar importance estimates</strong>, even when
+strongly correlated. This aligns well with how applied researchers and
+stakeholders typically think about importance (e.g., “Which inputs
+matter most overall?”).</p>
+<p>As such, relative weights are particularly useful when: - predictors
+are moderately to highly intercorrelated, - the focus is on
+<strong>explaining variance</strong>, not selecting variables, and -
+clear, stable importance estimates are needed for communication or
+reporting.</p>
+</div>
+<div class="section level4">
+<h4 id="methodology-1">Methodology<a class="anchor" aria-label="anchor" href="#methodology-1"></a>
+</h4>
+<p>Johnson’s relative weights method estimates each predictor’s
+contribution to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+by combining orthogonalization with variance reallocation.</p>
+<p>The procedure can be summarized in four steps:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Orthogonalization of predictors</strong><br>
+The correlated predictors are transformed into a set of
+<strong>uncorrelated variables</strong> using a least‑squares
+orthogonalization based on the eigenvalue decomposition of the
+predictors’ correlation matrix. This transformation yields orthogonal
+variables that are maximally similar to the original
+predictors.</p></li>
+<li><p><strong>Regression on orthogonal variables</strong><br>
+The outcome is regressed on the orthogonal predictors. Because these
+predictors are uncorrelated, each squared standardized coefficient
+represents the portion of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+attributable to that orthogonal component.</p></li>
+<li><p><strong>Mapping variance back to original
+predictors</strong><br>
+Each orthogonal variable is expressed as a linear combination of the
+original predictors. The variance explained by each orthogonal component
+is then <strong>partitioned among the original predictors</strong>
+according to their squared correlations with that component.</p></li>
+<li><p><strong>Computation of relative weights</strong><br>
+A predictor’s relative weight is obtained by summing its allocated
+contributions across all orthogonal components. The resulting weights
+are <strong>non‑negative and sum exactly to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></strong>,
+and are typically reported as percentages of explained
+variance.</p></li>
+</ol>
+<p>Empirically, Johnson showed that these relative weights closely
+approximate dominance analysis results, especially for moderate
+correlations, while requiring far less computation.</p>
+</div>
+<div class="section level4">
+<h4 id="summary-comparison">Summary comparison<a class="anchor" aria-label="anchor" href="#summary-comparison"></a>
+</h4>
+<p>Both dominance analysis and Johnson’s relative weights address the
+interpretational ambiguity caused by correlated predictors: dominance
+analysis does so exactly by averaging contributions across all subset
+models, whereas Johnson’s relative weights provide a computationally
+efficient approximation that yields very similar and practically
+interpretable results.</p>
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

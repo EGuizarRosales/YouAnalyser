@@ -1,14 +1,10 @@
 # BKW Employer Brand Positioning Study Data (Binary Outcome)
 
-Data from the BKW Employer Brand Positioning Study conducted in 2026
-(14713 BKW Zielgruppenumfrage Arbeitgeberpositionierung 2026) with
-binarized outcome. Key Driver Analyses (linear regression with dominance
-analysis) were performed. The data was processed to only include the
-dependent variable (F600) and 14 independent variables (F800_1 to
-F800_14) used in the regression model. All NA values in the dependent
-variable (F600) were removed to ensure the data is ready for analysis.
-The dependent variable (F600) was dichotomized into a binary variable
-(0: "Nicht attraktiv", 1: "Attraktiv") based on a cutoff of 4.
+Data based on
+[bkw_processed](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_processed.md)
+with a binary dependent variable. The dependent variable (F600) was
+dichotomized into a binary variable (0: "Nicht attraktiv", 1:
+"Attraktiv") based on a cutoff of 4.
 
 ## Usage
 
@@ -20,7 +16,7 @@ bkw_bin_outcome
 
 ### `bkw_bin_outcome`
 
-A data frame with 1,216 rows and 15 columns:
+A data frame with 1,171 rows and 15 columns:
 
 - F600:
 

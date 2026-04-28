@@ -73,6 +73,12 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/EGuizarRosales/YouAnalyser" class="external-link">YouAnalyser</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Welcome to </span><span style="color: #0000BB; font-weight: bold;">YouAnalyser</span><span style="font-weight: bold;">!</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Package loaded successfully!</span></span>
+<span><span class="co">#&gt; Type `?YouAnalyser` to see the documentation.</span></span>
+<span><span class="co">#&gt; Visit the package's website for more information:</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-style: italic;">&lt;https://eguizarrosales.github.io/YouAnalyser/&gt;</span></span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org" class="external-link">haven</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="labelled-survey-data">Labelled Survey Data<a class="anchor" aria-label="anchor" href="#labelled-survey-data"></a>
@@ -127,18 +133,17 @@ decode the variable and value names.</p>
 <code class="sourceCode R"><span><span class="co"># Inspect the structure of the data for the first two variables. Take note of</span></span>
 <span><span class="co"># the attributes "@label" (variable label) and "@labels" (value labels).</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">myData</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; tibble [1,216 × 2] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;  $ F600  : dbl+lbl [1:1216] 4, 2, 2, 4, 4, 5, 4, 3, 6, 2, 6, 5, 4, 6, 4, 4, 3, 3,...</span></span>
+<span><span class="co">#&gt; tibble [1,171 × 2] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;  $ F600  : dbl+lbl [1:1171] 5, 3, 6, 2, 4, 5, 5, 5, 5, 5, 5, 4, 3, 4, 4, 5, 4, 4,...</span></span>
 <span><span class="co">#&gt;    ..@ label      : chr "Wie attraktiv finden Sie die BKW als Arbeitgeberin?"</span></span>
-<span><span class="co">#&gt;    ..@ format.spss: chr "F1.0"</span></span>
+<span><span class="co">#&gt;    ..@ format.spss: chr "F8.2"</span></span>
 <span><span class="co">#&gt;    ..@ labels     : Named num [1:7] 1 2 3 4 5 6 7</span></span>
 <span><span class="co">#&gt;    .. ..- attr(*, "names")= chr [1:7] "1 - Überhaupt nicht attraktiv" "2" "3" "4" ...</span></span>
-<span><span class="co">#&gt;  $ F800_1: dbl+lbl [1:1216] 4, 3, 4, 6, 7, 4, 7, 4, 7, 4, 6, 6, 5, 6, 5, 5, 4, 5,...</span></span>
+<span><span class="co">#&gt;  $ F800_1: dbl+lbl [1:1171] 6, 6, 7, 5, 4, 6, 4, 5, 7, 6, 7, 7, 3, 4, 6, 7, 5, 4,...</span></span>
 <span><span class="co">#&gt;    ..@ label      : chr "Sicherheit und langfristige Stabilität des Arbeitgebers"</span></span>
-<span><span class="co">#&gt;    ..@ format.spss: chr "F1.0"</span></span>
+<span><span class="co">#&gt;    ..@ format.spss: chr "F8.2"</span></span>
 <span><span class="co">#&gt;    ..@ labels     : Named num [1:7] 1 2 3 4 5 6 7</span></span>
-<span><span class="co">#&gt;    .. ..- attr(*, "names")= chr [1:7] "Überhaupt nicht gut  1" "2" "3" "4" ...</span></span>
-<span><span class="co">#&gt;  - attr(*, "label")= chr "File created by user 'ana-maria.nedelcu' at Wed Feb 11 11:11"</span></span></code></pre></div>
+<span><span class="co">#&gt;    .. ..- attr(*, "names")= chr [1:7] "Überhaupt nicht gut  1" "2" "3" "4" ...</span></span></code></pre></div>
 <p>There are different ways you can inspect the variable and value
 labels in R, e.g.:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -176,25 +181,25 @@ value labels in a tidy format:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Print codebook for the first two variables</span></span>
 <span><span class="fu"><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook</a></span><span class="op">(</span><span class="va">myData</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; data (1216 rows and 2 variables, 2 shown)</span></span>
+<span><span class="co">#&gt; data (1171 rows and 2 variables, 2 shown)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ID | Name   | Label          | Type    | Missings | Values | Value Labels       |           N</span></span>
 <span><span class="co">#&gt; ---+--------+----------------+---------+----------+--------+--------------------+------------</span></span>
-<span><span class="co">#&gt; 1  | F600   | Wie attraktiv  | numeric | 0 (0.0%) |      1 | 1 - Überhaupt...   |  54 ( 4.4%)</span></span>
-<span><span class="co">#&gt;    |        | finden Sie die |         |          |      2 | 2                  |  59 ( 4.9%)</span></span>
-<span><span class="co">#&gt;    |        | BKW als        |         |          |      3 | 3                  | 116 ( 9.5%)</span></span>
-<span><span class="co">#&gt;    |        | Arbeitgeberin? |         |          |      4 | 4                  | 470 (38.7%)</span></span>
-<span><span class="co">#&gt;    |        |                |         |          |      5 | 5                  | 305 (25.1%)</span></span>
-<span><span class="co">#&gt;    |        |                |         |          |      6 | 6                  | 132 (10.9%)</span></span>
-<span><span class="co">#&gt;    |        |                |         |          |      7 | 7 - Sehr...        |  80 ( 6.6%)</span></span>
+<span><span class="co">#&gt; 1  | F600   | Wie attraktiv  | numeric | 0 (0.0%) |      1 | 1 - Überhaupt...   |  43 ( 3.7%)</span></span>
+<span><span class="co">#&gt;    |        | finden Sie die |         |          |      2 | 2                  |  50 ( 4.3%)</span></span>
+<span><span class="co">#&gt;    |        | BKW als        |         |          |      3 | 3                  | 130 (11.1%)</span></span>
+<span><span class="co">#&gt;    |        | Arbeitgeberin? |         |          |      4 | 4                  | 461 (39.4%)</span></span>
+<span><span class="co">#&gt;    |        |                |         |          |      5 | 5                  | 303 (25.9%)</span></span>
+<span><span class="co">#&gt;    |        |                |         |          |      6 | 6                  | 109 ( 9.3%)</span></span>
+<span><span class="co">#&gt;    |        |                |         |          |      7 | 7 - Sehr...        |  75 ( 6.4%)</span></span>
 <span><span class="co">#&gt; ---+--------+----------------+---------+----------+--------+--------------------+------------</span></span>
-<span><span class="co">#&gt; 2  | F800_1 | Sicherheit und | numeric | 0 (0.0%) |      1 | Überhaupt nicht... |  18 ( 1.5%)</span></span>
+<span><span class="co">#&gt; 2  | F800_1 | Sicherheit und | numeric | 0 (0.0%) |      1 | Überhaupt nicht... |  11 ( 0.9%)</span></span>
 <span><span class="co">#&gt;    |        | langfristige   |         |          |      2 | 2                  |  19 ( 1.6%)</span></span>
-<span><span class="co">#&gt;    |        | Stabilität des |         |          |      3 | 3                  |  61 ( 5.0%)</span></span>
-<span><span class="co">#&gt;    |        | Arbeitgebers   |         |          |      4 | 4                  | 310 (25.5%)</span></span>
-<span><span class="co">#&gt;    |        |                |         |          |      5 | 5                  | 274 (22.5%)</span></span>
-<span><span class="co">#&gt;    |        |                |         |          |      6 | 6                  | 334 (27.5%)</span></span>
-<span><span class="co">#&gt;    |        |                |         |          |      7 | Sehr gut  7        | 200 (16.4%)</span></span>
+<span><span class="co">#&gt;    |        | Stabilität des |         |          |      3 | 3                  |  66 ( 5.6%)</span></span>
+<span><span class="co">#&gt;    |        | Arbeitgebers   |         |          |      4 | 4                  | 301 (25.7%)</span></span>
+<span><span class="co">#&gt;    |        |                |         |          |      5 | 5                  | 270 (23.1%)</span></span>
+<span><span class="co">#&gt;    |        |                |         |          |      6 | 6                  | 322 (27.5%)</span></span>
+<span><span class="co">#&gt;    |        |                |         |          |      7 | Sehr gut  7        | 182 (15.5%)</span></span>
 <span><span class="co">#&gt; ---------------------------------------------------------------------------------------------</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -220,88 +225,87 @@ data looks like this:</p>
 <code class="sourceCode R"><span><span class="co"># Inspect the structure of the data for the first two variables.</span></span>
 <span><span class="co"># Note that there are no variable labels or value labels.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">myData_unlabelled</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; tibble [1,216 × 2] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;  $ F600  : num [1:1216] 4 2 2 4 4 5 4 3 6 2 ...</span></span>
+<span><span class="co">#&gt; tibble [1,171 × 2] (S3: tbl_df/tbl/data.frame)</span></span>
+<span><span class="co">#&gt;  $ F600  : num [1:1171] 5 3 6 2 4 5 5 5 5 5 ...</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "label")= chr "Wie attraktiv finden Sie die BKW als Arbeitgeberin?"</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "format.spss")= chr "F1.0"</span></span>
-<span><span class="co">#&gt;  $ F800_1: num [1:1216] 4 3 4 6 7 4 7 4 7 4 ...</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "format.spss")= chr "F8.2"</span></span>
+<span><span class="co">#&gt;  $ F800_1: num [1:1171] 6 6 7 5 4 6 4 5 7 6 ...</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "label")= chr "Sicherheit und langfristige Stabilität des Arbeitgebers"</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "format.spss")= chr "F1.0"</span></span>
-<span><span class="co">#&gt;  - attr(*, "label")= chr "File created by user 'ana-maria.nedelcu' at Wed Feb 11 11:11"</span></span>
+<span><span class="co">#&gt;   ..- attr(*, "format.spss")= chr "F8.2"</span></span>
 <span></span>
 <span><span class="co"># `dp_inspect_codebook()` also confirms that there are no variable labels or</span></span>
 <span><span class="co">#  value labels in the unlabelled data.</span></span>
 <span><span class="fu"><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook</a></span><span class="op">(</span><span class="va">myData_unlabelled</span><span class="op">)</span></span>
-<span><span class="co">#&gt; data (1216 rows and 15 variables, 15 shown)</span></span>
+<span><span class="co">#&gt; data (1171 rows and 15 variables, 15 shown)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ID | Name    | Label                     | Type    | Missings | Values |    N</span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 1  | F600    | Wie attraktiv             | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 1  | F600    | Wie attraktiv             | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | finden Sie die            |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | BKW als                   |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Arbeitgeberin?            |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 2  | F800_1  | Sicherheit und            | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 2  | F800_1  | Sicherheit und            | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | langfristige              |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Stabilität des            |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Arbeitgebers              |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 3  | F800_2  | Karriere- und             | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 3  | F800_2  | Karriere- und             | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | Entwicklungsmöglichkeiten |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 4  | F800_3  | Sinnvolle                 | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 4  | F800_3  | Sinnvolle                 | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | Tätigkeit und             |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | gesellschaftlicher        |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Beitrag                   |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 5  | F800_4  | Gute                      | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 5  | F800_4  | Gute                      | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | Zusammenarbeit            |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | und Teamkultur            |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 6  | F800_5  | Vereinbarkeit             | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 6  | F800_5  | Vereinbarkeit             | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | von Beruf und             |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Privatleben               |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 7  | F800_6  | Moderne                   | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 7  | F800_6  | Moderne                   | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | Arbeitsumgebung           |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | und                       |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Technologien              |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 8  | F800_7  | Attraktive                | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 8  | F800_7  | Attraktive                | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | Vergütung und             |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Zusatzleistungen          |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 9  | F800_8  | Gute Führung              | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 9  | F800_8  | Gute Führung              | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | und                       |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | wertschätzende            |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Unternehmenskultur        |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 10 | F800_9  | Verantwortung             | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 10 | F800_9  | Verantwortung             | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | und                       |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Gestaltungsspielraum      |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 11 | F800_10 | Zukunftsorientierung      | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 11 | F800_10 | Zukunftsorientierung      | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | und                       |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Nachhaltigkeit            |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | des                       |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Unternehmens              |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 12 | F800_11 | Internationales           | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 12 | F800_11 | Internationales           | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | Arbeitsumfeld             |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | und kulturelle            |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Vielfalt                  |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 13 | F800_12 | Innovationskultur         | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 13 | F800_12 | Innovationskultur         | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | und                       |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Veränderungsbereitschaft  |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | des                       |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Unternehmens              |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 14 | F800_13 | Arbeitszeit-              | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 14 | F800_13 | Arbeitszeit-              | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | und                       |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | Arbeitsortflexibilität    |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+---------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 15 | F800_14 | Diversität,               | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 15 | F800_14 | Diversität,               | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |         | Gleichstellung            |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |         | und Inklusion             |         |          |        |     </span></span>
 <span><span class="co">#&gt; -----------------------------------------------------------------------------</span></span>
@@ -382,25 +386,25 @@ unlabelled data into a labelled format:</p>
 <span></span>
 <span><span class="co"># Confirm that labelling worked (only show the first 3 variables for brevity)</span></span>
 <span><span class="fu"><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook</a></span><span class="op">(</span><span class="va">myData_unlabelled</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; data (1216 rows and 3 variables, 3 shown)</span></span>
+<span><span class="co">#&gt; data (1171 rows and 3 variables, 3 shown)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ID | Name   | Label                     | Type    | Missings | Values |    N</span></span>
 <span><span class="co">#&gt; ---+--------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 1  | F600   | Wie attraktiv             | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 1  | F600   | Wie attraktiv             | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |        | finden Sie die            |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |        | BKW als                   |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |        | Arbeitgeberin?            |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+--------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 2  | F800_1 | Sicherheit und            | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 2  | F800_1 | Sicherheit und            | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |        | langfristige              |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |        | Stabilität des            |         |          |        |     </span></span>
 <span><span class="co">#&gt;    |        | Arbeitgebers              |         |          |        |     </span></span>
 <span><span class="co">#&gt; ---+--------+---------------------------+---------+----------+--------+-----</span></span>
-<span><span class="co">#&gt; 3  | F800_2 | Karriere- und             | numeric | 0 (0.0%) | [1, 7] | 1216</span></span>
+<span><span class="co">#&gt; 3  | F800_2 | Karriere- und             | numeric | 0 (0.0%) | [1, 7] | 1171</span></span>
 <span><span class="co">#&gt;    |        | Entwicklungsmöglichkeiten |         |          |        |     </span></span>
 <span><span class="co">#&gt; ----------------------------------------------------------------------------</span></span>
 <span><span class="fu"><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook</a></span><span class="op">(</span><span class="va">myData_labelled</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; data (1216 rows and 3 variables, 3 shown)</span></span>
+<span><span class="co">#&gt; data (1171 rows and 3 variables, 3 shown)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ID | Name   | Label                     | Type    | Missings | Values</span></span>
 <span><span class="co">#&gt; ---+--------+---------------------------+---------+----------+-------</span></span>
@@ -431,29 +435,29 @@ unlabelled data into a labelled format:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ID | Value Labels       |           N</span></span>
 <span><span class="co">#&gt; ---+--------------------+------------</span></span>
-<span><span class="co">#&gt; 1  | 1 - Überhaupt...   |  54 ( 4.4%)</span></span>
-<span><span class="co">#&gt;    | 2                  |  59 ( 4.9%)</span></span>
-<span><span class="co">#&gt;    | 3                  | 116 ( 9.5%)</span></span>
-<span><span class="co">#&gt;    | 4                  | 470 (38.7%)</span></span>
-<span><span class="co">#&gt;    | 5                  | 305 (25.1%)</span></span>
-<span><span class="co">#&gt;    | 6                  | 132 (10.9%)</span></span>
-<span><span class="co">#&gt;    | 7 - Sehr...        |  80 ( 6.6%)</span></span>
+<span><span class="co">#&gt; 1  | 1 - Überhaupt...   |  43 ( 3.7%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  50 ( 4.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 130 (11.1%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 461 (39.4%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 303 (25.9%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 109 ( 9.3%)</span></span>
+<span><span class="co">#&gt;    | 7 - Sehr...        |  75 ( 6.4%)</span></span>
 <span><span class="co">#&gt; ---+--------------------+------------</span></span>
-<span><span class="co">#&gt; 2  | Überhaupt nicht... |  18 ( 1.5%)</span></span>
+<span><span class="co">#&gt; 2  | Überhaupt nicht... |  11 ( 0.9%)</span></span>
 <span><span class="co">#&gt;    | 2                  |  19 ( 1.6%)</span></span>
-<span><span class="co">#&gt;    | 3                  |  61 ( 5.0%)</span></span>
-<span><span class="co">#&gt;    | 4                  | 310 (25.5%)</span></span>
-<span><span class="co">#&gt;    | 5                  | 274 (22.5%)</span></span>
-<span><span class="co">#&gt;    | 6                  | 334 (27.5%)</span></span>
-<span><span class="co">#&gt;    | Sehr gut  7        | 200 (16.4%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  66 ( 5.6%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 301 (25.7%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 270 (23.1%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 322 (27.5%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 182 (15.5%)</span></span>
 <span><span class="co">#&gt; ---+--------------------+------------</span></span>
-<span><span class="co">#&gt; 3  | Überhaupt nicht... |  19 ( 1.6%)</span></span>
-<span><span class="co">#&gt;    | 2                  |  24 ( 2.0%)</span></span>
-<span><span class="co">#&gt;    | 3                  |  73 ( 6.0%)</span></span>
-<span><span class="co">#&gt;    | 4                  | 415 (34.1%)</span></span>
-<span><span class="co">#&gt;    | 5                  | 339 (27.9%)</span></span>
-<span><span class="co">#&gt;    | 6                  | 240 (19.7%)</span></span>
-<span><span class="co">#&gt;    | Sehr gut  7        | 106 ( 8.7%)</span></span>
+<span><span class="co">#&gt; 3  | Überhaupt nicht... |  11 ( 0.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  34 ( 2.9%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  70 ( 6.0%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 417 (35.6%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 316 (27.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 234 (20.0%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  89 ( 7.6%)</span></span>
 <span><span class="co">#&gt; -------------------------------------</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>

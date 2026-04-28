@@ -1,22 +1,32 @@
-# Synthetic BKW Employer Brand Positioning Study Data (Processed)
+# Synthetic BKW Employer Brand Positioning Study Data (With Missing Values)
 
-Processed data created based on
-[bkw_missings](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_missings.md).
-Only the dependent variable (F600) and 14 independent variables (F800_1
-to F800_14) used in the regression model are included. All NA values in
-these variables were removed to ensure the data is ready for analysis.
+Data synthetically created based on
+[bkw_synthetic](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_synthetic.md).
+5% NA values were introduced in all variables to mimic missing values.
 
 ## Usage
 
 ``` r
-bkw_processed
+bkw_missings
 ```
 
 ## Format
 
-### `bkw_processed`
+### `bkw_missings`
 
-A data frame with 1,171 rows and 15 columns:
+A data frame with 1,216 rows and 18 columns:
+
+- id:
+
+  unique identifier for each respondent, starting from 1
+
+- country:
+
+  country of the respondent
+
+- cluster:
+
+  segmentation-based cluster the respondent belongs to
 
 - F600:
 

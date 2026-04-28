@@ -89,53 +89,52 @@
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Inspect a subset of variables in the data</span></span></span>
-<span class="r-in"><span><span class="fu">eda_summary</span><span class="op">(</span>data <span class="op">=</span> <span class="va">bkw_raw</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F600"</span>, <span class="st">"F800_1"</span>, <span class="st">"F800_2"</span><span class="op">)</span>, console_output <span class="op">=</span> <span class="cn">TRUE</span>, browser_output <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">eda_summary</span><span class="op">(</span>data <span class="op">=</span> <span class="va">bkw_missings</span>, variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F600"</span>, <span class="st">"F800_1"</span>, <span class="st">"F800_2"</span><span class="op">)</span>, console_output <span class="op">=</span> <span class="cn">TRUE</span>, browser_output <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no DISPLAY variable so Tk is not available</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>unable to open connection to X11 display ''</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>unable to open connection to X11 display ''</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>unable to open connection to X11 display ''</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Data Frame Summary</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Data Frame Summary </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Data Frame Summary  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Label: File created by user 'ana-maria.nedelcu' at Wed Feb 11 11:11  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Dimensions: 5523 x 3  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Duplicates: 5353  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dimensions: 1216 x 3  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Duplicates: 1049  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variable           Label                                     Stats / Values                 Freqs (% of Valid)   Graph       Valid     Missing  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------ ----------------------------------------- ------------------------------ -------------------- ----------- --------- ---------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F600               Wie attraktiv finden Sie die BKW als      1. [1] 1 - Überhaupt nicht a    54 ( 4.4%)                      1216      4307     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [haven_labelled,   Arbeitgeberin?                            2. [2] 2                        59 ( 4.9%)                      (22.0%)   (78.0%)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> vctrs_vctr,                                                  3. [3] 3                       116 ( 9.5%)          I                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> double]                                                      4. [4] 4                       470 (38.7%)          IIIIIII                        </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              5. [5] 5                       305 (25.1%)          IIIII                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              6. [6] 6                       132 (10.9%)          II                             </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              7. [7] 7 - Sehr attraktiv       80 ( 6.6%)          I                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F600               Wie attraktiv finden Sie die BKW als      1. [1] 1 - Überhaupt nicht a    44 ( 3.6%)                      1214      2        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [haven_labelled,   Arbeitgeberin?                            2. [2] 2                        50 ( 4.1%)                      (99.8%)   (0.2%)   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> vctrs_vctr,                                                  3. [3] 3                       132 (10.9%)          II                             </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> double]                                                      4. [4] 4                       474 (39.0%)          IIIIIII                        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              5. [5] 5                       313 (25.8%)          IIIII                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              6. [6] 6                       117 ( 9.6%)          I                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              7. [7] 7 - Sehr attraktiv       84 ( 6.9%)          I                              </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      18 ( 1.5%)                      1216      4307     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [haven_labelled,   des Arbeitgebers                          2. [2] 2                        19 ( 1.6%)                      (22.0%)   (78.0%)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> vctrs_vctr,                                                  3. [3] 3                        61 ( 5.0%)          I                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> double]                                                      4. [4] 4                       310 (25.5%)          IIIII                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              5. [5] 5                       274 (22.5%)          IIII                           </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              6. [6] 6                       334 (27.5%)          IIIII                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              7. [7] Sehr gut  7             200 (16.4%)          III                            </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      11 ( 0.9%)                      1215      1        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [haven_labelled,   des Arbeitgebers                          2. [2] 2                        21 ( 1.7%)                      (99.9%)   (0.1%)   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> vctrs_vctr,                                                  3. [3] 3                        67 ( 5.5%)          I                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> double]                                                      4. [4] 4                       304 (25.0%)          IIIII                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              5. [5] 5                       277 (22.8%)          IIII                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              6. [6] 6                       340 (28.0%)          IIIII                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              7. [7] Sehr gut  7             195 (16.0%)          III                            </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      19 ( 1.6%)                      1216      4307     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [haven_labelled,                                             2. [2] 2                        24 ( 2.0%)                      (22.0%)   (78.0%)  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> vctrs_vctr,                                                  3. [3] 3                        73 ( 6.0%)          I                              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> double]                                                      4. [4] 4                       415 (34.1%)          IIIIII                         </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              5. [5] 5                       339 (27.9%)          IIIII                          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              6. [6] 6                       240 (19.7%)          III                            </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              7. [7] Sehr gut  7             106 ( 8.7%)          I                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      11 ( 0.9%)                      1211      5        </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [haven_labelled,                                             2. [2] 2                        34 ( 2.8%)                      (99.6%)   (0.4%)   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> vctrs_vctr,                                                  3. [3] 3                        70 ( 5.8%)          I                              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> double]                                                      4. [4] 4                       420 (34.7%)          IIIIII                         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              5. [5] 5                       331 (27.3%)          IIIII                          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              6. [6] 6                       247 (20.4%)          IIII                           </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                              7. [7] Sehr gut  7              98 ( 8.1%)          I                              </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Descriptive Statistics</span> <span style="color: #00BBBB;">──────────────────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Descriptive Statistics </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variable | Mean |   SD |        Range |  Quartiles | Skewness | Kurtosis |    n | n_Missing</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F600     | 4.34 | 1.36 | [1.00, 7.00] | 4.00, 5.00 |    -0.28 |     0.35 | 1216 |      4307</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F800_1   | 5.14 | 1.32 | [1.00, 7.00] | 4.00, 6.00 |    -0.51 |     0.12 | 1216 |      4307</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F800_2   | 4.79 | 1.23 | [1.00, 7.00] | 4.00, 6.00 |    -0.27 |     0.37 | 1216 |      4307</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F600     | 4.36 | 1.32 | [1.00, 7.00] | 4.00, 5.00 |    -0.19 |     0.44 | 1214 |         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F800_1   | 5.15 | 1.29 | [1.00, 7.00] | 4.00, 6.00 |    -0.44 |    -0.11 | 1215 |         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F800_2   | 4.78 | 1.21 | [1.00, 7.00] | 4.00, 6.00 |    -0.19 |     0.15 | 1211 |         5</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -5,7 +5,7 @@ A short description...
 ## Usage
 
 ``` r
-kda_importance_sumOfCoefficients(model)
+kda_importance_sumOfCoefficients(model, standardize = TRUE)
 ```
 
 ## Arguments
@@ -13,6 +13,11 @@ kda_importance_sumOfCoefficients(model)
 - model:
 
   A fitted model object.
+
+- standardize:
+
+  Logical. Whether to standardize the coefficients before calculating
+  importance. Defaults to `TRUE`.
 
 ## Value
 
