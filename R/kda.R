@@ -1137,6 +1137,50 @@ kda_interactive_workflow <- function(
 
   cli::cli_alert_success("KDA completed successfully!")
 
+  # Systematic checking of KDA results
+  r2 <- performance::r2(kda$model$model)
+  print(r2)
+  if (r2$R2 < 0.2) {
+    cli::cli_div(
+      theme = list(
+        .bullet = list(color = "red")
+      )
+    )
+    cli::cli_bullets(
+      c(
+        "x" = "Low R² detected (R² < 0.2): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
+        "i" = "Consider reviewing your model specification, adding relevant predictors, or checking for data quality issues."
+      )
+    )
+    cli::cli_end()
+  } else if (r2$R2 < 0.4) {
+    cli::cli_div(
+      theme = list(
+        .bullet = list(color = "orange")
+      )
+    )
+    cli::cli_bullets(
+      c(
+        ">" = "Moderate R² detected (0.2 ≤ R² < 0.4): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
+        "i" = "While this is not necessarily a problem, consider whether additional predictors or model adjustments could improve the explanatory power."
+      )
+    )
+    cli::cli_end()
+  } else {
+    cli::cli_div(
+      theme = list(
+        .bullet = list(color = "green")
+      )
+    )
+    cli::cli_bullets(
+      c(
+        "v" = "High R² detected (R² ≥ 0.4): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
+        "i" = "This suggests that your model is capturing a substantial portion of the variance in the outcome variable."
+      )
+    )
+    cli::cli_end()
+  }
+
   # Save plots
   cli::cli_alert_info(
     "Saving all created plots ..."

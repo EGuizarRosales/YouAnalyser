@@ -48,7 +48,7 @@ ya_choose_file_path <- function(file_name) {
 #'
 #' @export
 ya_choose_file <- function() {
-  file_path <- file.choose()
+  file_path <- tcltk::tk_choose.files()
   if (is.na(file_path) || is.null(file_path)) {
     stop("File selection was cancelled or failed.", call. = FALSE)
   }
@@ -68,8 +68,8 @@ ya_choose_file <- function() {
 #'
 #' @export
 ya_setup_folder_structure <- function(
-  base_path,
   folder_name,
+  base_path = tcltk::tk_choose.dir(),
   template = NULL,
   make_rproj = TRUE
 ) {
