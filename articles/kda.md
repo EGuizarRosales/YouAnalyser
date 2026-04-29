@@ -11,7 +11,7 @@ library(YouAnalyser)
 library(haven)
 ```
 
-## Recommended Workflow
+## 1. Recommended Workflow
 
 The following minimal and basic workflow is recommended for performing
 Key Driver Analysis (KDA) using the `YouAnalyser` package. This workflow
@@ -70,7 +70,7 @@ walkthrough of the EDA step, please refer to the
 [`vignette("eda", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/eda.md)
 vignette on Exploratory Data Analysis.
 
-## The `kda_regression()` Function
+## 2. The `kda_regression()` Function
 
 The
 [`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
@@ -147,7 +147,7 @@ documentation of the respective plotting functions
 `?kda_importance_barPlot()`, `?kda_performance_barPlot()`, and
 `?kda_ipma_scatterPlot()`.
 
-### Example Usage of `kda_regression()`
+### 2.1 Example Usage of `kda_regression()`
 
 We will use the `bkw_processed` dataset, a synthetically generated
 dataset based on the structure of real study (call
@@ -254,7 +254,174 @@ measures, and diagnostic plots. Try accessing these interactively by
 typing `kda$` in your console and using tab-completion to see the
 available elements.
 
-### Charts for PowerPoint Reporting
+### 2.2 KDA with Binary Outcomes
+
+It is also possible to conduct a KDA with a binary outcome variable
+using the
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function, which automatically detects the type of the outcome variable
+and fits a logistic regression model if the outcome is binary. The
+interpretation of the results are very similar to a KDA with a
+continuous outcome.
+
+Let’s have a look at the example data with a binary outcome variable
+(“F600”) and the first three predictor variables (“F800_1” to “F800_3”):
+
+``` r
+eda_summary(
+  data = bkw_bin_outcome,
+  variables = c("F600", paste0("F800_", 1:3)),
+  browser_output = FALSE
+)
+#> Warning: no DISPLAY variable so Tk is not available
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> 
+#> ── Data Frame Summary
+#> Data Frame Summary  
+#> data  
+#> Dimensions: 1171 x 4  
+#> Duplicates: 976  
+#> 
+#> --------------------------------------------------------------------------------------------------------------------------------------------------------
+#> Variable           Label                                     Stats / Values                 Freqs (% of Valid)   Graph              Valid      Missing  
+#> ------------------ ----------------------------------------- ------------------------------ -------------------- ------------------ ---------- ---------
+#> F600               Wie attraktiv finden Sie die BKW als      1. [0] Nicht attraktiv         223 (19.0%)          III                1171       0        
+#> [haven_labelled,   Arbeitgeberin?                            2. [1] Attraktiv               948 (81.0%)          IIIIIIIIIIIIIIII   (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                                                                                                             
+#> double]                                                                                                                                                 
+#> 
+#> F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      11 ( 0.9%)                             1171       0        
+#> [haven_labelled,   des Arbeitgebers                          2. [2] 2                        19 ( 1.6%)                             (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                  3. [3] 3                        66 ( 5.6%)          I                                      
+#> double]                                                      4. [4] 4                       301 (25.7%)          IIIII                                  
+#>                                                              5. [5] 5                       270 (23.1%)          IIII                                   
+#>                                                              6. [6] 6                       322 (27.5%)          IIIII                                  
+#>                                                              7. [7] Sehr gut  7             182 (15.5%)          III                                    
+#> 
+#> F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      11 ( 0.9%)                             1171       0        
+#> [haven_labelled,                                             2. [2] 2                        34 ( 2.9%)                             (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                  3. [3] 3                        70 ( 6.0%)          I                                      
+#> double]                                                      4. [4] 4                       417 (35.6%)          IIIIIII                                
+#>                                                              5. [5] 5                       316 (27.0%)          IIIII                                  
+#>                                                              6. [6] 6                       234 (20.0%)          III                                    
+#>                                                              7. [7] Sehr gut  7              89 ( 7.6%)          I                                      
+#> 
+#> F800_3             Sinnvolle Tätigkeit und                   1. [1] Überhaupt nicht gut      12 ( 1.0%)                             1171       0        
+#> [haven_labelled,   gesellschaftlicher Beitrag                2. [2] 2                        27 ( 2.3%)                             (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                  3. [3] 3                        89 ( 7.6%)          I                                      
+#> double]                                                      4. [4] 4                       357 (30.5%)          IIIIII                                 
+#>                                                              5. [5] 5                       305 (26.0%)          IIIII                                  
+#>                                                              6. [6] 6                       259 (22.1%)          IIII                                   
+#>                                                              7. [7] Sehr gut  7             122 (10.4%)          II                                     
+#> --------------------------------------------------------------------------------------------------------------------------------------------------------
+#> 
+#> ── Descriptive Statistics
+#> Variable | Mean |   SD |        Range |  Quartiles | Skewness | Kurtosis |    n | n_Missing
+#> -------------------------------------------------------------------------------------------
+#> F600     | 0.81 | 0.39 | [0.00, 1.00] | 1.00, 1.00 |    -1.58 |     0.49 | 1171 |         0
+#> F800_1   | 5.13 | 1.29 | [1.00, 7.00] | 4.00, 6.00 |    -0.41 |    -0.11 | 1171 |         0
+#> F800_2   | 4.75 | 1.20 | [1.00, 7.00] | 4.00, 6.00 |    -0.18 |     0.16 | 1171 |         0
+#> F800_3   | 4.86 | 1.27 | [1.00, 7.00] | 4.00, 6.00 |    -0.23 |    -0.08 | 1171 |         0
+```
+
+We can run the KDA with the binary outcome variable in the same way as
+before, just with a different dataset. Note that estimating a KDA for a
+binary outcome variable can take a bit longer than for a continuous
+outcome variable, especially if you have many predictors, because
+logistic regression models are more computationally intensive to fit
+than linear regression models. This is especially the case if you use
+the “domir” method for calculating variable importance, which is why we
+will use the “jrw” method in this example.
+
+``` r
+kda_bin <- kda_regression(
+  data = bkw_bin_outcome,
+  outcome = "F600",
+  predictors = paste0("F800_", 1:14),
+  importance_method = "jrw",
+  diagnostics = TRUE
+)
+#> Cannot simulate residuals for models of class `glm`. Please try
+#>   `check_model(..., residual_type = "normal")` instead.
+```
+
+We get essentially the same plots as for the KDA with the continuous
+outcome variable. Some differences include:
+
+- `kda_bin$plots$diagnostics_model` is adjusted for the logistic
+  regression model, so it shows different diagnostic plots than the
+  linear regression model. (See Model Diagnostics section below for more
+  information on how to interpret these plots.)
+- The `kda_bin$plots$model_forestPlot` now shows the Log-Odds. Negative
+  Log-Odds indicate that higher values of the predictor are associated
+  with lower probabilities of the outcome being 1 (i.e., the event of
+  interest), while positive Log-Odds indicate that higher values of the
+  predictor are associated with higher probabilities of the outcome
+  being 1. The further away from zero, the stronger the association
+  between the predictor and the outcome.
+- $R^{2}$ values in the `kda_bin$plots$importance_barPlot`,
+  `kda_bin$plots$performance_barPlot`, and
+  `kda_bin$plots$ipma_scatterPlot` now refer to $R_{Tjur}^{2}$, which is
+  a pseudo-$R^{2}$ measure that is commonly used for logistic regression
+  models. The same rules for interpretation apply as for the $R^{2}$
+  values in the KDA with a continuous outcome variable.
+
+`kda_bin$plots$diagnostics_correlation`
+
+![](fig/bin_diagnostics_corelation.jpeg)
+
+`kda_bin$plots$diagnostics_model`
+
+![](fig/bin_diagnostics_model.jpeg)
+
+`kda_bin$plots$model_forestPlot`
+
+![](fig/bin_model_forestPlot.jpeg)
+
+`kda_bin$plots$importance_barPlot`
+
+![](fig/bin_importance_barPlot.jpeg)
+
+`kda_bin$plots$performance_barPlot`
+
+![](fig/bin_performance_barPlot.jpeg)
+
+`kda_bin$plots$ipma_scatterPlot`
+
+![](fig/bin_ipma_scatterPlot.jpeg)
+
+Pro tip: If you prefer to get the forest plot in a Odds-Ratio format
+instead of Log-Odds, you can use:
+
+``` r
+kda_forestPlot(
+  model = kda_bin$model$model,
+  model_parameters_args = list(exponentiate = TRUE)
+)$p
+```
+
+![](kda_files/figure-html/kda-bin-odds-ratio-forest-plot-1.png)
+
+In this case, the interpretation of the forest plot changes slightly. An
+Odds-Ratio greater than 1 indicates that higher values of the predictor
+are associated with higher odds of the outcome being 1 (i.e., the event
+of interest), while an Odds-Ratio less than 1 indicates that higher
+values of the predictor are associated with lower odds of the outcome
+being 1. An Odds-Ratio of exactly 1 indicates no association between the
+predictor and the outcome. For example, an Odds-Ratio of 1.5 would
+indicate that a one-unit increase in the predictor is associated with a
+50% increase in the odds of the outcome being 1, while an Odds-Ratio of
+0.7 would indicate that a one-unit increase in the predictor is
+associated with a 30% decrease in the odds of the outcome being 1.
+
+### 2.3 Charts for PowerPoint Reporting
 
 `YouAnalyser` includes functions to facilitate the creation of an IPMA
 chart for reporting in PowerPoint.
@@ -344,7 +511,7 @@ horizontal line in the chart.](fig/kda_format_axis_pane_screenshot.png)
 “Format Axis” pane in PowerPoint that opens if you double-click on the
 horizontal line in the chart.
 
-### Model Diagnostics
+### 2.4 Model Diagnostics
 
 A short note on model diagnostics. The plot
 `kda$plots$diagnostics_model`can also be computed like this:
@@ -425,10 +592,7 @@ KDA. For additional ressources, please refer to the following resources:
   predictor variables in multiple regression. *Multivariate Behavioral
   Research*, 35, 1–19 . <https://doi.org/10.1207/S15327906MBR3501_1>
 
-###   
-
-  
-  
+------------------------------------------------------------------------
 
 ### Dominance Analysis
 

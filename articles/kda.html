@@ -81,7 +81,7 @@
 <span><span class="co">#&gt; <span style="color: #0000BB; font-style: italic;">&lt;https://eguizarrosales.github.io/YouAnalyser/&gt;</span></span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://haven.tidyverse.org" class="external-link">haven</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
-<h2 id="recommended-workflow">Recommended Workflow<a class="anchor" aria-label="anchor" href="#recommended-workflow"></a>
+<h2 id="recommended-workflow">1. Recommended Workflow<a class="anchor" aria-label="anchor" href="#recommended-workflow"></a>
 </h2>
 <p>The following minimal and basic workflow is recommended for
 performing Key Driver Analysis (KDA) using the <code>YouAnalyser</code>
@@ -134,7 +134,7 @@ walkthrough of the EDA step, please refer to the
 Exploratory Data Analysis.</p>
 </div>
 <div class="section level2">
-<h2 id="the-kda_regression-function">The <code>kda_regression()</code> Function<a class="anchor" aria-label="anchor" href="#the-kda_regression-function"></a>
+<h2 id="the-kda_regression-function">2. The <code>kda_regression()</code> Function<a class="anchor" aria-label="anchor" href="#the-kda_regression-function"></a>
 </h2>
 <p>The <code><a href="../reference/kda_regression.html">kda_regression()</a></code> function is the main work horse for
 conducting KDA. It is a wrapper function for all the necessary steps
@@ -215,7 +215,7 @@ documentation of the respective plotting functions
 <code>?kda_performance_barPlot()</code>, and
 <code>?kda_ipma_scatterPlot()</code>.</p>
 <div class="section level3">
-<h3 id="example-usage-of-kda_regression">Example Usage of <code>kda_regression()</code><a class="anchor" aria-label="anchor" href="#example-usage-of-kda_regression"></a>
+<h3 id="example-usage-of-kda_regression">2.1 Example Usage of <code>kda_regression()</code><a class="anchor" aria-label="anchor" href="#example-usage-of-kda_regression"></a>
 </h3>
 <p>We will use the <code>bkw_processed</code> dataset, a synthetically
 generated dataset based on the structure of real study (call
@@ -298,7 +298,159 @@ interactively by typing <code>kda$</code> in your console and using
 tab-completion to see the available elements.</p>
 </div>
 <div class="section level3">
-<h3 id="charts-for-powerpoint-reporting">Charts for PowerPoint Reporting<a class="anchor" aria-label="anchor" href="#charts-for-powerpoint-reporting"></a>
+<h3 id="kda-with-binary-outcomes">2.2 KDA with Binary Outcomes<a class="anchor" aria-label="anchor" href="#kda-with-binary-outcomes"></a>
+</h3>
+<p>It is also possible to conduct a KDA with a binary outcome variable
+using the <code><a href="../reference/kda_regression.html">kda_regression()</a></code> function, which automatically
+detects the type of the outcome variable and fits a logistic regression
+model if the outcome is binary. The interpretation of the results are
+very similar to a KDA with a continuous outcome.</p>
+<p>Let’s have a look at the example data with a binary outcome variable
+(“F600”) and the first three predictor variables (“F800_1” to
+“F800_3”):</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/eda_summary.html">eda_summary</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">bkw_bin_outcome</span>,</span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"F600"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  browser_output <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: no DISPLAY variable so Tk is not available</span></span>
+<span><span class="co">#&gt; Warning in png(png_loc &lt;- tempfile(fileext = ".png"), width = 150 *</span></span>
+<span><span class="co">#&gt; graph.magnif, : unable to open connection to X11 display ''</span></span>
+<span><span class="co">#&gt; Warning in png(png_loc &lt;- tempfile(fileext = ".png"), width = 150 *</span></span>
+<span><span class="co">#&gt; graph.magnif, : unable to open connection to X11 display ''</span></span>
+<span><span class="co">#&gt; Warning in png(png_loc &lt;- tempfile(fileext = ".png"), width = 150 *</span></span>
+<span><span class="co">#&gt; graph.magnif, : unable to open connection to X11 display ''</span></span>
+<span><span class="co">#&gt; Warning in png(png_loc &lt;- tempfile(fileext = ".png"), width = 150 *</span></span>
+<span><span class="co">#&gt; graph.magnif, : unable to open connection to X11 display ''</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Data Frame Summary</span></span>
+<span><span class="co">#&gt; Data Frame Summary  </span></span>
+<span><span class="co">#&gt; data  </span></span>
+<span><span class="co">#&gt; Dimensions: 1171 x 4  </span></span>
+<span><span class="co">#&gt; Duplicates: 976  </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; --------------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Variable           Label                                     Stats / Values                 Freqs (% of Valid)   Graph              Valid      Missing  </span></span>
+<span><span class="co">#&gt; ------------------ ----------------------------------------- ------------------------------ -------------------- ------------------ ---------- ---------</span></span>
+<span><span class="co">#&gt; F600               Wie attraktiv finden Sie die BKW als      1. [0] Nicht attraktiv         223 (19.0%)          III                1171       0        </span></span>
+<span><span class="co">#&gt; [haven_labelled,   Arbeitgeberin?                            2. [1] Attraktiv               948 (81.0%)          IIIIIIIIIIIIIIII   (100.0%)   (0.0%)   </span></span>
+<span><span class="co">#&gt; vctrs_vctr,                                                                                                                                             </span></span>
+<span><span class="co">#&gt; double]                                                                                                                                                 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      11 ( 0.9%)                             1171       0        </span></span>
+<span><span class="co">#&gt; [haven_labelled,   des Arbeitgebers                          2. [2] 2                        19 ( 1.6%)                             (100.0%)   (0.0%)   </span></span>
+<span><span class="co">#&gt; vctrs_vctr,                                                  3. [3] 3                        66 ( 5.6%)          I                                      </span></span>
+<span><span class="co">#&gt; double]                                                      4. [4] 4                       301 (25.7%)          IIIII                                  </span></span>
+<span><span class="co">#&gt;                                                              5. [5] 5                       270 (23.1%)          IIII                                   </span></span>
+<span><span class="co">#&gt;                                                              6. [6] 6                       322 (27.5%)          IIIII                                  </span></span>
+<span><span class="co">#&gt;                                                              7. [7] Sehr gut  7             182 (15.5%)          III                                    </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      11 ( 0.9%)                             1171       0        </span></span>
+<span><span class="co">#&gt; [haven_labelled,                                             2. [2] 2                        34 ( 2.9%)                             (100.0%)   (0.0%)   </span></span>
+<span><span class="co">#&gt; vctrs_vctr,                                                  3. [3] 3                        70 ( 6.0%)          I                                      </span></span>
+<span><span class="co">#&gt; double]                                                      4. [4] 4                       417 (35.6%)          IIIIIII                                </span></span>
+<span><span class="co">#&gt;                                                              5. [5] 5                       316 (27.0%)          IIIII                                  </span></span>
+<span><span class="co">#&gt;                                                              6. [6] 6                       234 (20.0%)          III                                    </span></span>
+<span><span class="co">#&gt;                                                              7. [7] Sehr gut  7              89 ( 7.6%)          I                                      </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; F800_3             Sinnvolle Tätigkeit und                   1. [1] Überhaupt nicht gut      12 ( 1.0%)                             1171       0        </span></span>
+<span><span class="co">#&gt; [haven_labelled,   gesellschaftlicher Beitrag                2. [2] 2                        27 ( 2.3%)                             (100.0%)   (0.0%)   </span></span>
+<span><span class="co">#&gt; vctrs_vctr,                                                  3. [3] 3                        89 ( 7.6%)          I                                      </span></span>
+<span><span class="co">#&gt; double]                                                      4. [4] 4                       357 (30.5%)          IIIIII                                 </span></span>
+<span><span class="co">#&gt;                                                              5. [5] 5                       305 (26.0%)          IIIII                                  </span></span>
+<span><span class="co">#&gt;                                                              6. [6] 6                       259 (22.1%)          IIII                                   </span></span>
+<span><span class="co">#&gt;                                                              7. [7] Sehr gut  7             122 (10.4%)          II                                     </span></span>
+<span><span class="co">#&gt; --------------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── Descriptive Statistics</span></span>
+<span><span class="co">#&gt; Variable | Mean |   SD |        Range |  Quartiles | Skewness | Kurtosis |    n | n_Missing</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; F600     | 0.81 | 0.39 | [0.00, 1.00] | 1.00, 1.00 |    -1.58 |     0.49 | 1171 |         0</span></span>
+<span><span class="co">#&gt; F800_1   | 5.13 | 1.29 | [1.00, 7.00] | 4.00, 6.00 |    -0.41 |    -0.11 | 1171 |         0</span></span>
+<span><span class="co">#&gt; F800_2   | 4.75 | 1.20 | [1.00, 7.00] | 4.00, 6.00 |    -0.18 |     0.16 | 1171 |         0</span></span>
+<span><span class="co">#&gt; F800_3   | 4.86 | 1.27 | [1.00, 7.00] | 4.00, 6.00 |    -0.23 |    -0.08 | 1171 |         0</span></span></code></pre></div>
+<p>We can run the KDA with the binary outcome variable in the same way
+as before, just with a different dataset. Note that estimating a KDA for
+a binary outcome variable can take a bit longer than for a continuous
+outcome variable, especially if you have many predictors, because
+logistic regression models are more computationally intensive to fit
+than linear regression models. This is especially the case if you use
+the “domir” method for calculating variable importance, which is why we
+will use the “jrw” method in this example.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">kda_bin</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kda_regression.html">kda_regression</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">bkw_bin_outcome</span>,</span>
+<span>  outcome <span class="op">=</span> <span class="st">"F600"</span>,</span>
+<span>  predictors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">14</span><span class="op">)</span>,</span>
+<span>  importance_method <span class="op">=</span> <span class="st">"jrw"</span>,</span>
+<span>  diagnostics <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Cannot simulate residuals for models of class `glm`. Please try</span></span>
+<span><span class="co">#&gt;   `check_model(..., residual_type = "normal")` instead.</span></span></code></pre></div>
+<p>We get essentially the same plots as for the KDA with the continuous
+outcome variable. Some differences include:</p>
+<ul>
+<li>
+<code>kda_bin$plots$diagnostics_model</code> is adjusted for the
+logistic regression model, so it shows different diagnostic plots than
+the linear regression model. (See Model Diagnostics section below for
+more information on how to interpret these plots.)</li>
+<li>The <code>kda_bin$plots$model_forestPlot</code> now shows the
+Log-Odds. Negative Log-Odds indicate that higher values of the predictor
+are associated with lower probabilities of the outcome being 1 (i.e.,
+the event of interest), while positive Log-Odds indicate that higher
+values of the predictor are associated with higher probabilities of the
+outcome being 1. The further away from zero, the stronger the
+association between the predictor and the outcome.</li>
+<li>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+values in the <code>kda_bin$plots$importance_barPlot</code>,
+<code>kda_bin$plots$performance_barPlot</code>, and
+<code>kda_bin$plots$ipma_scatterPlot</code> now refer to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>R</mi><mrow><mi>T</mi><mi>j</mi><mi>u</mi><mi>r</mi></mrow><mn>2</mn></msubsup><annotation encoding="application/x-tex">R^2_{Tjur}</annotation></semantics></math>,
+which is a
+pseudo-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+measure that is commonly used for logistic regression models. The same
+rules for interpretation apply as for the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+values in the KDA with a continuous outcome variable.</li>
+</ul>
+<p><code>kda_bin$plots$diagnostics_correlation</code></p>
+<p><img src="fig/bin_diagnostics_corelation.jpeg"></p>
+<p><code>kda_bin$plots$diagnostics_model</code></p>
+<p><img src="fig/bin_diagnostics_model.jpeg"></p>
+<p><code>kda_bin$plots$model_forestPlot</code></p>
+<p><img src="fig/bin_model_forestPlot.jpeg"></p>
+<p><code>kda_bin$plots$importance_barPlot</code></p>
+<p><img src="fig/bin_importance_barPlot.jpeg"></p>
+<p><code>kda_bin$plots$performance_barPlot</code></p>
+<p><img src="fig/bin_performance_barPlot.jpeg"></p>
+<p><code>kda_bin$plots$ipma_scatterPlot</code></p>
+<p><img src="fig/bin_ipma_scatterPlot.jpeg"></p>
+<p>Pro tip: If you prefer to get the forest plot in a Odds-Ratio format
+instead of Log-Odds, you can use:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/kda_forestPlot.html">kda_forestPlot</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="va">kda_bin</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">model</span>,</span>
+<span>  model_parameters_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">$</span><span class="va">p</span></span></code></pre></div>
+<p><img src="kda_files/figure-html/kda-bin-odds-ratio-forest-plot-1.png" class="r-plt" alt="" width="100%"></p>
+<p>In this case, the interpretation of the forest plot changes slightly.
+An Odds-Ratio greater than 1 indicates that higher values of the
+predictor are associated with higher odds of the outcome being 1 (i.e.,
+the event of interest), while an Odds-Ratio less than 1 indicates that
+higher values of the predictor are associated with lower odds of the
+outcome being 1. An Odds-Ratio of exactly 1 indicates no association
+between the predictor and the outcome. For example, an Odds-Ratio of 1.5
+would indicate that a one-unit increase in the predictor is associated
+with a 50% increase in the odds of the outcome being 1, while an
+Odds-Ratio of 0.7 would indicate that a one-unit increase in the
+predictor is associated with a 30% decrease in the odds of the outcome
+being 1.</p>
+</div>
+<div class="section level3">
+<h3 id="charts-for-powerpoint-reporting">2.3 Charts for PowerPoint Reporting<a class="anchor" aria-label="anchor" href="#charts-for-powerpoint-reporting"></a>
 </h3>
 <p><code>YouAnalyser</code> includes functions to facilitate the
 creation of an IPMA chart for reporting in PowerPoint.</p>
@@ -308,7 +460,7 @@ right structure for reporting. We can do this using the
 scatter plot data and saves it to an Excel file. You can choose the file
 path interactively using the <code><a href="../reference/ya_choose_file_path.html">ya_choose_file_path()</a></code>
 function.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"ipma_data.xlsx"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/kda_save_data_for_chart.html">kda_save_data_for_chart</a></span><span class="op">(</span></span>
 <span>  ipma_scatterPlot_data <span class="op">=</span> <span class="va">kda</span><span class="op">$</span><span class="va">plots</span><span class="op">$</span><span class="va">ipma_scatterPlot</span><span class="op">$</span><span class="va">d</span>,</span>
@@ -324,7 +476,7 @@ Excel:</p>
 needed to update a pre-formatted PowerPoint template that you can use
 for reporting. You can copy the PowerPoint template to your desired
 location using the <code><a href="../reference/kda_copy_pptx_template.html">kda_copy_pptx_template()</a></code> function:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"ipma_chart.pptx"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/kda_copy_pptx_template.html">kda_copy_pptx_template</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span></span></code></pre></div>
 <p>Follow these steps to update the PowerPoint template with the
@@ -379,18 +531,18 @@ you double-click on the horizontal line in the chart.</div>
 </div>
 </div>
 <div class="section level3">
-<h3 id="model-diagnostics">Model Diagnostics<a class="anchor" aria-label="anchor" href="#model-diagnostics"></a>
+<h3 id="model-diagnostics">2.4 Model Diagnostics<a class="anchor" aria-label="anchor" href="#model-diagnostics"></a>
 </h3>
 <p>A short note on model diagnostics. The plot
 <code>kda$plots$diagnostics_model</code>can also be computed like
 this:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diagnostics</span> <span class="op">&lt;-</span> <span class="fu">performance</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/performance/reference/check_model.html" class="external-link">check_model</a></span><span class="op">(</span><span class="va">kda</span><span class="op">$</span><span class="va">model</span><span class="op">$</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">diagnostics</span><span class="op">)</span></span></code></pre></div>
 <p><img src="kda_files/figure-html/model-diagnostics-1.png" class="r-plt" alt="" width="100%"></p>
 <p>This gives you the advantage that you can also access infomation that
 can be helpful to interpret the plot, e.g.:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diagnostics</span><span class="op">$</span><span class="va">OUTLIERS</span></span>
 <span><span class="co">#&gt; OK: No outliers detected.</span></span>
 <span><span class="co">#&gt; - Based on the following method and threshold: cook (1).</span></span>
@@ -459,12 +611,7 @@ weight of predictor variables in multiple regression. <em>Multivariate
 Behavioral Research</em>, 35, 1–19 . <a href="https://doi.org/10.1207/S15327906MBR3501_1" class="external-link uri">https://doi.org/10.1207/S15327906MBR3501_1</a>
 </li>
 </ul>
-</div>
-<div class="section level3">
-<h3 id="section">
-<br><br><a class="anchor" aria-label="anchor" href="#section"></a>
-</h3>
-<p><br><br></p>
+<hr>
 </div>
 <div class="section level3">
 <h3 id="dominance-analysis">Dominance Analysis<a class="anchor" aria-label="anchor" href="#dominance-analysis"></a>

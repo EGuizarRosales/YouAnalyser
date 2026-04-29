@@ -64,7 +64,8 @@ Miscellaneous utility functions for the YouAnalyser package.
 - [`ya_choose_file()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file.md)
   : Choose a file and return its path
 - [`ya_choose_file_path()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file_path.md)
-  : Choose a directory and create a file path
+  : Choose an existing directory and define a new file in this
+  directory, returning the full file path
 - [`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md)
   : Save a plot to JPEG
 - [`ya_setup_folder_structure()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_setup_folder_structure.md)

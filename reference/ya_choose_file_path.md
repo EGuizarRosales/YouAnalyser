@@ -1,6 +1,7 @@
-# Choose a directory and create a file path
+# Choose an existing directory and define a new file in this directory, returning the full file path
 
-Choose a directory and create a file path
+Choose an existing directory and define a new file in this directory,
+returning the full file path
 
 ## Usage
 
