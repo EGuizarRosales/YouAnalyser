@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{ya_choose_file_path}
 \alias{ya_choose_file_path}
-\title{Choose a directory and create a file path}
+\title{Choose an existing directory and define a new file in this directory, returning the full file path}
 \usage{
 ya_choose_file_path(file_name)
 }
@@ -13,7 +13,7 @@ ya_choose_file_path(file_name)
 A single string representing the full file path, combining the chosen directory and the provided file name. The function normalizes the directory path to use forward slashes and ensures that the specified directory exists.
 }
 \description{
-Choose a directory and create a file path
+Choose an existing directory and define a new file in this directory, returning the full file path
 }
 \examples{
 \dontshow{if (interactive()) withAutoprint(\{ # examplesIf}

@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 The goal of YouAnalyser is to provide Analytics Partners of YouGov DACH with a convenient and standardized way to perform core analyses on survey data, such as Key Driver Analysis (KDA). The package includes functions for data preprocessing, exploratory data analysis (EDA), and KDA (more to come), all designed to work seamlessly with survey data in the `haven::labelled()` format. By using YouAnalyser, you can save time and ensure consistency in your analyses across different projects.
 
-## Installation
+## Installation and Setup
 
 You can install the development version of YouAnalyser from [GitHub](https://github.com/) with:
 
@@ -30,16 +30,93 @@ You can install the development version of YouAnalyser from [GitHub](https://git
 pak::pak("EGuizarRosales/YouAnalyser")
 ```
 
-## Key Driver Analysis (KDA)
+Then, in your scripts, use:
 
-### Basic Example
+```{r load-libraries}
+library(YouAnalyser)
+library(haven)
+```
+
+**Some general Tips:**
+
+* You can find the documentation for each function by calling `?function_name` in your R console (e.g., `?eda_summary`).
+* This package is documented with vignettes. You can browse the available vignettes with `browseVignettes("YouAnalyser")` and open a specific vignette with `vignette("vignette_name", package = "YouAnalyser")`.
+* The most convenient way to access the full documentation of this package is through the website: <https://eguizarrosales.github.io/YouAnalyser/>.
+
+## 1. Data Processing, Convenience Functions, and Example Data
+
+All data processing functions start with the prefix `dp_`, while convenience functions start with the prefix `ya_`. For a detailed walkthrough of the data processing functions, please refer to the vignette included in the package (use e.g. `vignette("dp", package = "YouAnalyser")`), which provide step-by-step guides on how to use the various functions for data processing and other convenient tasks.
+
+`YouAnalyser` assumes that your data comes in the `haven::labelled()` format, which is common for survey data. The package includes functions to help you process and prepare your data for analysis if your data is not already in this format:
+
+* `dp_copy_codebook_template()`: Copy a codebook template to a specified file path
+* `dp_convert_to_labelled()`: Convert a data frame to a labelled data frame using a codebook.
+* `dp_inspect_codebook()`: Inspect the codebook of a labelled data frame (useful to check whether labelling worked as expected)
+
+The convenience functions starting with `ya_` mostly take care of selecting files, defining file names, and saving plots:
+
+* `ya_choose_file()`: Choose an existing file and return its path
+* `ya_choose_file_path()`: Choose an existing directory and define a new file in this directory, returning the full file path
+* `ya_save_plot()`: Save a plot to JPEG
+
+Special consideration should be given to `ya_setup_folder_structure()`, which creates a standardized folder structure for your project. This function is designed to help you organize your files and outputs in a consistent way across different projects. By default, it creates the following folder structure:
+
+```{r folder-structure, eval = FALSE}
+├── 01_input
+│   └── data
+│       ├── processed
+│       └── raw
+├── 02_scripts
+├── 03_output
+│   ├── data
+│   ├── plots
+│   └── reports
+├── Project2.Rproj
+└── R
+```
+
+The `ya_setup_folder_structure()` function is used in workflows. See `vignette("kda", package = "YouAnalyser")` for an example of how to use it in a workflow.
+
+## 2. Exploratory Data Analysis (EDA)
+
+All EDA functions start with the prefix `eda_`. For a detailed walkthrough of the EDA functions, please refer to the vignettes included in the package (use e.g. `vignette("eda", package = "YouAnalyser")`), which provide step-by-step guides on how to use the various functions for EDA.
+
+There are two basic functions for EDA in the YouAnalyser package: `eda_summary()` and `eda_correlation()`. The former provides a summary of the data, including descriptive statistics and missing values, while the latter calculates and visualizes correlations between variables.
+
+```{r eda_summary-example}
+eda_summary(
+  data = bkw_processed,
+  variables = c("F600", paste0("F800_", 1:8)),
+  console_output = TRUE,
+  browser_output = FALSE
+)
+```
+
+By setting `browser_output = TRUE`, the output will be displayed in your default web browser, which can be more convenient for exploring large tables and visualizations. The result will look like this:
+
+![Summary Table as a Browser Output](man/figures/eda_summary_browserOutput_screenshot.png)
+
+You can request a correlation matrix for a set of variables using the `eda_correlation()` function:
+
+```{r eda_correlation-example, fig.width = 12, fig.height = 12, out.width = "100%"}
+eda_corrs <- eda_correlation(
+  data = bkw_processed,
+  variables = c("F600", paste0("F800_", 1:8)),
+  correlation_type = "Pearson"
+)
+print(eda_corrs$d)
+print(eda_corrs$p)
+```
+
+There are many more options for `correlation_type`. To see all available options, call `?correlation::correlation` and read the details section.
+
+## 3. Key Driver Analysis (KDA)
+
+All KDA functions start with the prefix `kda_`. For a detailed walkthrough of the KDA functions, please refer to the vignettes included in the package (use e.g. `vignette("kda", package = "YouAnalyser")`), which provide step-by-step guides on how to use the various functions for KDA.
 
 This is a basic example which shows you how to conduct a End-2-End Key Driver Analysis using the YouAnalyser package. For a more detailed walkthrough, please refer to the vignettes included in the package (use e.g. `vignette("kda", package = "YouAnalyser")`), which provide step-by-step guides on how to use the various functions for KDA.
 
 ```{r kda_regression_example}
-library(YouAnalyser)
-library(haven)
-
 res <- kda_regression(
   data = bkw_processed,
   outcome = "F600",
@@ -51,17 +128,11 @@ res <- kda_regression(
 
 `res` is a list containing the results of the KDA, including the fitted regression model, variable importance and performance measures, and plots. The most important outcome is the "Importance Performance Map Analysis" (IPMA) plot, which can be accessed like this:
 
-```{r res_plots_ipma_p, fig.width = 12, fig.height = 12, out.width = "100%", eval = FALSE}
+```{r res_plots_ipma_p, fig.width = 12, fig.height = 10, out.width = "100%", eval = FALSE}
 res$plots$ipma_scatterPlot$p
 ```
 
-### Charts and Reporting
-
-If you would like to save a plot, you can use two convenience functions:
-
-- `ya_choose_file_path()`: This function will open a dialog box that allows you to choose a directory where you would like to save the plot. You only need to additionally provide a file name (`"ipma_plot.jpeg"` in the example below), and the function will take care of the rest.
-- `ya_save_plot()`: This function allows you to save a plot to a specified file path, with options to set the width and height (in centimeters) of the saved plot.
-
+Below you can find all the available plots in the `res` object. You can save these plots using the `ya_save_plot()` function, which allows you to specify the file path and dimensions of the saved plot.
 ```{r save_available_kda_plots, include = FALSE, eval = FALSE}
 purrr::iwalk(
   .x = res$plots,
@@ -81,65 +152,6 @@ purrr::iwalk(
 )
 ```
 
-```{r save_ipma_plot, eval = FALSE}
-file_path <- ya_choose_file_path("ipma_plot.jpeg")
-ya_save_plot(
-  plot = res$plots$ipma_scatterPlot$p,
-  file_path = file_path,
-  width = 30,
-  height = 20
-)
-```
-
-This will result in the following plot being saved to your chosen directory:
-
-![IPMA Scatter Plot](man/figures/ipma_scatterPlot.jpeg)
-
-The data visualized in this plot can be accessed like this:
-
-```{r res_plots_ipma_d, fig.width = 12, fig.height = 12, out.width = "100%"}
-res$plots$ipma_scatterPlot$d
-```
-
-We can also export this data to an Excel file that can be used for reporting in a PowerPoint report:
-
-```{r export_ipma_data, eval = FALSE}
-file_path <- ya_choose_file_path("ipma_data.xlsx")
-kda_save_data_for_chart(
-  ipma_scatterPlot_data = res$plots$ipma_scatterPlot$d,
-  file_path = file_path
-)
-```
-
-This will result in a file that looks like this when opened in Excel:
-
-![Screenshot of ipma_data.xlsx (right-click -> "Open image in new tab" to zoom in)](man/figures/ipma_data_screenshot.png)
-
-This file has the right structure and contains all the information needed to update a pre-formatted PowerPoint template that you can use for reporting. You can copy the PowerPoint template to your desired location using the `kda_copy_pptx_template()` function:
-
-```{r copy_pptx_template, eval = FALSE}
-file_path <- ya_choose_file_path("ipma_chart.pptx")
-kda_copy_pptx_template(file_path)
-```
-
-Follow these steps to update the PowerPoint template with the exported data:
-
-1. Open the ipma data saved in the Excel, i.e. `ipma_data.xlsx` in this example.
-2. Select the data in the grey box, i.e. **A5:D12** in this example, and copy it (Ctrl + C).
-3. Open the PowerPoint template, i.e. `ipma_chart.pptx` in this example.
-4. Go to the slide with the IPMA chart, right-click on the chart, and select "Edit Data" > "Edit Data in Excel". This will open the "Chart in Microsoft PowerPoint" window, which looks just like Excel.
-5. In the "Chart in Microsoft PowerPoint" window, select the Cell **A5**, right-click, and paste values only (Ctrl + Shift + V). The chart in the PowerPoint will automatically update based on the pasted data. You can close the "Chart in Microsoft PowerPoint" window after pasting the data.
-6. In the IPMA chart, we need to update part of the chart that is displayed as well as the cross defining the quadrants. For this, arrange the PowerPoint (`ipma_chart.pptx`) and the Excel (`ipma_data.xlsx`) window side by side.
-    - Double-click on the horizontal line in the PowerPoint chart. This will open the "Format Axis" pane on the right-hand-side (see screenshot below). Copy and paste (Ctrl + C and Ctrl + V) the value in Cell **L10** of the Excel sheet (X-Achsenminimum) to the "Bounds: Minimum" field in the "Format Axis" pane. Now copy and paste the value in Cell **L9** (X-Achsenmaximum) to the "Bounds: Maximum" field in the "Format Axis" pane. Finally, copy and paste the value in Cell **L8** (X-Achsenwert) to the "Vertical axis crosses: Axis value" field in the "Format Axis" pane.
-    - Double-click on the vertical line in the PowerPoint chart. This will open the "Format Axis" pane on the right-hand-side. Copy and paste (Ctrl + C and Ctrl + V) the value in Cell **M10** of the Excel sheet (Y-Achsenminimum) to the "Bounds: Minimum" field in the "Format Axis" pane. Now copy and paste the value in Cell **M9** (Y-Achsenmaximum) to the "Bounds: Maximum" field in the "Format Axis" pane. Finally, copy and paste the value in Cell **M8** (Y-Achsenwert) to the "Horizontal axis crosses: Axis value" field in the "Format Axis" pane.
-7. Update the right-hand side legend of the chart with the item numbers and statements. Use the information summarised in the Excel file in **O5:V35** to do this.
-
-!["Format Axis" pane in PowerPoint that opens if you double-click on the horizontal line in the chart.](man/figures/format_axis_pane_screenshot.png)
-
-### Additional Outputs
-
-There are a lot more plots and outputs available from `res`, so you are encouraged to explore the object and check out the vignettes for more details on how to use the package for KDA. Below you find all available plots in the `res` object:
-
 `res$plots$diagnostics_correlation`
 
 ![](man/figures/diagnostics_corelation.jpeg)
@@ -148,14 +160,18 @@ There are a lot more plots and outputs available from `res`, so you are encourag
 
 ![](man/figures/diagnostics_model.jpeg)
 
-`res$plots$model_forestPlot`
+`res$plots$model_forestPlot$p`
 
 ![](man/figures/model_forestPlot.jpeg)
 
-`res$plots$importance_barPlot`
+`res$plots$importance_barPlot$p`
 
 ![](man/figures/importance_barPlot.jpeg)
 
-`res$plots$performance_barPlot`
+`res$plots$performance_barPlot$p`
 
 ![](man/figures/performance_barPlot.jpeg)
+
+`res$plots$ipma_scatterPlot$p`
+
+![](man/figures/ipma_scatterPlot.jpeg)

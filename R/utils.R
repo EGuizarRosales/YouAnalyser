@@ -17,7 +17,7 @@ ya_get_predictor_labels <- function(model) {
     dplyr::mutate(label_withPred = paste0(predictor, ": ", label))
 }
 
-#' Choose a directory and create a file path
+#' Choose an existing directory and define a new file in this directory, returning the full file path
 #'
 #' @param file_name A single string specifying the file name to be appended to the chosen directory path.
 #'
