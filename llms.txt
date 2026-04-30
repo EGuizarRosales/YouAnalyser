@@ -16,6 +16,7 @@ You can install the development version of YouAnalyser from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("EGuizarRosales/YouAnalyser")
 ```
@@ -23,6 +24,7 @@ pak::pak("EGuizarRosales/YouAnalyser")
 Then, in your scripts, use:
 
 ``` r
+
 library(YouAnalyser)
 #> 
 #> ── Welcome to YouAnalyser! ─────────────────────────────────────────────────────
@@ -66,6 +68,11 @@ not already in this format:
   Copy a codebook template to a specified file path
 - [`dp_convert_to_labelled()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_convert_to_labelled.md):
   Convert a data frame to a labelled data frame using a codebook.
+- [`dp_label_automatically()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_label_automatically.md):
+  Automatically label a data frame based on its values (useful for
+  filling in missing labels if you do not want to use
+  [`dp_convert_to_labelled()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_convert_to_labelled.md)
+  with a codebook - use with caution!)
 - [`dp_inspect_codebook()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_inspect_codebook.md):
   Inspect the codebook of a labelled data frame (useful to check whether
   labelling worked as expected)
@@ -126,6 +133,7 @@ statistics and missing values, while the latter calculates and
 visualizes correlations between variables.
 
 ``` r
+
 eda_summary(
   data = bkw_processed,
   variables = c("F600", paste0("F800_", 1:8)),
@@ -243,6 +251,7 @@ You can request a correlation matrix for a set of variables using the
 function:
 
 ``` r
+
 eda_corrs <- eda_correlation(
   data = bkw_processed,
   variables = c("F600", paste0("F800_", 1:8)),
@@ -319,6 +328,7 @@ which provide step-by-step guides on how to use the various functions
 for KDA.
 
 ``` r
+
 res <- kda_regression(
   data = bkw_processed,
   outcome = "F600",
@@ -335,6 +345,7 @@ plots. The most important outcome is the “Importance Performance Map
 Analysis” (IPMA) plot, which can be accessed like this:
 
 ``` r
+
 res$plots$ipma_scatterPlot$p
 ```
 
@@ -381,6 +392,8 @@ variable and value labels.
   : Copy a codebook template to a specified file path
 - [`dp_inspect_codebook()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_inspect_codebook.md)
   : Inspect the codebook of a labelled data frame
+- [`dp_label_automatically()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_label_automatically.md)
+  : Automatically label a data frame
 
 ## Exploratory Data Analysis (EDA)
 

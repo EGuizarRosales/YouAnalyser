@@ -11,6 +11,8 @@ variable and value labels.
   : Copy a codebook template to a specified file path
 - [`dp_inspect_codebook()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_inspect_codebook.md)
   : Inspect the codebook of a labelled data frame
+- [`dp_label_automatically()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_label_automatically.md)
+  : Automatically label a data frame
 
 ## Exploratory Data Analysis (EDA)
 

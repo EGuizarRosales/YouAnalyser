@@ -494,6 +494,535 @@ use the following code snippets to convert it to a labelled format:</p>
 <span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"my_labelled_data.sav"</span><span class="op">)</span></span>
 <span><span class="fu">haven</span><span class="fu">::</span><span class="fu"><a href="https://haven.tidyverse.org/reference/read_spss.html" class="external-link">write_sav</a></span><span class="op">(</span><span class="va">myData_labelled</span>, <span class="va">file_path</span><span class="op">)</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="automatically-label-data">Automatically Label Data<a class="anchor" aria-label="anchor" href="#automatically-label-data"></a>
+</h3>
+<p>If you are missing variable and value labels for your data and do not
+want to provide a codebook (lazy you! ;) ), you can use the
+<code><a href="../reference/dp_label_automatically.html">dp_label_automatically()</a></code> function to automatically label
+your data based on its values. This function is useful for filling in
+missing labels, but it should be used with caution: It assumes that the
+observed minimum and maximum values in your data represent the
+theoretical minimum and maximum values of the variables, which is not
+always the case. Therefore, it is recommended to provide a codebook with
+<code><a href="../reference/dp_convert_to_labelled.html">dp_convert_to_labelled()</a></code> if possible. If you do use
+<code><a href="../reference/dp_label_automatically.html">dp_label_automatically()</a></code>, make sure to inspect the results
+carefully using <code><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook()</a></code> to check whether the
+labelling worked as expected.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create an example data frame with some missing variable labels and value labels</span></span>
+<span><span class="va">bkw_processed_missing_labels</span> <span class="op">&lt;-</span> <span class="va">bkw_processed</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">haven</span><span class="fu">::</span><span class="fu"><a href="https://haven.tidyverse.org/reference/zap_label.html" class="external-link">zap_label</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">4</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">haven</span><span class="fu">::</span><span class="fu"><a href="https://haven.tidyverse.org/reference/zap_labels.html" class="external-link">zap_labels</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Demonstrate: There are missing labels in the data</span></span>
+<span><span class="fu"><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook</a></span><span class="op">(</span><span class="va">bkw_processed_missing_labels</span><span class="op">)</span></span>
+<span><span class="co">#&gt; data (1171 rows and 15 variables, 15 shown)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ID | Name    | Label                    | Type    | Missings | Values</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 1  | F600    | Wie attraktiv            | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | finden Sie die           |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | BKW als                  |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | Arbeitgeberin?           |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 2  | F800_1  |                          | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 3  | F800_2  |                          | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 4  | F800_3  |                          | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 5  | F800_4  |                          | numeric | 0 (0.0%) | [1, 7]</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 6  | F800_5  |                          | numeric | 0 (0.0%) | [1, 7]</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 7  | F800_6  | Moderne                  | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | Arbeitsumgebung          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | Technologien             |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 8  | F800_7  | Attraktive               | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | Vergütung und            |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Zusatzleistungen         |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 9  | F800_8  | Gute Führung             | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | wertschätzende           |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | Unternehmenskultur       |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 10 | F800_9  | Verantwortung            | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Gestaltungsspielraum     |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 11 | F800_10 | Zukunftsorientierung     | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Nachhaltigkeit           |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | des                      |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         | Unternehmens             |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 12 | F800_11 | Internationales          | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | Arbeitsumfeld            |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | und kulturelle           |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | Vielfalt                 |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 13 | F800_12 | Innovationskultur        | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Veränderungsbereitschaft |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | des                      |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         | Unternehmens             |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 14 | F800_13 | Arbeitszeit-             | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Arbeitsortflexibilität   |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 15 | F800_14 | Diversität,              | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | Gleichstellung           |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | und Inklusion            |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ID | Value Labels       |           N</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 1  | 1 - Überhaupt...   |  43 ( 3.7%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  50 ( 4.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 130 (11.1%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 461 (39.4%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 303 (25.9%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 109 ( 9.3%)</span></span>
+<span><span class="co">#&gt;    | 7 - Sehr...        |  75 ( 6.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 2  | Überhaupt nicht... |  11 ( 0.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  19 ( 1.6%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  66 ( 5.6%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 301 (25.7%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 270 (23.1%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 322 (27.5%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 182 (15.5%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 3  | Überhaupt nicht... |  11 ( 0.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  34 ( 2.9%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  70 ( 6.0%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 417 (35.6%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 316 (27.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 234 (20.0%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  89 ( 7.6%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 4  | Überhaupt nicht... |  12 ( 1.0%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  27 ( 2.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  89 ( 7.6%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 357 (30.5%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 305 (26.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 259 (22.1%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 122 (10.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 5  |                    |        1171</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 6  |                    |        1171</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 7  | Überhaupt nicht... |  14 ( 1.2%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  25 ( 2.1%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  67 ( 5.7%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 324 (27.7%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 328 (28.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 273 (23.3%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 140 (12.0%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 8  | Überhaupt nicht... |  13 ( 1.1%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  18 ( 1.5%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  82 ( 7.0%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 442 (37.7%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 281 (24.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 225 (19.2%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 110 ( 9.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 9  | Überhaupt nicht... |  16 ( 1.4%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  31 ( 2.6%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  97 ( 8.3%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 466 (39.8%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 307 (26.2%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 173 (14.8%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  81 ( 6.9%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 10 | Überhaupt nicht... |  22 ( 1.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  18 ( 1.5%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 117 (10.0%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 457 (39.0%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 295 (25.2%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 177 (15.1%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  85 ( 7.3%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 11 | Überhaupt nicht... |  22 ( 1.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  20 ( 1.7%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  65 ( 5.6%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 322 (27.5%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 322 (27.5%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 310 (26.5%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 110 ( 9.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 12 | Überhaupt nicht... |  27 ( 2.3%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  74 ( 6.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 155 (13.2%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 380 (32.5%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 258 (22.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 185 (15.8%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  92 ( 7.9%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 13 | Überhaupt nicht... |  17 ( 1.5%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  27 ( 2.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 110 ( 9.4%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 408 (34.8%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 323 (27.6%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 203 (17.3%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  83 ( 7.1%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 14 | Überhaupt nicht... |  12 ( 1.0%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  31 ( 2.6%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 113 ( 9.6%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 422 (36.0%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 317 (27.1%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 189 (16.1%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  87 ( 7.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 15 | Überhaupt nicht... |  34 ( 2.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  47 ( 4.0%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  93 ( 7.9%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 461 (39.4%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 313 (26.7%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 163 (13.9%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  60 ( 5.1%)</span></span>
+<span><span class="co">#&gt; -------------------------------------</span></span>
+<span></span>
+<span><span class="co"># Fill in missing labels using the function</span></span>
+<span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dp_label_automatically.html">dp_label_automatically</a></span><span class="op">(</span><span class="va">bkw_processed_missing_labels</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Missing variable <span style="color: #00BB00;">label</span> detected.</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Replaced with variable name for: <span style="color: #0000BB;">"F800_1"</span>, <span style="color: #0000BB;">"F800_2"</span>, <span style="color: #0000BB;">"F800_3"</span>, <span style="color: #0000BB;">"F800_4"</span>, and</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">"F800_5"</span>.</span></span>
+<span><span class="co">#&gt; Warning: Missing value <span style="color: #00BB00;">labels</span> detected.</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Replaced with observed min/max values for: <span style="color: #0000BB;">"F800_4"</span> and <span style="color: #0000BB;">"F800_5"</span>.</span></span>
+<span></span>
+<span><span class="co"># Check the results</span></span>
+<span><span class="fu"><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
+<span><span class="co">#&gt; data (1171 rows and 15 variables, 15 shown)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ID | Name    | Label                    | Type    | Missings | Values</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 1  | F600    | Wie attraktiv            | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | finden Sie die           |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | BKW als                  |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | Arbeitgeberin?           |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 2  | F800_1  | F800_1                   | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 3  | F800_2  | F800_2                   | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 4  | F800_3  | F800_3                   | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 5  | F800_4  | F800_4                   | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 6  | F800_5  | F800_5                   | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 7  | F800_6  | Moderne                  | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | Arbeitsumgebung          |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | Technologien             |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 8  | F800_7  | Attraktive               | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | Vergütung und            |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Zusatzleistungen         |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 9  | F800_8  | Gute Führung             | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | wertschätzende           |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | Unternehmenskultur       |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 10 | F800_9  | Verantwortung            | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Gestaltungsspielraum     |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 11 | F800_10 | Zukunftsorientierung     | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Nachhaltigkeit           |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | des                      |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         | Unternehmens             |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 12 | F800_11 | Internationales          | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | Arbeitsumfeld            |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | und kulturelle           |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | Vielfalt                 |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 13 | F800_12 | Innovationskultur        | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Veränderungsbereitschaft |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         | des                      |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         | Unternehmens             |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 14 | F800_13 | Arbeitszeit-             | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | und                      |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | Arbeitsortflexibilität   |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---+---------+--------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 15 | F800_14 | Diversität,              | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |         | Gleichstellung           |         |          |      2</span></span>
+<span><span class="co">#&gt;    |         | und Inklusion            |         |          |      3</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      4</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      5</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      6</span></span>
+<span><span class="co">#&gt;    |         |                          |         |          |      7</span></span>
+<span><span class="co">#&gt; ---------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ID | Value Labels       |           N</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 1  | 1 - Überhaupt...   |  43 ( 3.7%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  50 ( 4.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 130 (11.1%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 461 (39.4%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 303 (25.9%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 109 ( 9.3%)</span></span>
+<span><span class="co">#&gt;    | 7 - Sehr...        |  75 ( 6.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 2  | Überhaupt nicht... |  11 ( 0.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  19 ( 1.6%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  66 ( 5.6%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 301 (25.7%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 270 (23.1%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 322 (27.5%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 182 (15.5%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 3  | Überhaupt nicht... |  11 ( 0.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  34 ( 2.9%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  70 ( 6.0%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 417 (35.6%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 316 (27.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 234 (20.0%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  89 ( 7.6%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 4  | Überhaupt nicht... |  12 ( 1.0%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  27 ( 2.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  89 ( 7.6%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 357 (30.5%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 305 (26.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 259 (22.1%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 122 (10.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 5  | 1                  |  13 ( 1.1%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  20 ( 1.7%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  81 ( 6.9%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 463 (39.5%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 328 (28.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 190 (16.2%)</span></span>
+<span><span class="co">#&gt;    | 7                  |  76 ( 6.5%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 6  | 1                  |  14 ( 1.2%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  27 ( 2.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 103 ( 8.8%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 446 (38.1%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 308 (26.3%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 177 (15.1%)</span></span>
+<span><span class="co">#&gt;    | 7                  |  96 ( 8.2%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 7  | Überhaupt nicht... |  14 ( 1.2%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  25 ( 2.1%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  67 ( 5.7%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 324 (27.7%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 328 (28.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 273 (23.3%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 140 (12.0%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 8  | Überhaupt nicht... |  13 ( 1.1%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  18 ( 1.5%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  82 ( 7.0%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 442 (37.7%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 281 (24.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 225 (19.2%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 110 ( 9.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 9  | Überhaupt nicht... |  16 ( 1.4%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  31 ( 2.6%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  97 ( 8.3%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 466 (39.8%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 307 (26.2%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 173 (14.8%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  81 ( 6.9%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 10 | Überhaupt nicht... |  22 ( 1.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  18 ( 1.5%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 117 (10.0%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 457 (39.0%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 295 (25.2%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 177 (15.1%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  85 ( 7.3%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 11 | Überhaupt nicht... |  22 ( 1.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  20 ( 1.7%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  65 ( 5.6%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 322 (27.5%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 322 (27.5%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 310 (26.5%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        | 110 ( 9.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 12 | Überhaupt nicht... |  27 ( 2.3%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  74 ( 6.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 155 (13.2%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 380 (32.5%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 258 (22.0%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 185 (15.8%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  92 ( 7.9%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 13 | Überhaupt nicht... |  17 ( 1.5%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  27 ( 2.3%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 110 ( 9.4%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 408 (34.8%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 323 (27.6%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 203 (17.3%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  83 ( 7.1%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 14 | Überhaupt nicht... |  12 ( 1.0%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  31 ( 2.6%)</span></span>
+<span><span class="co">#&gt;    | 3                  | 113 ( 9.6%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 422 (36.0%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 317 (27.1%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 189 (16.1%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  87 ( 7.4%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 15 | Überhaupt nicht... |  34 ( 2.9%)</span></span>
+<span><span class="co">#&gt;    | 2                  |  47 ( 4.0%)</span></span>
+<span><span class="co">#&gt;    | 3                  |  93 ( 7.9%)</span></span>
+<span><span class="co">#&gt;    | 4                  | 461 (39.4%)</span></span>
+<span><span class="co">#&gt;    | 5                  | 313 (26.7%)</span></span>
+<span><span class="co">#&gt;    | 6                  | 163 (13.9%)</span></span>
+<span><span class="co">#&gt;    | Sehr gut  7        |  60 ( 5.1%)</span></span>
+<span><span class="co">#&gt; -------------------------------------</span></span></code></pre></div>
+<p>You can do better by providing theoretical minimum and maximum values
+for the variables:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create a theoretical min/max data frame</span></span>
+<span><span class="va">theoretical_min_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span>
+<span>  min <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  max <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fill in missing labels using the function with theoretical min/max values</span></span>
+<span><span class="va">out_with_theoretical</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dp_label_automatically.html">dp_label_automatically</a></span><span class="op">(</span></span>
+<span>  <span class="va">bkw_processed_missing_labels</span>,</span>
+<span>  <span class="va">theoretical_min_max</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Missing variable <span style="color: #00BB00;">label</span> detected.</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Replaced with variable name for: <span style="color: #0000BB;">"F800_1"</span>, <span style="color: #0000BB;">"F800_2"</span>, <span style="color: #0000BB;">"F800_3"</span>, <span style="color: #0000BB;">"F800_4"</span>, and</span></span>
+<span><span class="co">#&gt;   <span style="color: #0000BB;">"F800_5"</span>.</span></span>
+<span><span class="co">#&gt; Warning: Missing value <span style="color: #00BB00;">labels</span> detected.</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Replaced with user-supplied min/max values for: <span style="color: #0000BB;">"F800_4"</span> and <span style="color: #0000BB;">"F800_5"</span>.</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

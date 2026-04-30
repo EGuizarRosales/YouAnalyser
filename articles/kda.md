@@ -1,6 +1,7 @@
 # Key Driver Analysis
 
 ``` r
+
 library(YouAnalyser)
 #> 
 #> ── Welcome to YouAnalyser! ─────────────────────────────────────────────────────
@@ -33,6 +34,7 @@ Use the following command to create and open a new R project with a
 suitable folder structure for your KDA:
 
 ``` r
+
 # Step 1: Create a new project with a suitable folder structure for your KDA analysis:
 ya_setup_folder_structure(
   folder_name = "myKDAProject", # Chose a name for your project folder (no spaces or special characters)
@@ -161,6 +163,7 @@ Finally, we do not want to show variable labels in the final plot, so we
 will set `show_labels = FALSE` in the `ipma_scatterPlot_args` argument.
 
 ``` r
+
 kda <- kda_regression(
   data = bkw_processed,
   outcome = "F600",
@@ -176,6 +179,7 @@ kda <- kda_regression(
 We can access the IPMA plot using:
 
 ``` r
+
 kda$plots$ipma_scatterPlot$p
 ```
 
@@ -188,6 +192,7 @@ theme, keep the legend at the bottom, don’t show major and minor grids,
 remove the x- and y-axis ticks, labels, and titles, you can do:
 
 ``` r
+
 my_ipma_plot <- kda$plots$ipma_scatterPlot$p +
   ggplot2::theme_bw() +
   ggplot2::theme(
@@ -215,6 +220,7 @@ additionally provide a file name (`"ipma_plot.jpeg"` in the example
 below), and the function will take care of the rest.
 
 ``` r
+
 file_path <- ya_choose_file_path("ipma_plot.jpeg")
 ya_save_plot(
   plot = my_ipma_plot,
@@ -268,6 +274,7 @@ Let’s have a look at the example data with a binary outcome variable
 (“F600”) and the first three predictor variables (“F800_1” to “F800_3”):
 
 ``` r
+
 eda_summary(
   data = bkw_bin_outcome,
   variables = c("F600", paste0("F800_", 1:3)),
@@ -341,6 +348,7 @@ the “domir” method for calculating variable importance, which is why we
 will use the “jrw” method in this example.
 
 ``` r
+
 kda_bin <- kda_regression(
   data = bkw_bin_outcome,
   outcome = "F600",
@@ -366,11 +374,11 @@ outcome variable. Some differences include:
   predictor are associated with higher probabilities of the outcome
   being 1. The further away from zero, the stronger the association
   between the predictor and the outcome.
-- $R^{2}$ values in the `kda_bin$plots$importance_barPlot`,
+- $`R^2`$ values in the `kda_bin$plots$importance_barPlot`,
   `kda_bin$plots$performance_barPlot`, and
-  `kda_bin$plots$ipma_scatterPlot` now refer to $R_{Tjur}^{2}$, which is
-  a pseudo-$R^{2}$ measure that is commonly used for logistic regression
-  models. The same rules for interpretation apply as for the $R^{2}$
+  `kda_bin$plots$ipma_scatterPlot` now refer to $`R^2_{Tjur}`$, which is
+  a pseudo-$`R^2`$ measure that is commonly used for logistic regression
+  models. The same rules for interpretation apply as for the $`R^2`$
   values in the KDA with a continuous outcome variable.
 
 `kda_bin$plots$diagnostics_correlation`
@@ -401,6 +409,7 @@ Pro tip: If you prefer to get the forest plot in a Odds-Ratio format
 instead of Log-Odds, you can use:
 
 ``` r
+
 kda_forestPlot(
   model = kda_bin$model$model,
   model_parameters_args = list(exponentiate = TRUE)
@@ -435,6 +444,7 @@ Excel file. You can choose the file path interactively using the
 function.
 
 ``` r
+
 file_path <- ya_choose_file_path("ipma_data.xlsx")
 kda_save_data_for_chart(
   ipma_scatterPlot_data = kda$plots$ipma_scatterPlot$d,
@@ -458,6 +468,7 @@ location using the
 function:
 
 ``` r
+
 file_path <- ya_choose_file_path("ipma_chart.pptx")
 kda_copy_pptx_template(file_path)
 ```
@@ -517,6 +528,7 @@ A short note on model diagnostics. The plot
 `kda$plots$diagnostics_model`can also be computed like this:
 
 ``` r
+
 diagnostics <- performance::check_model(kda$model$model)
 print(diagnostics)
 ```
@@ -527,6 +539,7 @@ This gives you the advantage that you can also access infomation that
 can be helpful to interpret the plot, e.g.:
 
 ``` r
+
 diagnostics$OUTLIERS
 #> OK: No outliers detected.
 #> - Based on the following method and threshold: cook (1).
@@ -601,7 +614,7 @@ KDA. For additional ressources, please refer to the following resources:
 In many applied regression settings—particularly with observational
 data—predictors are **correlated**, making it unclear how much each
 predictor truly contributes to the model. Standard regression outputs
-(e.g., standardized coefficients, partial $R^{2}$ , or $t$-statistics)
+(e.g., standardized coefficients, partial $`R^2`$ , or $`t`$-statistics)
 depend on the specific set of covariates included and can change
 dramatically under multicollinearity. As a result, they often provide
 **unstable or misleading assessments of predictor importance**.
@@ -622,22 +635,24 @@ computationally efficient approaches can be compared.
 #### Methodology
 
 Dominance analysis defines the importance of a predictor as its
-**average marginal contribution to $R^{2}$** across all subset models in
+**average marginal contribution to $`R^2`$** across all subset models in
 which it appears.
 
-Formally, for each predictor $X_{j}$:
+Formally, for each predictor $`X_j`$:
 
 1.  All possible subsets of the remaining predictors are considered.
-2.  For each subset $S$, the increase in explained variance,
-    $$\Delta R^{2} = R^{2}\left( S \cup X_{j} \right) - R^{2}(S)$$ is
-    computed.
+2.  For each subset $`S`$, the increase in explained variance,
+    ``` math
+    \Delta R^2 = R^2(S \cup {X_j}) - R^2(S)
+    ```
+    is computed.
 3.  These incremental contributions are **averaged over all subsets**,
-    yielding a non‑negative importance value for $X_{j}$.
+    yielding a non‑negative importance value for $`X_j`$.
 
 The resulting dominance statistics **sum exactly to the total model
-$R^{2}$** and can be expressed as percentages of explained variance.
+$`R^2`$** and can be expressed as percentages of explained variance.
 Dominance analysis is mathematically equivalent to the **LMG / Shapley
-value decomposition** of $R^{2}$, ensuring a fair and order‑independent
+value decomposition** of $`R^2`$, ensuring a fair and order‑independent
 allocation of shared variance. Its principal drawback is computational
 complexity, as the number of subset models grows exponentially with the
 number of predictors.
@@ -670,7 +685,7 @@ estimates are needed for communication or reporting.
 #### Methodology
 
 Johnson’s relative weights method estimates each predictor’s
-contribution to $R^{2}$ by combining orthogonalization with variance
+contribution to $`R^2`$ by combining orthogonalization with variance
 reallocation.
 
 The procedure can be summarized in four steps:
@@ -685,7 +700,7 @@ The procedure can be summarized in four steps:
 2.  **Regression on orthogonal variables**  
     The outcome is regressed on the orthogonal predictors. Because these
     predictors are uncorrelated, each squared standardized coefficient
-    represents the portion of $R^{2}$ attributable to that orthogonal
+    represents the portion of $`R^2`$ attributable to that orthogonal
     component.
 
 3.  **Mapping variance back to original predictors**  
@@ -697,7 +712,7 @@ The procedure can be summarized in four steps:
 4.  **Computation of relative weights**  
     A predictor’s relative weight is obtained by summing its allocated
     contributions across all orthogonal components. The resulting
-    weights are **non‑negative and sum exactly to $R^{2}$**, and are
+    weights are **non‑negative and sum exactly to $`R^2`$**, and are
     typically reported as percentages of explained variance.
 
 Empirically, Johnson showed that these relative weights closely

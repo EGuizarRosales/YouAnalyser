@@ -1,6 +1,7 @@
 # Exploratory Data Analysis (EDA)
 
 ``` r
+
 library(YouAnalyser)
 #> 
 #> ── Welcome to YouAnalyser! ─────────────────────────────────────────────────────
@@ -30,6 +31,7 @@ descriptive statistics in the console. You can control this behavior
 with the `console_output` and `browser_output` arguments.
 
 ``` r
+
 # Provide summary in console only:
 eda_summary(
   data = bkw_processed,
@@ -101,6 +103,7 @@ correlation methods (e.g., Pearson, Spearman) and provides a heatmap
 visualization of the correlations.
 
 ``` r
+
 out <- eda_correlation(
   data = bkw_processed,
   variables = c("F600", paste0("F800_", 1:8)), # If NULL (default), all variables are included
@@ -170,6 +173,7 @@ particularly useful for visualizing relationships between variables in
 your survey data.
 
 ``` r
+
 # Create a dummy data set with a binary outcome variable coded as factor and three binary predictors
 binary_data_example <- bkw_bin_outcome |>
   dplyr::select("F600", paste0("F800_", 1:3)) |>
