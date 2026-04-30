@@ -76,3 +76,147 @@ dp_convert_to_labelled <- function(data, codebook) {
 
   return(data_labelled)
 }
+
+#' Automatically label a data frame
+#'
+#' @description This function checks for missing variable labels and value labels
+#' in a data frame and automatically fills them in. For missing variable labels,
+#' it uses the variable name as a fallback. For missing value labels, it uses
+#' the observed minimum and maximum values in the data, or theoretical minimum
+#' and maximum values if provided by the user.
+#'
+#' @param data A data frame to be checked and labelled. This can be a labelled data frame or an unlabelled data frame.
+#' @param theoretical_min_max_values An optional data frame with columns "variable", "min", and "max" that provides theoretical minimum and maximum values for variables. If provided, these values will be used to fill in missing value labels instead of using observed min/max values from the data.
+#'
+#' @returns A labelled data frame with missing variable labels and value labels filled in.
+#'
+#' @export
+#' @examples
+#' # Create an example data frame with some missing variable labels and value labels
+#' bkw_processed_missing_labels <- bkw_processed |>
+#'   dplyr::mutate(dplyr::across(paste0("F800_", 1:5), \(x) {
+#'     haven::zap_label(x)
+#'   })) |>
+#'  dplyr::mutate(dplyr::across(paste0("F800_", 4:5), \(x) {
+#'    haven::zap_labels(x)
+#'  }))
+#' # Fill in missing labels using the function
+#' out <- dp_label_automatically(bkw_processed_missing_labels)
+#' # Check the results
+#' dp_inspect_codebook(out)
+#'
+#' # Create a theoretical min/max data frame
+#' theoretical_min_max <- data.frame(
+#'   variable = paste0("F800_", 1:5),
+#'  min = c(1, 1, 1, 1, 1),
+#'  max = c(7, 7, 7, 7, 7)
+#' )
+#' # Fill in missing labels using the function with theoretical min/max values
+#' out_with_theoretical <- dp_label_automatically(bkw_processed_missing_labels, theoretical_min_max)
+dp_label_automatically <- function(data, theoretical_min_max_values = NULL) {
+  if (!is.data.frame(data)) {
+    cli::cli_abort("{.arg data} must be a data frame.")
+  }
+
+  if (!is.null(theoretical_min_max_values)) {
+    if (!is.data.frame(theoretical_min_max_values)) {
+      cli::cli_abort("{.arg theoretical_min_max_values} must be a data frame.")
+    }
+
+    required_cols <- c("variable", "min", "max")
+    missing_cols <- setdiff(required_cols, names(theoretical_min_max_values))
+
+    if (length(missing_cols) > 0) {
+      cli::cli_abort(c(
+        "{.arg theoretical_min_max_values} is missing required columns.",
+        "x" = "Missing: {.val {missing_cols}}",
+        "i" = "Required columns are: {.val {required_cols}}"
+      ))
+    }
+  }
+
+  missing_label_vars <- character()
+  missing_labels_vars <- character()
+
+  for (nm in names(data)) {
+    x <- data[[nm]]
+
+    lbl <- attr(x, "label", exact = TRUE)
+    lbls <- attr(x, "labels", exact = TRUE)
+
+    if (
+      is.null(lbl) || length(lbl) != 1 || !nzchar(trimws(as.character(lbl)))
+    ) {
+      lbl <- nm
+      missing_label_vars <- c(missing_label_vars, nm)
+    }
+
+    if (is.null(lbls) || length(lbls) == 0) {
+      use_theoretical <- !is.null(theoretical_min_max_values) &&
+        nm %in% theoretical_min_max_values$variable
+
+      if (use_theoretical) {
+        row_idx <- match(nm, theoretical_min_max_values$variable)
+        min_val <- theoretical_min_max_values$min[[row_idx]]
+        max_val <- theoretical_min_max_values$max[[row_idx]]
+        label_values <- c(min_val, max_val)
+
+        if (is.factor(x)) {
+          label_values <- as.character(label_values)
+          lbls <- stats::setNames(label_values, label_values)
+        } else {
+          lbls <- stats::setNames(label_values, as.character(label_values))
+        }
+      } else {
+        x_non_na <- x[!is.na(x)]
+
+        if (length(x_non_na) > 0) {
+          if (is.factor(x_non_na)) {
+            vals <- as.character(x_non_na)
+            min_val <- min(vals)
+            max_val <- max(vals)
+            label_values <- c(min_val, max_val)
+            lbls <- stats::setNames(label_values, label_values)
+          } else {
+            min_val <- min(x_non_na)
+            max_val <- max(x_non_na)
+            label_values <- c(min_val, max_val)
+            lbls <- stats::setNames(label_values, as.character(label_values))
+          }
+        } else {
+          lbls <- stats::setNames(c(NA, NA), c("NA", "NA"))
+        }
+      }
+
+      missing_labels_vars <- c(missing_labels_vars, nm)
+    }
+
+    if (nm %in% missing_label_vars || nm %in% missing_labels_vars) {
+      x <- haven::labelled(x = x, labels = lbls, label = lbl)
+    }
+
+    data[[nm]] <- x
+  }
+
+  if (length(missing_label_vars) > 0) {
+    cli::cli_warn(c(
+      "Missing variable {.field label} detected.",
+      "!" = "Replaced with variable name for: {.val {missing_label_vars}}."
+    ))
+  }
+
+  if (length(missing_labels_vars) > 0) {
+    replacement_source <- if (is.null(theoretical_min_max_values)) {
+      "observed"
+    } else {
+      "user-supplied"
+    }
+
+    cli::cli_warn(c(
+      "Missing value {.field labels} detected.",
+      "!" = "Replaced with {replacement_source} min/max values for: {.val {missing_labels_vars}}."
+    ))
+  }
+
+  data
+}

@@ -214,3 +214,45 @@ dp_inspect_codebook(myData_labelled)
 file_path <- ya_choose_file_path("my_labelled_data.sav")
 haven::write_sav(myData_labelled, file_path)
 ```
+
+### Automatically Label Data
+
+If you are missing variable and value labels for your data and do not want to provide a codebook (lazy you! ;) ), you can use the `dp_label_automatically()` function to automatically label your data based on its values. This function is useful for filling in missing labels, but it should be used with caution: It assumes that the observed minimum and maximum values in your data represent the theoretical minimum and maximum values of the variables, which is not always the case. Therefore, it is recommended to provide a codebook with `dp_convert_to_labelled()` if possible. If you do use `dp_label_automatically()`, make sure to inspect the results carefully using `dp_inspect_codebook()` to check whether the labelling worked as expected.
+
+```{r label-automatically}
+# Create an example data frame with some missing variable labels and value labels
+bkw_processed_missing_labels <- bkw_processed |>
+  dplyr::mutate(dplyr::across(paste0("F800_", 1:5), \(x) {
+    haven::zap_label(x)
+  })) |>
+  dplyr::mutate(dplyr::across(paste0("F800_", 4:5), \(x) {
+    haven::zap_labels(x)
+  }))
+
+# Demonstrate: There are missing labels in the data
+dp_inspect_codebook(bkw_processed_missing_labels)
+
+# Fill in missing labels using the function
+out <- dp_label_automatically(bkw_processed_missing_labels)
+
+# Check the results
+dp_inspect_codebook(out)
+```
+
+You can do better by providing theoretical minimum and maximum values for the variables:
+
+
+```{r label-automatically-theoretical}
+# Create a theoretical min/max data frame
+theoretical_min_max <- data.frame(
+  variable = paste0("F800_", 1:5),
+  min = c(1, 1, 1, 1, 1),
+  max = c(5, 5, 5, 5, 5)
+)
+
+# Fill in missing labels using the function with theoretical min/max values
+out_with_theoretical <- dp_label_automatically(
+  bkw_processed_missing_labels,
+  theoretical_min_max
+)
+```

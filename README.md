@@ -69,6 +69,9 @@ not already in this format:
   file path
 - `dp_convert_to_labelled()`: Convert a data frame to a labelled data
   frame using a codebook.
+- `dp_label_automatically()`: Automatically label a data frame based on
+  its values (useful for filling in missing labels if you do not want to
+  use `dp_convert_to_labelled()` with a codebook - use with caution!)
 - `dp_inspect_codebook()`: Inspect the codebook of a labelled data frame
   (useful to check whether labelling worked as expected)
 

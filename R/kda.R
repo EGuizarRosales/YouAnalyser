@@ -1,3 +1,26 @@
+#' Check whether all variables are haven-labelled and include variable/value labels
+#'
+#' @param data A data frame.
+#'
+#' @returns A single logical value: `TRUE` if all variables are haven-labelled and
+#' have both a variable label and value labels, otherwise `FALSE`.
+kda_data_is_haven_labelled <- function(data) {
+  if (!is.data.frame(data)) {
+    cli::cli_abort("{.arg data} must be a data frame.")
+  }
+  checks <- purrr::map_lgl(
+    data,
+    \(x) {
+      haven::is.labelled(x) &&
+        !is.null(attr(x, "label")) &&
+        !is.null(attr(x, "labels")) &&
+        length(attr(x, "labels")) > 0
+    }
+  )
+
+  all(checks)
+}
+
 kda_formula <- function(outcome, predictors) {
   as.formula(
     paste(outcome, "~", paste(predictors, collapse = " + "))
@@ -272,6 +295,13 @@ kda_performance <- function(model) {
   # Extract data used in model
   df_predictors <- insight::get_predictors(model)
 
+  # Check wheter data is labelled and has variable/value labels
+  if (!kda_data_is_haven_labelled(df_predictors)) {
+    cli::cli_abort(
+      "Data used in the model does not have complete haven labels."
+    )
+  }
+
   # Get theoretical minimum and maximum values of predictors
   predictors_minmax_labels <- sjlabelled::get_values(df_predictors) |>
     tibble::enframe(name = "predictor", value = "values") |>
@@ -414,6 +444,13 @@ kda_forestPlot <- function(model, model_parameters_args = list()) {
     !!!model_parameters_args
   )
 
+  # Check wheter data is labelled and has variable/value labels
+  if (!kda_data_is_haven_labelled(data)) {
+    cli::cli_abort(
+      "Data used in the model does not have complete haven labels."
+    )
+  }
+
   # Get model parameters
   m_params <- partial_model_parameters(model)
 
@@ -522,6 +559,13 @@ kda_importance_barPlot <- function(
   data <- insight::get_data(model, source = "mf")
   predictor_labels <- ya_get_predictor_labels(model)
 
+  # Check wheter data is labelled and has variable/value labels
+  if (!kda_data_is_haven_labelled(data)) {
+    cli::cli_abort(
+      "Data used in the model does not have complete haven labels."
+    )
+  }
+
   # Data for plot
   d_plot <- importance_obj$out |>
     dplyr::left_join(predictor_labels, by = "predictor") |>
@@ -625,6 +669,13 @@ kda_performance_barPlot <- function(
   data <- insight::get_data(model, source = "mf")
   predictor_labels <- ya_get_predictor_labels(model)
 
+  # Check wheter data is labelled and has variable/value labels
+  if (!kda_data_is_haven_labelled(data)) {
+    cli::cli_abort(
+      "Data used in the model does not have complete haven labels."
+    )
+  }
+
   # Data for plot
   d_plot <- performance_obj$out |>
     dplyr::left_join(predictor_labels, by = "predictor") |>
@@ -726,6 +777,13 @@ kda_ipma_scatterPlot <- function(
   predictor_labels <- ya_get_predictor_labels(model) |>
     dplyr::mutate(predictor_nr = dplyr::row_number()) |>
     dplyr::relocate(predictor_nr, .after = predictor)
+
+  # Check wheter data is labelled and has variable/value labels
+  if (!kda_data_is_haven_labelled(data)) {
+    cli::cli_abort(
+      "Data used in the model does not have complete haven labels."
+    )
+  }
 
   # Data for plot
   d_plot <- ipma_obj$out |>
