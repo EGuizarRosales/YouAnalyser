@@ -1,12 +1,12 @@
 ---
-title: "Key Driver Analysis"
+title: "3. Key Driver Analysis"
 output:
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 3
     number_sections: true
 vignette: >
-  %\VignetteIndexEntry{Key Driver Analysis}
+  %\VignetteIndexEntry{3. Key Driver Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -299,7 +299,23 @@ Follow these steps to update the PowerPoint template with the exported data:
 
 !["Format Axis" pane in PowerPoint that opens if you double-click on the horizontal line in the chart.](fig/kda_format_axis_pane_screenshot.png)
 
-## 2.4 Model Diagnostics
+## 2.4 Importance Methods
+
+There are three methods available for calculating variable importance in the `kda_regression()` function:
+
+1. `"domir"` **Dominance Analysis**: This method decomposes the R-squared of the regression model into contributions from each predictor variable. It provides a comprehensive measure of variable importance but can be computationally intensive for models with many predictors. This method is also known as *Relative Importance*, *LMG* or *Shapley Value Decomposition*.
+2. `"jrw"` **Johnson Relative Weights**: Similarly to dominance analysis, this method decomposes the R-squared of the regression model into contributions from each predictor variable. However, it does so using a heuristic method that is computationally more efficient and can handle models with a larger number of predictors.
+3. `"sumOfCoefficients"` **Sum of Absolute (Standardized) Coefficients**: This method calculates variable importance by taking the sum of the absolute values of the (standardized) regression coefficients for each predictor variable. This is a simpler and more computationally efficient method, but it does not account for the intercorrelations between predictors and may not provide as accurate a measure of variable importance as the other two methods. It is included for legacy reasons and is not recommended for use in most cases.
+
+Note that the default method is set to `"auto"`, which will automatically choose between `"domir"` and `"jrw"` based on the number of predictors in the model. If you have fewer than 15 predictors, it will use `"domir"`. If you have 15 or more predictors, it will use `"jrw"`. Set the `importance_method` argument to one of the three methods above to override the default behavior and specify a method directly.
+
+For an extended discussion of the **Dominance Analysis** and **Johnson Relative Weights** methods, please refer to the subsections at the end of this vignette. They are inteded for interested readers or as a reference if clients want to know more about the methods used in the KDA. For additional ressources, please refer to the following resources:
+
+* Vignette of the `domir` package: <https://cran.r-project.org/web/packages/domir/vignettes/domir_basics.html>
+* Technical paper for the Dominance Analysis Method: Grömping, Ulrike. 2007. Estimators of Relative Importance in Linear Regression Based on Variance Decomposition. *The American Statistician* 61 (2): 139–47. <https://doi.org/10.1198/000313007X188252>.
+* Technical paper for the *Johnson Relative Weights* Method: Johnson, J. (2000). A heuristic method for estimating the relative weight of predictor variables in multiple regression. *Multivariate Behavioral Research*, 35, 1–19 . <https://doi.org/10.1207/S15327906MBR3501_1>
+
+## 2.5 Model Diagnostics
 
 A short note on model diagnostics. The plot `kda$plots$diagnostics_model`can also be computed like this:
 
@@ -316,25 +332,121 @@ diagnostics$OUTLIERS
 
 Please refer to the following documentation for more information on how to interpret the diagnostic plots and what you can do if the assumptions underlying the regression model are violated: [Checking model assumption - linear models](https://easystats.github.io/performance/articles/check_model.html#linear-models-are-all-assumptions-for-linear-models-met).
 
-## Importance Methods
+# 3. Scaling KDA for Multiple Groups
 
-There are three methods available for calculating variable importance in the `kda_regression()` function:
+You may find yourself in a situation where you want to conduct the same KDA for multiple groups in your data, e.g. for different demographic subgroups or segments. In this case, you can use the `kda_regression()` function in combination the looping functions from the `purrr` package, most notably with `purrr::map()`. Let's walk through an example of how to do this.
 
-1. `"domir"` **Dominance Analysis**: This method decomposes the R-squared of the regression model into contributions from each predictor variable. It provides a comprehensive measure of variable importance but can be computationally intensive for models with many predictors. This method is also known as *Relative Importance*, *LMG* or *Shapley Value Decomposition*.
-2. `"jrw"` **Johnson Relative Weights**: Similarly to dominance analysis, this method decomposes the R-squared of the regression model into contributions from each predictor variable. However, it does so using a heuristic method that is computationally more efficient and can handle models with a larger number of predictors.
-3. `"sumOfCoefficients"` **Sum of Absolute (Standardized) Coefficients**: This method calculates variable importance by taking the sum of the absolute values of the (standardized) regression coefficients for each predictor variable. This is a simpler and more computationally efficient method, but it does not account for the intercorrelations between predictors and may not provide as accurate a measure of variable importance as the other two methods. It is included for legacy reasons and is not recommended for use in most cases.
+Let's suppose our participants belong to different segments defined beforehand, and we want to conduct a KDA for each segment separately. We can do this by splitting our data into a list of data frames, where each data frame corresponds to a segment, and then applying the `kda_regression()` function to each data frame in the list using `purrr::map()`.
 
-Note that the default method is set to `"auto"`, which will automatically choose between `"domir"` and `"jrw"` based on the number of predictors in the model. If you have fewer than 15 predictors, it will use `"domir"`. If you have 15 or more predictors, it will use `"jrw"`. Set the `importance_method` argument to one of the three methods above to override the default behavior and specify a method directly.
+In the `bkw_synthetic` dataset, we have a variable called `cluster`that contains the segment membership of each participant:
 
-For an extended discussion of the **Dominance Analysis** and **Johnson Relative Weights** methods, please refer to the subsections at the end of this vignette. They are inteded for interested readers or as a reference if clients want to know more about the methods used in the KDA. For additional ressources, please refer to the following resources:
+```{r example-data-with-segments}
+# Inspect the value labels of the variable "cluster"
+sjlabelled::get_labels(bkw_synthetic$cluster) |>
+  tibble::enframe(name = "value", value = "label")
 
-* Vignette of the `domir` package: <https://cran.r-project.org/web/packages/domir/vignettes/domir_basics.html>
-* Technical paper for the Dominance Analysis Method: Grömping, Ulrike. 2007. Estimators of Relative Importance in Linear Regression Based on Variance Decomposition. *The American Statistician* 61 (2): 139–47. <https://doi.org/10.1198/000313007X188252>.
-* Technical paper for the *Johnson Relative Weights* Method: Johnson, J. (2000). A heuristic method for estimating the relative weight of predictor variables in multiple regression. *Multivariate Behavioral Research*, 35, 1–19 . <https://doi.org/10.1207/S15327906MBR3501_1>
+# Inspect the distribution of participants across segments:
+datawizard::data_tabulate(bkw_synthetic$cluster, remove_na = TRUE)
 
-  
+# Note: there is also a variable "country". We can use datawizard::data_tabulate()
+# to quickly inspect cross-tabulations:
+datawizard::data_tabulate(
+  bkw_synthetic$cluster,
+  by = bkw_synthetic$country,
+  remove_na = TRUE
+)
+```
+
+The trick is now to devide the data into smaller subsets for each segment using `tidyr::nest()`, which creates a list-column containing the data frames for each segment. We can then apply the `kda_regression()` function to each data frame in the list using `tidyr::map()`. Here's how to do this:
+
+```{r kda_multiple_groups}
+# Split the data into a list of data frames, one for each segment.
+bkw_by_segment <- bkw_synthetic |>
+  tidyr::nest(.by = cluster) |>
+  dplyr::arrange(cluster) # Arrange by cluster for cosmetic reasons.
+
+#  Note how "data" now in each row contains an entire data frame for the
+# respective segment:
+print(bkw_by_segment)
+
+# purrr::map() applies a function to each element of a list. In this case, we
+# apply the kda_regression() function with a specific set of arguments to each
+# data frame in the "data" column. The only thing that changes across iterations
+# is the data frame that is used as input. To make make the following code easier
+# to read, we define a temporary function called "my_kda_function" that takes a
+# data frame as input and applies the kda_regression() function to it with the
+# specified arguments. We then pass this function to purrr::map() to apply it to
+# each data frame in the "data" column.
+
+# Helper function
+my_kda_function <- function(df) {
+  kda_regression(
+    data = df,
+    outcome = "F600",
+    predictors = paste0("F800_", 1:14),
+    importance_method = "jrw",
+    diagnostics = TRUE
+  )
+}
+
+# Apply helper function to each data frame in the "data" column using purrr::map()
+bkw_kda_by_segment <- bkw_by_segment |>
+  dplyr::mutate(kda_result = purrr::map(data, my_kda_function))
+
+# Note how we added the column "kda_result" which now contains the KDA results
+# for each segment:
+print(bkw_kda_by_segment)
+```
+
+All results for each segment are now stored in the `kda_result` column of the `bkw_kda_by_segment` data frame. You can access the results for each segment using `dplyr::filter()`, `dplyr::select()` and `purrr::pluck()`. For example, to access the KDA results for the sixth segment, you can do:
+
+```{r extract-kda-results-for-second-segment, fig.width=12, fig.height=8, out.width="100%"}
+cluster6_ipma_ScatterPlot <- bkw_kda_by_segment |>
+  dplyr::filter(cluster == 6) |>
+  dplyr::select(kda_result) |>
+  purrr::pluck(1, 1, "plots", "ipma_scatterPlot", "p")
+print(cluster6_ipma_ScatterPlot)
+```
+
+If you would like to save all IPMA scatter plots for each segment, you can do this using `purrr::iwalk()`, which allows you to iterate over the rows of the `bkw_kda_by_segment` data frame and save the IPMA scatter plot for each segment using the `ya_save_plot()` function. Here's how to do this:
+
+```{r save-ipma-plots-for-all-segments, eval = FALSE}
+# Choose the output folder interactively. You can also specify a path directly
+# as a string, e.g. "C:/Users/YourAbbreviation/Downloads/"
+my_output_folder <- tcltk::tk_choose.dir()
+
+# Iterate over the rows of the bkw_kda_by_segment data frame and save the IPMA
+# scatter plot for each segment.
+purrr::walk2(
+  .x = bkw_kda_by_segment$kda_result,
+  .y = bkw_kda_by_segment$cluster,
+  .f = \(kda_result, cluster) {
+    ipma_plot <- kda_result$plots$ipma_scatterPlot$p
+    cluster_id <- as.integer(cluster)
+
+    ya_save_plot(
+      plot = ipma_plot,
+      file_path = paste0(
+        my_output_folder,
+        "/segment_",
+        cluster_id,
+        "_ipma_scatterPlot.jpeg"
+      ),
+      width = 30,
+      height = 20,
+      verbose = FALSE
+    )
+  }
+)
+```
+
+As a final note: Please be aware that results for subgroups should only be interpreted if the sample size for the subgroup is sufficiently large. If the sample size is too small, the results may be unstable and not generalizable to the population of interest. There is no hard rule for what constitutes a "sufficiently large" sample size, as it depends on various factors such as the number of predictors in the model, the expected effect sizes, and the desired level of statistical power. However, as a general guideline, it is often recommended to have at least 10-15 observations per predictor variable in the model for reliable estimation. Therefore, if you have a model with 14 predictors, you would ideally want at least 140-210 observations in each subgroup to ensure stable and interpretable results.
+
+# 4. Missing Data
+
 ---
-  
+
+# Extended Discussion of Importance Methods
 
 ## Dominance Analysis
 

@@ -1,8 +1,8 @@
 ---
-title: "Data Processing"
+title: "1. Data Processing"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Data Processing}
+  %\VignetteIndexEntry{1. Data Processing}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
