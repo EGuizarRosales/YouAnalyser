@@ -37,7 +37,7 @@
 #' Only the dependent variable (F600) and 14 independent variables (F800_1 to F800_14) used in the regression model are included. All NA values in these variables were removed to ensure the data is ready for analysis.
 #'
 #' @format ## `bkw_processed`
-#' A data frame with 1,171 rows and 15 columns:
+#' A data frame with 1,104 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables used in the regression model. Main question: Wie gut passt die BKW Ihrer Meinung nach zu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -50,7 +50,7 @@
 #' The dependent variable (F600) was dichotomized into a binary variable (0: "Nicht attraktiv", 1: "Attraktiv") based on a cutoff of 4. The independent variables (F800_1 to F800_14) were also dichotomized into binary variables (0: "Nicht gut", 1: "Gut") based on a cutoff of 4.
 #'
 #' @format ## `bkw_bin`
-#' A data frame with 1,171 rows and 15 columns:
+#' A data frame with 1,104 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (0: Nicht attraktiv, 1: Attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (0: Nicht gut, 1: Gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -64,7 +64,7 @@
 #' The dependent variable (F600) was dichotomized into a binary variable (0: "Nicht attraktiv", 1: "Attraktiv") based on a cutoff of 4.
 #'
 #' @format ## `bkw_bin_outcome`
-#' A data frame with 1,171 rows and 15 columns:
+#' A data frame with 1,104 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (0: Nicht attraktiv, 1: Attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -78,7 +78,7 @@
 #' The independent variables (F800_1 to F800_14) were dichotomized into binary variables (0: "Nicht gut", 1: "Gut") based on a cutoff of 4.
 #'
 #' @format ## `bkw_bin_predictors`
-#' A data frame with 1,171 rows and 15 columns:
+#' A data frame with 1,104 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (0: Nicht gut, 1: Gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -93,7 +93,7 @@
 #' a typical dataset that user might have read in from a .csv or .xlsx file.
 #'
 #' @format ## `bkw_unlabelled`
-#' A data frame with 1,171 rows and 15 columns:
+#' A data frame with 1,104 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
@@ -107,7 +107,7 @@
 #' The data only contains variable labels and value labels, providing a codebook additionally needed if unlabelled data is read in, e.g. using .xlsx or .csv files..
 #'
 #' @format ## `bkw_labels`
-#' A data frame with 1,171 rows and 15 columns:
+#' A data frame with 1,104 rows and 15 columns:
 #' \describe{
 #'   \item{F600}{Dependent variable: Wie attraktiv finden Sie die BKW als Arbeitgeberin? (1: Überhaupt nicht attraktiv - 7: Sehr attraktiv)}
 #'   \item{F800_1, ..., F800_14}{Independent variables. Main question: Wie gut passt die BKW Ihrer Meinung nach uzu den folgenden Aspekten, die Ihnen bei einem Arbeitgeber wichtig sind? (1: Überhaupt nicht gut - 7: Sehr gut); F800_1: "Sicherheit und langfristige Stabilität des Arbeitgebers", ... , F800_14: "Diversität, Gleichstellung und Inklusion")}
