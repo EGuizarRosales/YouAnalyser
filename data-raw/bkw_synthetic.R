@@ -46,60 +46,81 @@ syn_obj <- synthpop::syn(
 bkw_synthetic <- syn_obj$syn |>
   tibble::as_tibble()
 
-# Create a data frame with missing values to test the handling of missing data
-bkw_synthetic_missings <- bkw_synthetic
-
-# Dummy code factors for use in mice::ampute
-cluster_levels <- sort(unique(bkw_synthetic$cluster))
-
-stopifnot(length(cluster_levels) == 6)
-
-cluster_dummies <- stats::model.matrix(
-  ~ factor(cluster, levels = cluster_levels) - 1,
-  data = bkw_synthetic
-) |>
-  as.data.frame() |>
-  rlang::set_names(paste0("cluster_", seq_len(6)))
-
+# Create a data frame with missing values in predictor and outcome variables to
+# test the handling of missing data
 bkw_synthetic_missings <- bkw_synthetic |>
-  dplyr::bind_cols(tibble::as_tibble(cluster_dummies)) |>
-  dplyr::select(-cluster) |>
-  dplyr::mutate(
-    country = dplyr::case_when(
-      country == "CH" ~ 0,
-      country == "DE" ~ 1,
-    )
-  )
+  dplyr::select(dplyr::starts_with("F"))
 
 # Apply mice::ampute to introduce missing values in all variables
 bkw_synthetic_missings <- withr::with_seed(123, {
   mice::ampute(
     data = bkw_synthetic_missings,
-    prop = 0.05,
+    prop = 0.10,
     mech = "MAR",
   )$amp
 })
 
-
+# Add back the id, country, and cluster variables to the dataset with missings
 bkw_synthetic_missings <- bkw_synthetic_missings |>
-  dplyr::mutate(
-    cluster = factor(
-      cluster_levels[
-        max.col(
-          as.matrix(dplyr::pick(dplyr::starts_with("cluster_"))),
-          ties.method = "first"
-        )
-      ],
-      levels = cluster_levels
-    ),
-    country = factor(
-      ifelse(country == 0, "CH", "DE"),
-      levels = c("CH", "DE")
-    )
+  dplyr::bind_cols(
+    bkw_synthetic |>
+      dplyr::select(country, cluster)
   ) |>
-  dplyr::select(-dplyr::starts_with("cluster_")) |>
-  dplyr::relocate(cluster, .after = country)
+  dplyr::relocate(country, cluster)
 
+# The following code would allow to introduce missings in the cluster and
+# country variables as well.
+if (FALSE) {
+  # Dummy code factors for use in mice::ampute
+  cluster_levels <- sort(unique(bkw_synthetic$cluster))
+
+  stopifnot(length(cluster_levels) == 6)
+
+  cluster_dummies <- stats::model.matrix(
+    ~ factor(cluster, levels = cluster_levels) - 1,
+    data = bkw_synthetic
+  ) |>
+    as.data.frame() |>
+    rlang::set_names(paste0("cluster_", seq_len(6)))
+
+  bkw_synthetic_missings <- bkw_synthetic |>
+    dplyr::bind_cols(tibble::as_tibble(cluster_dummies)) |>
+    dplyr::select(-cluster) |>
+    dplyr::mutate(
+      country = dplyr::case_when(
+        country == "CH" ~ 0,
+        country == "DE" ~ 1,
+      )
+    )
+
+  # Apply mice::ampute to introduce missing values in all variables
+  bkw_synthetic_missings <- withr::with_seed(123, {
+    mice::ampute(
+      data = bkw_synthetic_missings,
+      prop = 0.05,
+      mech = "MAR",
+    )$amp
+  })
+
+  bkw_synthetic_missings <- bkw_synthetic_missings |>
+    dplyr::mutate(
+      cluster = factor(
+        cluster_levels[
+          max.col(
+            as.matrix(dplyr::pick(dplyr::starts_with("cluster_"))),
+            ties.method = "first"
+          )
+        ],
+        levels = cluster_levels
+      ),
+      country = factor(
+        ifelse(country == 0, "CH", "DE"),
+        levels = c("CH", "DE")
+      )
+    ) |>
+    dplyr::select(-dplyr::starts_with("cluster_")) |>
+    dplyr::relocate(cluster, .after = country)
+}
 
 # Convert the synthetic data back to haven::labelled format
 f_convert_to_labelled <- function(data) {
