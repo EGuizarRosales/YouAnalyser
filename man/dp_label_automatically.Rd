@@ -35,9 +35,9 @@ out <- dp_label_automatically(bkw_processed_missing_labels)
 # Check the results
 dp_inspect_codebook(out)
 
-#' # Create a theoretical min/max data frame
+# Create a theoretical min/max data frame
 theoretical_min_max <- data.frame(
-  variable = paste0("F800_", 1:5),
+ variable = paste0("F800_", 1:5),
  min = c(1, 1, 1, 1, 1),
  max = c(7, 7, 7, 7, 7)
 )

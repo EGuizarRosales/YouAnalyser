@@ -107,7 +107,7 @@ dp_convert_to_labelled <- function(data, codebook) {
 #'
 #' # Create a theoretical min/max data frame
 #' theoretical_min_max <- data.frame(
-#'   variable = paste0("F800_", 1:5),
+#'  variable = paste0("F800_", 1:5),
 #'  min = c(1, 1, 1, 1, 1),
 #'  max = c(7, 7, 7, 7, 7)
 #' )
@@ -219,4 +219,48 @@ dp_label_automatically <- function(data, theoretical_min_max_values = NULL) {
   }
 
   data
+}
+
+#' Zap missing values and their labels
+#'
+#' @param data A haven::labelled data frame.
+#' @param missing_labels A character vector of missing value labels. If NULL (default), the function will attempt to automatically detect suspicious values that may indicate missings (e.g., -99, 9999) if they are `<= 0` or `>= 99`.
+#'
+#' @returns A haven::labelled data frame with missing values and their labels removed.
+#'
+#' @export
+dp_zap_missings <- function(data, missing_labels = NULL) {
+  if (is.null(missing_labels)) {
+    example_var <- kda_data[[length(kda_data) - 1]]
+    vals <- sjlabelled::get_values(example_var)
+
+    suspicious_values_idx <- vals >= 99 | vals <= 0
+    suspicious_values <- vals[suspicious_values_idx]
+
+    suspicious_val_labels <- example_var |>
+      sjlabelled::get_labels(values = "p") |>
+      (\(labels) labels[suspicious_values_idx])()
+
+    suspicious_labels <- example_var |>
+      sjlabelled::get_labels() |>
+      (\(labels) labels[suspicious_values_idx])()
+
+    missing_labels_code <- paste0('"', suspicious_labels, '"', collapse = ", ")
+
+    cli::cli_abort(c(
+      "x" = "Missing labels not provided.",
+      "i" = "The following value{?s} seem suspicious: {suspicious_val_labels}",
+      "i" = "Consider setting {.arg missing_labels}: {.code missing_labels = c({missing_labels_code})}"
+    ))
+  } else {
+    data |>
+      haven::zap_missing() |>
+      tidyr::drop_na() |>
+      dplyr::mutate(
+        dplyr::across(
+          where(sjlabelled::is_labelled),
+          \(x) sjlabelled::remove_labels(x, labels = missing_labels)
+        )
+      )
+  }
 }

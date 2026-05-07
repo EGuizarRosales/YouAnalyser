@@ -159,6 +159,7 @@ kda_importance_sumOfCoefficients <- function(model, standardize = TRUE) {
 #'
 #' @param model A fitted model object.
 #' @param domir_args Optional. A list of arguments to pass to [domir::domin()].
+#' @param verbose Logical. Whether to print messages to the console. Defaults to `FALSE`.
 #'
 #' @returns
 #' A list containing:
@@ -175,7 +176,8 @@ kda_importance_domir <- function(
     complete = FALSE,
     consmodel = NULL,
     reverse = FALSE
-  )
+  ),
+  verbose = FALSE
 ) {
   # Get model infos
   formula_obj <- insight::find_formula(model)$conditional
@@ -203,6 +205,12 @@ kda_importance_domir <- function(
   #   data = data
   # )
 
+  if (verbose) {
+    cli::cli_alert_info(
+      "Running dominance analysis with 2^{ncol(insight::get_predictors(model))} = {2^ncol(insight::get_predictors(model))} submodels..."
+    )
+  }
+
   # Run dominance analysis
   da <- do.call(
     domir::domin,
@@ -216,6 +224,10 @@ kda_importance_domir <- function(
       domir_args
     )
   )
+
+  if (verbose) {
+    cli::cli_alert_success("Dominance analysis completed.")
+  }
 
   # Define primary output
   out <- tibble::enframe(

@@ -4,18 +4,25 @@
 \alias{kda_importance_domir}
 \title{Perform KDA dominance analysis}
 \usage{
-kda_importance_domir(model, domir_args = list(.set = NULL))
+kda_importance_domir(
+  model,
+  domir_args = list(sets = NULL, all = NULL, conditional = TRUE, complete = FALSE,
+    consmodel = NULL, reverse = FALSE),
+  verbose = FALSE
+)
 }
 \arguments{
 \item{model}{A fitted model object.}
 
-\item{domir_args}{Optional. A list of arguments to pass to \code{\link[domir:domir]{domir::domir()}}.}
+\item{domir_args}{Optional. A list of arguments to pass to \code{\link[domir:domin]{domir::domin()}}.}
+
+\item{verbose}{Logical. Whether to print messages to the console. Defaults to \code{FALSE}.}
 }
 \value{
 A list containing:
 \itemize{
 \item \code{out}: A tibble with predictor importance metrics (raw, ratio, percent, and rank).
-\item \code{da}: The raw dominance analysis object from \code{\link[domir:domir]{domir::domir()}}.
+\item \code{da}: The raw dominance analysis object from \code{\link[domir:domin]{domir::domin()}}.
 }
 }
 \description{
