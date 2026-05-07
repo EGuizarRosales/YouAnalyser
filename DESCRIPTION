@@ -1,6 +1,6 @@
 Package: YouAnalyser
 Title: Provide Standardized Analytics Products for YouGov DACH
-Version: 0.9
+Version: 0.9.1
 Authors@R: 
     person(
         "Emmanuel", "Guizar Rosales",
@@ -28,7 +28,9 @@ Imports:
     forcats,
     fs (>= 2.0.1),
     GGally (>= 2.4.0),
+    ggdist,
     ggrepel (>= 0.9.6),
+    glue,
     haven,
     insight,
     mice (>= 3.19.0),

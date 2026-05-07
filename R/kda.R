@@ -158,46 +158,63 @@ kda_importance_sumOfCoefficients <- function(model, standardize = TRUE) {
 #' A short description...
 #'
 #' @param model A fitted model object.
-#' @param domir_args Optional. A list of arguments to pass to [domir::domir()].
+#' @param domir_args Optional. A list of arguments to pass to [domir::domin()].
 #'
 #' @returns
 #' A list containing:
 #' - `out`: A tibble with predictor importance metrics (raw, ratio, percent, and rank).
-#' - `da`: The raw dominance analysis object from [domir::domir()].
+#' - `da`: The raw dominance analysis object from [domir::domin()].
 #'
 #' @export
 kda_importance_domir <- function(
   model,
   domir_args = list(
-    .set = NULL
+    sets = NULL,
+    all = NULL,
+    conditional = TRUE,
+    complete = FALSE,
+    consmodel = NULL,
+    reverse = FALSE
   )
 ) {
-  # Define partial function for dominance analysis with user-specified arguments
-  partial_domir <- purrr::partial(
-    domir::domir,
-    .adj = FALSE,
-    .prg = TRUE,
-    !!!domir_args
-  )
-
   # Get model infos
   formula_obj <- insight::find_formula(model)$conditional
   data <- insight::get_data(model, source = "mf")
 
-  # Define function to calculate R² for a given formula and data
+  # Define function to calculate R-squared for a given formula and data
   partial_glm <- purrr::partial(glm, family = binomial())
   reg_type <- if (insight::model_info(model)$is_binomial) partial_glm else lm
-  R2_wrapper <- function(formula, data) {
-    mod <- reg_type(formula, data = data)
-    r2 <- performance::r2(mod)$R2
-    return(r2)
-  }
+
+  # Run dominance analysis with domir::domir: BUGGY since dmoir (1.3.0)!
+  # R2_wrapper <- function(formula, data) {
+  #   mod <- reg_type(formula, data = data)
+  #   r2 <- performance::r2(mod)$R2
+  #   return(r2)
+  # }
+  # partial_domir <- purrr::partial(
+  #   domir::domir,
+  #   .adj = FALSE,
+  #   .prg = TRUE,
+  #   !!!domir_args
+  # )
+  # da <- partial_domir(
+  #   .obj = formula_obj,
+  #   .fct = R2_wrapper,
+  #   data = data
+  # )
 
   # Run dominance analysis
-  da <- partial_domir(
-    .obj = formula_obj,
-    .fct = R2_wrapper,
-    data = data
+  da <- do.call(
+    domir::domin,
+    c(
+      list(
+        formula_overall = formula_obj,
+        reg = reg_type,
+        fitstat = list(performance::r2, "R2"),
+        data = data
+      ),
+      domir_args
+    )
   )
 
   # Define primary output
@@ -618,7 +635,7 @@ kda_importance_barPlot <- function(
           ""
         ),
         "Total R² = ",
-        ya_format_numeric(performance::r2(model)$R2 * 100),
+        ya_format_numeric(sum(importance_obj$out$Importance_Raw) * 100),
         "%; N = ",
         nrow(data)
       ),
@@ -1352,4 +1369,379 @@ kda_interactive_workflow <- function(
   )
   cli::cli_text()
   cli::cli_rule()
+}
+
+
+#' Conduct KDA with imputation of missing values
+#'
+#' @param data A data frame with missing data containing the outcome and predictors. Optional if model is provided.
+#' @param outcome A single string naming the outcome variable. Optional if model is provided.
+#' @param predictors A character vector of predictor variable names. Optional if model is provided.
+#' @param model A fitted regression model object. Optional if data, outcome, and predictors are provided.
+#' @param imputation_args A list of arguments passed to the mice function for imputation. Defaults to `list(m = 100, method = "pmm", seed = 123, printFlag = FALSE)`, which translates 100 imputations with the predictive mean matching method and a seed of 123 for reproducibility. See [mice::mice()] for details.
+#' @param importance_method A string specifying the method for calculating variable importance. Options are 'auto', 'domir', 'jrw', or 'sumOfCoefficients'. Defaults to 'auto'.
+#' @param show_progress A logical indicating whether to show progress during the application of the different kda functions to the imputed datasets. Defaults to TRUE.
+#' @param imputation_aggregation_function A string specifying the function to aggregate imputed values. Defaults to 'median' but could also be set to 'mean'.
+#' @param display_imputation_info A logical indicating whether to display information about the imputation parameters in the subtitle of plots. Defaults to TRUE.
+#'
+#' @returns A list containing model results, importance measures, performance metrics, IPMA analysis, and associated plots. Errors if neither model nor all of data, outcome, and predictors are provided.
+#'
+#' @export
+kda_regression_with_imputation <- function(
+  data,
+  outcome = NULL,
+  predictors = NULL,
+  model = NULL,
+  imputation_args = list(
+    m = 100,
+    method = "pmm",
+    seed = 123,
+    printFlag = FALSE
+  ),
+  importance_method = "auto",
+  show_progress = TRUE,
+  imputation_aggregation_function = "median",
+  display_imputation_info = TRUE
+) {
+  # ---- 1. Preparation ----
+
+  if (
+    is.null(model) && (is.null(data) || is.null(outcome) || is.null(predictors))
+  ) {
+    cli::cli_abort(
+      c(
+        "Insufficient arguments provided.",
+        "i" = "Either {.arg model} or all of {.arg data}, {.arg outcome}, and {.arg predictors} must be supplied.",
+        "x" = "{.arg model} is {.val NULL} and one or more of {.arg data}, {.arg outcome}, {.arg predictors} is missing."
+      )
+    )
+  }
+
+  if (!is.null(data)) {
+    non_labelled_vars <- names(data)[!purrr::map_lgl(data, haven::is.labelled)]
+
+    if (length(non_labelled_vars) > 0) {
+      cli::cli_abort(c(
+        "{.arg data} needs to be in {.fn haven::labelled} format.",
+        "x" = "The following variable{?s} {?is/are} not in this format: {.val {non_labelled_vars}}"
+      ))
+    }
+  }
+
+  if (!importance_method %in% c("auto", "domir", "jrw", "sumOfCoefficients")) {
+    cli::cli_abort(c(
+      "Invalid {.arg importance_method} provided.",
+      "x" = "{.arg importance_method} must be one of 'auto', 'domir', 'jrw', or 'sumOfCoefficients'."
+    ))
+  }
+
+  #---- 2. Impute Missing Values Using MICE ------------------------------------
+
+  # Check missing data pattern
+  missings_pattern <- function() {
+    mice::md.pattern(data, plot = TRUE, rotate.names = TRUE)
+  }
+
+  # Save labels before imputation
+  saved_labels <- data |>
+    purrr::map(\(x) {
+      list(
+        var_label = attr(x, "label", exact = TRUE),
+        val_labels = attr(x, "labels", exact = TRUE)
+      )
+    })
+
+  # Remove labels as mice does not handle them
+  data_for_imp <- data |>
+    dplyr::mutate(dplyr::across(dplyr::everything(), \(x) {
+      x |>
+        haven::zap_label() |>
+        haven::zap_labels()
+    }))
+
+  # Perform imputation using mice
+  imp <- do.call(mice::mice, c(list(data = data_for_imp), imputation_args))
+
+  # Get the completed datasets in long format
+  cpl <- imp |>
+    mice::complete(action = "long", include = FALSE) |>
+    tibble::as_tibble()
+
+  # Add backthe varaible labels to the imputed datasets
+  cpl <- cpl |>
+    dplyr::mutate(
+      dplyr::across(
+        dplyr::everything(),
+        \(x) {
+          current_var <- dplyr::cur_column()
+          var_info <- saved_labels[[current_var]]
+
+          if (is.null(var_info$val_labels) && is.null(var_info$var_label)) {
+            x
+          } else {
+            haven::labelled(
+              x,
+              labels = var_info$val_labels,
+              label = var_info$var_label
+            )
+          }
+        }
+      )
+    )
+
+  # Create a grid of imputed datasets
+  res_grid <- cpl |>
+    dplyr::select(-.id) |>
+    tidyr::nest(.by = ".imp")
+
+  #---- 3. Define Models and Functions -----------------------------------------
+
+  # Get or define model
+  if (!is.null(model)) {
+    formula_obj <- insight::find_formula(model)
+  } else {
+    formula_obj <- kda_formula(outcome, predictors)
+  }
+
+  # Importance
+  f_importance <- function(model) {
+    if (importance_method == "auto") {
+      if (ncol(insight::get_predictors(model)) <= 15) {
+        kda_importance_domir(model, domir_args = list(.prg = FALSE))
+      } else {
+        kda_importance_jrw(model)
+      }
+    } else if (importance_method == "domir") {
+      kda_importance_domir(model, domir_args = list(.prg = FALSE))
+    } else if (importance_method == "jrw") {
+      kda_importance_jrw(model)
+    } else if (importance_method == "sumOfCoefficients") {
+      kda_importance_sumOfCoefficients(model)
+    }
+  }
+
+  #----4. Apply KDA Functions to Each Imputed Dataset --------------------------
+
+  # Define progress messages
+  prgrbr_importance <- if (show_progress) {
+    list(
+      name = "Calculating variable importances",
+      clear = FALSE
+    )
+  } else {
+    FALSE
+  }
+  prgrbr_performance <- if (show_progress) {
+    list(
+      name = "Calculating model performances",
+      clear = FALSE
+    )
+  } else {
+    FALSE
+  }
+  prgrbr_ipma <- if (show_progress) {
+    list(
+      name = "Creating IPMA objects",
+      clear = FALSE
+    )
+  } else {
+    FALSE
+  }
+
+  # Apply the model, importance, performance, and IPMA functions to each imputed dataset
+  res_grid <- res_grid |>
+    dplyr::mutate(
+      model = purrr::map(data, \(x) {
+        kda_model_reg(x, formula_obj)
+      }),
+      imp_obj = purrr::map(
+        model,
+        f_importance,
+        .progress = prgrbr_importance
+      ),
+      perf_obj = purrr::map(
+        model,
+        kda_performance,
+        .progress = prgrbr_performance
+      ),
+      ipma_obj = purrr::map2(
+        imp_obj,
+        perf_obj,
+        kda_ipma,
+        .progress = prgrbr_ipma
+      )
+    )
+
+  #---- 5. Summarise Grid ------------------------------------------------------
+
+  example_data <- res_grid$data[[1]]
+  example_model <- kda_model_reg(data = example_data, formula_obj)
+
+  # Function to summarise objects across imputed datasets
+  f_summarizing_objects <- function(
+    grid,
+    obj,
+    summary_function = match.fun(imputation_aggregation_function)
+  ) {
+    data_long <- purrr::map2_dfr(grid$.imp, grid[[obj]], \(imp, obj) {
+      obj$out |>
+        dplyr::mutate(.imp = imp) |>
+        dplyr::relocate(.imp)
+    })
+    data_summarized <- data_long |>
+      dplyr::summarise(
+        dplyr::across(
+          dplyr::starts_with("Importance_") |
+            dplyr::starts_with("Performance_"),
+          summary_function
+        ),
+        .by = "predictor"
+      )
+    return(list(
+      out = data_summarized,
+      data_long = data_long
+    ))
+  }
+
+  # Summarise importance, performance, and IPMA objects across imputed datasets
+  summ_imp_obj <- f_summarizing_objects(res_grid, "imp_obj")
+  summ_perf_obj <- f_summarizing_objects(res_grid, "perf_obj")
+  summ_ipma_obj <- f_summarizing_objects(res_grid, "ipma_obj")
+
+  # Add infos to importance object
+  attr(summ_imp_obj$out, "importance_type") <- attr(
+    res_grid$imp_obj[[1]]$out,
+    "importance_type"
+  )
+
+  # Add infos to ipma object
+  summ_ipma_obj$means <- summ_ipma_obj$out |>
+    dplyr::summarise(
+      Importance_Ratio_Mean = mean(Importance_Ratio),
+      Performance_Ratio_Mean = mean(Performance_Ratio)
+    )
+  summ_ipma_obj$out <- summ_ipma_obj$out |>
+    dplyr::mutate(
+      recommendation = dplyr::case_when(
+        Importance_Ratio >= summ_ipma_obj$means$Importance_Ratio_Mean &
+          Performance_Ratio >=
+            summ_ipma_obj$means$Performance_Ratio_Mean ~ "Keep up the good work",
+        Importance_Ratio >= summ_ipma_obj$means$Importance_Ratio_Mean &
+          Performance_Ratio <
+            summ_ipma_obj$means$Performance_Ratio_Mean ~ "Concentrate here",
+        Importance_Ratio < summ_ipma_obj$means$Importance_Ratio_Mean &
+          Performance_Ratio >=
+            summ_ipma_obj$means$Performance_Ratio_Mean ~ "Possible overkill",
+        Importance_Ratio < summ_ipma_obj$means$Importance_Ratio_Mean &
+          Performance_Ratio <
+            summ_ipma_obj$means$Performance_Ratio_Mean ~ "Low priority"
+      ) |>
+        factor(
+          levels = c(
+            "Low priority",
+            "Possible overkill",
+            "Keep up the good work",
+            "Concentrate here"
+          )
+        )
+    )
+  attr(summ_ipma_obj$out, "importance_type") <- attr(
+    summ_imp_obj$out,
+    "importance_type"
+  )
+
+  #---- 6. Create Plots --------------------------------------------------------
+
+  n_rows_with_missings <- data |>
+    dplyr::filter(dplyr::if_any(dplyr::everything(), \(x) is.na(x))) |>
+    nrow()
+
+  subtitle_imputation <- glue::glue(
+    "Rows with missing values: {n_rows_with_missings}; Number of imputations: {imputation_args$m}; Imputation aggregation function: {stringr::str_to_title(imputation_aggregation_function)}"
+  )
+
+  f_update_subtitle <- function(plot_obj) {
+    subtitle_old <- plot_obj$p$labels$subtitle
+    subtitle_new <- paste(subtitle_old, subtitle_imputation, sep = "\n")
+    plot_obj$p$labels$subtitle <- subtitle_new
+    return(plot_obj)
+  }
+
+  # Main output plots for importance, performance, and IPMA
+  p_imp <- kda_importance_barPlot(example_model, summ_imp_obj)
+  p_perf <- kda_performance_barPlot(example_model, summ_perf_obj)
+  p_ipma <- kda_ipma_scatterPlot(example_model, summ_ipma_obj)
+
+  if (display_imputation_info) {
+    p_imp <- f_update_subtitle(p_imp)
+    p_perf <- f_update_subtitle(p_perf)
+    p_ipma <- f_update_subtitle(p_ipma)
+  }
+
+  # Diagnostic plots for imputation: Importance
+  p_imp_diag <- ya_get_predictor_labels(example_model) |>
+    dplyr::left_join(summ_imp_obj$data_long, by = "predictor") |>
+    dplyr::mutate(
+      label_withPred = forcats::fct_reorder(label_withPred, Importance_Ratio)
+    ) |>
+    ggplot2::ggplot(ggplot2::aes(x = Importance_Ratio, y = label_withPred)) +
+    ggdist::stat_dotsinterval() +
+    # ggplot2::geom_boxplot(color = "darkgrey", outlier.shape = NA) +
+    # ggplot2::geom_point(
+    #   color = "black",
+    #   position = ggplot2::position_jitter(width = 0, height = 0.1)
+    # ) +
+    ggplot2::scale_x_continuous(labels = scales::label_percent()) +
+    ggplot2::theme_classic() +
+    ggplot2::labs(
+      title = "Variance In Perdictor Importance Due To Imputation",
+      subtitle = subtitle_imputation
+    ) +
+    ggplot2::theme(
+      axis.title.y = ggplot2::element_blank()
+    )
+
+  # Diagnostic plots for imputation: Performance
+  p_perf_diag <- ya_get_predictor_labels(example_model) |>
+    dplyr::left_join(summ_perf_obj$data_long, by = "predictor") |>
+    dplyr::mutate(
+      label_withPred = forcats::fct_reorder(label_withPred, Performance_Ratio)
+    ) |>
+    ggplot2::ggplot(ggplot2::aes(x = Performance_Ratio, y = label_withPred)) +
+    ggdist::stat_dotsinterval() +
+    # ggplot2::geom_boxplot(color = "darkgrey", outlier.shape = NA) +
+    # ggplot2::geom_point(
+    #   color = "black",
+    #   position = ggplot2::position_jitter(width = 0, height = 0.1)
+    # ) +
+    ggplot2::scale_x_continuous(labels = scales::label_percent()) +
+    ggplot2::theme_classic() +
+    ggplot2::labs(
+      title = "Variance In Perdictor Performance Due To Imputation",
+      subtitle = subtitle_imputation
+    ) +
+    ggplot2::theme(
+      axis.title.y = ggplot2::element_blank()
+    )
+
+  #---- RETURN -----------------------------------------------------------------
+
+  return(list(
+    imputation_objects = list(
+      missings_pattern = missings_pattern,
+      imp = imp,
+      cpl = cpl,
+      res_grid = res_grid
+    ),
+    importance = summ_imp_obj,
+    performance = summ_perf_obj,
+    ipma = summ_ipma_obj,
+    plots = list(
+      diagnostics_importance = p_imp_diag,
+      diagnostics_performance = p_perf_diag,
+      importance_barPlot = p_imp,
+      performance_barPlot = p_perf,
+      ipma_scatterPlot = p_ipma
+    )
+  ))
 }

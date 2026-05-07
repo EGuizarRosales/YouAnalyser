@@ -1,53 +1,25 @@
 myModel_lm <- lm(F600 ~ ., data = bkw_processed)
+myModel_lm_reduced <- lm(
+  F600 ~ F800_1 +
+    F800_2 +
+    F800_3 +
+    F800_4 +
+    F800_5 +
+    F800_6 +
+    F800_7 +
+    F800_8 +
+    F800_9 +
+    F800_10,
+  data = bkw_processed
+)
 myModel_glm <- glm(F600 ~ ., data = bkw_bin_outcome, family = binomial())
 
+imp_obj <- kda_importance_jrw(myModel_lm)
+perf_obj <- kda_performance(myModel_lm)
+ipma_obj <- kda_ipma(imp_obj, perf_obj)
+
+p_imp <- kda_importance_barPlot(myModel_lm, imp_obj)
+p_perf <- kda_performance_barPlot(myModel_lm, perf_obj)
+p_ipma <- kda_ipma_scatterPlot(myModel_lm, ipma_obj)
+
 ################################################################################
-
-
-saved_labels <- bkw_missings |>
-  purrr::map(\(x) {
-    list(
-      var_label = attr(x, "label", exact = TRUE),
-      val_labels = attr(x, "labels", exact = TRUE)
-    )
-  })
-
-d <- bkw_missings |>
-  dplyr::mutate(dplyr::across(dplyr::everything(), \(x) {
-    x |>
-      haven::zap_label() |>
-      haven::zap_labels()
-  }))
-
-imp <- mice::mice(d, m = 10, method = "pmm", seed = 123, printFlag = FALSE)
-
-cpl <- mice::complete(imp, action = "long", include = FALSE) |>
-  tibble::as_tibble()
-
-d_imputed <- cpl |>
-  dplyr::select(-.imp, -.id) |>
-  dplyr::summarise(
-    dplyr::across(dplyr::everything(), \(x) quantile(x, probs = 0.5, type = 3)),
-    .by = "id"
-  )
-
-d_imputed <- d_imputed |>
-  dplyr::mutate(
-    dplyr::across(
-      dplyr::everything(),
-      \(x) {
-        current_var <- dplyr::cur_column()
-        var_info <- saved_labels[[current_var]]
-
-        if (is.null(var_info$val_labels) && is.null(var_info$var_label)) {
-          x
-        } else {
-          haven::labelled(
-            x,
-            labels = var_info$val_labels,
-            label = var_info$var_label
-          )
-        }
-      }
-    )
-  )
