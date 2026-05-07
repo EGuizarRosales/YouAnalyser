@@ -16,7 +16,7 @@ bkw_bin_outcome
 
 ### `bkw_bin_outcome`
 
-A data frame with 1,171 rows and 15 columns:
+A data frame with 1,104 rows and 15 columns:
 
 - F600:
 

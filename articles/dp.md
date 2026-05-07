@@ -144,6 +144,16 @@ dp_inspect_codebook(myData[, 1:2])
 #> ---------------------------------------------------------------------------------------------
 ```
 
+### Important Note on Missing Values
+
+If you need to remove some missing values from your data, make sure to
+use the
+[`dp_zap_missings()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_zap_missings.md)
+function, which not only removes the missing values but also removes the
+corresponding value labels. This is important because if you simply
+remove the missing values without removing the value labels, this will
+lead to errors further down the analysis pipeline.
+
 ## Convert Unlabelled to Labelled Data
 
 Sometimes, your data comes in an unlabelled format, for example if you

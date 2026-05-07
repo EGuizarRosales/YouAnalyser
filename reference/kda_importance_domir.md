@@ -5,7 +5,12 @@ A short description...
 ## Usage
 
 ``` r
-kda_importance_domir(model, domir_args = list(.set = NULL))
+kda_importance_domir(
+  model,
+  domir_args = list(sets = NULL, all = NULL, conditional = TRUE, complete = FALSE,
+    consmodel = NULL, reverse = FALSE),
+  verbose = FALSE
+)
 ```
 
 ## Arguments
@@ -17,7 +22,12 @@ kda_importance_domir(model, domir_args = list(.set = NULL))
 - domir_args:
 
   Optional. A list of arguments to pass to
-  [`domir::domir()`](https://jluchman.github.io/domir/reference/domir.html).
+  [`domir::domin()`](https://jluchman.github.io/domir/reference/domin.html).
+
+- verbose:
+
+  Logical. Whether to print messages to the console. Defaults to
+  `FALSE`.
 
 ## Value
 
@@ -27,4 +37,4 @@ A list containing:
   percent, and rank).
 
 - `da`: The raw dominance analysis object from
-  [`domir::domir()`](https://jluchman.github.io/domir/reference/domir.html).
+  [`domir::domin()`](https://jluchman.github.io/domir/reference/domin.html).

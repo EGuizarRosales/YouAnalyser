@@ -200,6 +200,16 @@ value labels in a tidy format:</p>
 <span><span class="co">#&gt;    |        |                |         |          |      6 | 6                  | 300 (27.2%)</span></span>
 <span><span class="co">#&gt;    |        |                |         |          |      7 | Sehr gut  7        | 156 (14.1%)</span></span>
 <span><span class="co">#&gt; ---------------------------------------------------------------------------------------------</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="important-note-on-missing-values">Important Note on Missing Values<a class="anchor" aria-label="anchor" href="#important-note-on-missing-values"></a>
+</h3>
+<p>If you need to remove some missing values from your data, make sure
+to use the <code><a href="../reference/dp_zap_missings.html">dp_zap_missings()</a></code> function, which not only
+removes the missing values but also removes the corresponding value
+labels. This is important because if you simply remove the missing
+values without removing the value labels, this will lead to errors
+further down the analysis pipeline.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="convert-unlabelled-to-labelled-data">Convert Unlabelled to Labelled Data<a class="anchor" aria-label="anchor" href="#convert-unlabelled-to-labelled-data"></a>

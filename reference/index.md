@@ -13,6 +13,8 @@ variable and value labels.
   : Inspect the codebook of a labelled data frame
 - [`dp_label_automatically()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_label_automatically.md)
   : Automatically label a data frame
+- [`dp_zap_missings()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_zap_missings.md)
+  : Zap missing values and their labels
 
 ## Exploratory Data Analysis (EDA)
 
@@ -34,6 +36,9 @@ specific steps of the KDA process.
 
 - [`kda_copy_pptx_template()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_copy_pptx_template.md)
   : Copy PowerPoint template to specified file path
+- [`kda_data_is_haven_labelled()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_data_is_haven_labelled.md)
+  : Check whether all variables are haven-labelled and include
+  variable/value labels
 - [`kda_forestPlot()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_forestPlot.md)
   : Create a forest plot for model coefficients
 - [`kda_importance_barPlot()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_barPlot.md)
@@ -56,6 +61,8 @@ specific steps of the KDA process.
   : Create a KDA performance bar plot
 - [`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
   : Conduct KDA regression analysis
+- [`kda_regression_with_imputation()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression_with_imputation.md)
+  : Conduct KDA with imputation of missing values
 - [`kda_save_data_for_chart()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_save_data_for_chart.md)
   : Save KDA data for chart in Excel template
 

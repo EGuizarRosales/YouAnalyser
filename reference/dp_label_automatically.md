@@ -299,9 +299,9 @@ dp_inspect_codebook(out)
 #>    | Sehr gut  7        |  50 ( 4.5%)
 #> -------------------------------------
 
-#' # Create a theoretical min/max data frame
+# Create a theoretical min/max data frame
 theoretical_min_max <- data.frame(
-  variable = paste0("F800_", 1:5),
+ variable = paste0("F800_", 1:5),
  min = c(1, 1, 1, 1, 1),
  max = c(7, 7, 7, 7, 7)
 )

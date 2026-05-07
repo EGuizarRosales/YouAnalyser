@@ -17,7 +17,7 @@ bkw_bin
 
 ### `bkw_bin`
 
-A data frame with 1,171 rows and 15 columns:
+A data frame with 1,104 rows and 15 columns:
 
 - F600:
 

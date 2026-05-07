@@ -20,10 +20,12 @@
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/dp_copy_codebook_template.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/dp_inspect_codebook.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/dp_label_automatically.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/dp_zap_missings.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/eda_correlation.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/eda_summary.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/index.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_copy_pptx_template.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_data_is_haven_labelled.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_forestPlot.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_barPlot.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_importance_domir.html</loc></url>
@@ -35,6 +37,7 @@
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_performance.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_performance_barPlot.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.html</loc></url>
+<url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression_with_imputation.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/kda_save_data_for_chart.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/reexports.html</loc></url>
 <url><loc>https://eguizarrosales.github.io/YouAnalyser/reference/ya_choose_file.html</loc></url>
