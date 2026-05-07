@@ -1,4 +1,4 @@
-# Key Driver Analysis
+# 3. Key Driver Analysis
 
 ``` r
 
@@ -293,49 +293,49 @@ eda_summary(
 #> ── Data Frame Summary
 #> Data Frame Summary  
 #> data  
-#> Dimensions: 1171 x 4  
-#> Duplicates: 976  
+#> Dimensions: 1104 x 4  
+#> Duplicates: 908  
 #> 
 #> --------------------------------------------------------------------------------------------------------------------------------------------------------
 #> Variable           Label                                     Stats / Values                 Freqs (% of Valid)   Graph              Valid      Missing  
 #> ------------------ ----------------------------------------- ------------------------------ -------------------- ------------------ ---------- ---------
-#> F600               Wie attraktiv finden Sie die BKW als      1. [0] Nicht attraktiv         223 (19.0%)          III                1171       0        
-#> [haven_labelled,   Arbeitgeberin?                            2. [1] Attraktiv               948 (81.0%)          IIIIIIIIIIIIIIII   (100.0%)   (0.0%)   
+#> F600               Wie attraktiv finden Sie die BKW als      1. [0] Nicht attraktiv         218 (19.7%)          III                1104       0        
+#> [haven_labelled,   Arbeitgeberin?                            2. [1] Attraktiv               886 (80.3%)          IIIIIIIIIIIIIIII   (100.0%)   (0.0%)   
 #> vctrs_vctr,                                                                                                                                             
 #> double]                                                                                                                                                 
 #> 
-#> F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      11 ( 0.9%)                             1171       0        
-#> [haven_labelled,   des Arbeitgebers                          2. [2] 2                        19 ( 1.6%)                             (100.0%)   (0.0%)   
-#> vctrs_vctr,                                                  3. [3] 3                        66 ( 5.6%)          I                                      
-#> double]                                                      4. [4] 4                       301 (25.7%)          IIIII                                  
-#>                                                              5. [5] 5                       270 (23.1%)          IIII                                   
-#>                                                              6. [6] 6                       322 (27.5%)          IIIII                                  
-#>                                                              7. [7] Sehr gut  7             182 (15.5%)          III                                    
+#> F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      11 ( 1.0%)                             1104       0        
+#> [haven_labelled,   des Arbeitgebers                          2. [2] 2                        21 ( 1.9%)                             (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                  3. [3] 3                        65 ( 5.9%)          I                                      
+#> double]                                                      4. [4] 4                       295 (26.7%)          IIIII                                  
+#>                                                              5. [5] 5                       256 (23.2%)          IIII                                   
+#>                                                              6. [6] 6                       300 (27.2%)          IIIII                                  
+#>                                                              7. [7] Sehr gut  7             156 (14.1%)          II                                     
 #> 
-#> F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      11 ( 0.9%)                             1171       0        
-#> [haven_labelled,                                             2. [2] 2                        34 ( 2.9%)                             (100.0%)   (0.0%)   
-#> vctrs_vctr,                                                  3. [3] 3                        70 ( 6.0%)          I                                      
-#> double]                                                      4. [4] 4                       417 (35.6%)          IIIIIII                                
-#>                                                              5. [5] 5                       316 (27.0%)          IIIII                                  
-#>                                                              6. [6] 6                       234 (20.0%)          III                                    
-#>                                                              7. [7] Sehr gut  7              89 ( 7.6%)          I                                      
+#> F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      11 ( 1.0%)                             1104       0        
+#> [haven_labelled,                                             2. [2] 2                        33 ( 3.0%)                             (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                  3. [3] 3                        69 ( 6.2%)          I                                      
+#> double]                                                      4. [4] 4                       405 (36.7%)          IIIIIII                                
+#>                                                              5. [5] 5                       300 (27.2%)          IIIII                                  
+#>                                                              6. [6] 6                       209 (18.9%)          III                                    
+#>                                                              7. [7] Sehr gut  7              77 ( 7.0%)          I                                      
 #> 
-#> F800_3             Sinnvolle Tätigkeit und                   1. [1] Überhaupt nicht gut      12 ( 1.0%)                             1171       0        
-#> [haven_labelled,   gesellschaftlicher Beitrag                2. [2] 2                        27 ( 2.3%)                             (100.0%)   (0.0%)   
-#> vctrs_vctr,                                                  3. [3] 3                        89 ( 7.6%)          I                                      
-#> double]                                                      4. [4] 4                       357 (30.5%)          IIIIII                                 
-#>                                                              5. [5] 5                       305 (26.0%)          IIIII                                  
-#>                                                              6. [6] 6                       259 (22.1%)          IIII                                   
-#>                                                              7. [7] Sehr gut  7             122 (10.4%)          II                                     
+#> F800_3             Sinnvolle Tätigkeit und                   1. [1] Überhaupt nicht gut      12 ( 1.1%)                             1104       0        
+#> [haven_labelled,   gesellschaftlicher Beitrag                2. [2] 2                        27 ( 2.4%)                             (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                  3. [3] 3                        87 ( 7.9%)          I                                      
+#> double]                                                      4. [4] 4                       348 (31.5%)          IIIIII                                 
+#>                                                              5. [5] 5                       289 (26.2%)          IIIII                                  
+#>                                                              6. [6] 6                       238 (21.6%)          IIII                                   
+#>                                                              7. [7] Sehr gut  7             103 ( 9.3%)          I                                      
 #> --------------------------------------------------------------------------------------------------------------------------------------------------------
 #> 
 #> ── Descriptive Statistics
 #> Variable | Mean |   SD |        Range |  Quartiles | Skewness | Kurtosis |    n | n_Missing
 #> -------------------------------------------------------------------------------------------
-#> F600     | 0.81 | 0.39 | [0.00, 1.00] | 1.00, 1.00 |    -1.58 |     0.49 | 1171 |         0
-#> F800_1   | 5.13 | 1.29 | [1.00, 7.00] | 4.00, 6.00 |    -0.41 |    -0.11 | 1171 |         0
-#> F800_2   | 4.75 | 1.20 | [1.00, 7.00] | 4.00, 6.00 |    -0.18 |     0.16 | 1171 |         0
-#> F800_3   | 4.86 | 1.27 | [1.00, 7.00] | 4.00, 6.00 |    -0.23 |    -0.08 | 1171 |         0
+#> F600     | 0.80 | 0.40 | [0.00, 1.00] | 1.00, 1.00 |    -1.52 |     0.32 | 1104 |         0
+#> F800_1   | 5.07 | 1.29 | [1.00, 7.00] | 4.00, 6.00 |    -0.40 |    -0.10 | 1104 |         0
+#> F800_2   | 4.71 | 1.20 | [1.00, 7.00] | 4.00, 6.00 |    -0.17 |     0.23 | 1104 |         0
+#> F800_3   | 4.81 | 1.26 | [1.00, 7.00] | 4.00, 6.00 |    -0.22 |    -0.03 | 1104 |         0
 ```
 
 We can run the KDA with the binary outcome variable in the same way as
@@ -522,37 +522,7 @@ horizontal line in the chart.](fig/kda_format_axis_pane_screenshot.png)
 “Format Axis” pane in PowerPoint that opens if you double-click on the
 horizontal line in the chart.
 
-### 2.4 Model Diagnostics
-
-A short note on model diagnostics. The plot
-`kda$plots$diagnostics_model`can also be computed like this:
-
-``` r
-
-diagnostics <- performance::check_model(kda$model$model)
-print(diagnostics)
-```
-
-![](kda_files/figure-html/model-diagnostics-1.png)
-
-This gives you the advantage that you can also access infomation that
-can be helpful to interpret the plot, e.g.:
-
-``` r
-
-diagnostics$OUTLIERS
-#> OK: No outliers detected.
-#> - Based on the following method and threshold: cook (1).
-#> - For variable: (Whole model)
-```
-
-Please refer to the following documentation for more information on how
-to interpret the diagnostic plots and what you can do if the assumptions
-underlying the regression model are violated: [Checking model
-assumption - linear
-models](https://easystats.github.io/performance/articles/check_model.html#linear-models-are-all-assumptions-for-linear-models-met).
-
-### Importance Methods
+### 2.4 Importance Methods
 
 There are three methods available for calculating variable importance in
 the
@@ -605,7 +575,251 @@ KDA. For additional ressources, please refer to the following resources:
   predictor variables in multiple regression. *Multivariate Behavioral
   Research*, 35, 1–19 . <https://doi.org/10.1207/S15327906MBR3501_1>
 
+### 2.5 Model Diagnostics
+
+A short note on model diagnostics. The plot
+`kda$plots$diagnostics_model`can also be computed like this:
+
+``` r
+
+diagnostics <- performance::check_model(kda$model$model)
+print(diagnostics)
+```
+
+![](kda_files/figure-html/model-diagnostics-1.png)
+
+This gives you the advantage that you can also access infomation that
+can be helpful to interpret the plot, e.g.:
+
+``` r
+
+diagnostics$OUTLIERS
+#> OK: No outliers detected.
+#> - Based on the following method and threshold: cook (1).
+#> - For variable: (Whole model)
+```
+
+Please refer to the following documentation for more information on how
+to interpret the diagnostic plots and what you can do if the assumptions
+underlying the regression model are violated: [Checking model
+assumption - linear
+models](https://easystats.github.io/performance/articles/check_model.html#linear-models-are-all-assumptions-for-linear-models-met).
+
+## 3. Scaling KDA for Multiple Groups
+
+You may find yourself in a situation where you want to conduct the same
+KDA for multiple groups in your data, e.g. for different demographic
+subgroups or segments. In this case, you can use the
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function in combination the looping functions from the `purrr` package,
+most notably with
+[`purrr::map()`](https://purrr.tidyverse.org/reference/map.html). Let’s
+walk through an example of how to do this.
+
+Let’s suppose our participants belong to different segments defined
+beforehand, and we want to conduct a KDA for each segment separately. We
+can do this by splitting our data into a list of data frames, where each
+data frame corresponds to a segment, and then applying the
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function to each data frame in the list using
+[`purrr::map()`](https://purrr.tidyverse.org/reference/map.html).
+
+In the `bkw_synthetic` dataset, we have a variable called `cluster`that
+contains the segment membership of each participant:
+
+``` r
+
+# Inspect the value labels of the variable "cluster"
+sjlabelled::get_labels(bkw_synthetic$cluster) |>
+  tibble::enframe(name = "value", value = "label")
+#> # A tibble: 6 × 2
+#>   value label                                                                   
+#>   <int> <chr>                                                                   
+#> 1     1 Cluster 1: Betrieb, Installation & Instandhaltung von Anlagen und Netzen
+#> 2     2 Cluster 2: Planung, Projektierung, Engineering, Architektur & Bauplanung
+#> 3     3 Cluster 3: Energie-, Finanz- & Commodity-Handel / Trading & Marktsteuer…
+#> 4     4 Cluster 4: IT, Software, Daten & digitale Lösungen                      
+#> 5     5 Cluster 5: Support- & Querschnittsfunktionen                            
+#> 6     6 Cluster 6: Early Careers
+
+# Inspect the distribution of participants across segments:
+datawizard::data_tabulate(bkw_synthetic$cluster, remove_na = TRUE)
+#> Cluster (bkw_synthetic$cluster) <numeric>
+#> # total N=1216 valid N=1216
+#> 
+#> Value |   N | Raw % | Valid % | Cumulative %
+#> ------+-----+-------+---------+-------------
+#> 1     | 146 | 12.01 |   12.01 |        12.01
+#> 2     | 202 | 16.61 |   16.61 |        28.62
+#> 3     |  98 |  8.06 |    8.06 |        36.68
+#> 4     | 270 | 22.20 |   22.20 |        58.88
+#> 5     | 229 | 18.83 |   18.83 |        77.71
+#> 6     | 271 | 22.29 |   22.29 |       100.00
+
+# Note: there is also a variable "country". We can use datawizard::data_tabulate()
+# to quickly inspect cross-tabulations:
+datawizard::data_tabulate(
+  bkw_synthetic$cluster,
+  by = bkw_synthetic$country,
+  remove_na = TRUE
+)
+#> bkw_synthetic$cluster |  CH |  DE | Total
+#> ----------------------+-----+-----+------
+#> 1                     | 117 |  29 |   146
+#> 2                     | 141 |  61 |   202
+#> 3                     |  74 |  24 |    98
+#> 4                     | 177 |  93 |   270
+#> 5                     | 195 |  34 |   229
+#> 6                     | 151 | 120 |   271
+#> ----------------------+-----+-----+------
+#> Total                 | 855 | 361 |  1216
+```
+
+The trick is now to devide the data into smaller subsets for each
+segment using
+[`tidyr::nest()`](https://tidyr.tidyverse.org/reference/nest.html),
+which creates a list-column containing the data frames for each segment.
+We can then apply the
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function to each data frame in the list using `tidyr::map()`. Here’s how
+to do this:
+
+``` r
+
+# Split the data into a list of data frames, one for each segment.
+bkw_by_segment <- bkw_synthetic |>
+  tidyr::nest(.by = cluster) |>
+  dplyr::arrange(cluster) # Arrange by cluster for cosmetic reasons.
+
+#  Note how "data" now in each row contains an entire data frame for the
+# respective segment:
+print(bkw_by_segment)
+#> # A tibble: 6 × 2
+#>   cluster                                                               data    
+#>   <dbl+lbl>                                                             <list>  
+#> 1 1 [Cluster 1: Betrieb, Installation & Instandhaltung von Anlagen und… <tibble>
+#> 2 2 [Cluster 2: Planung, Projektierung, Engineering, Architektur & Bau… <tibble>
+#> 3 3 [Cluster 3: Energie-, Finanz- & Commodity-Handel / Trading & Markt… <tibble>
+#> 4 4 [Cluster 4: IT, Software, Daten & digitale Lösungen]                <tibble>
+#> 5 5 [Cluster 5: Support- & Querschnittsfunktionen]                      <tibble>
+#> 6 6 [Cluster 6: Early Careers]                                          <tibble>
+
+# purrr::map() applies a function to each element of a list. In this case, we
+# apply the kda_regression() function with a specific set of arguments to each
+# data frame in the "data" column. The only thing that changes across iterations
+# is the data frame that is used as input. To make make the following code easier
+# to read, we define a temporary function called "my_kda_function" that takes a
+# data frame as input and applies the kda_regression() function to it with the
+# specified arguments. We then pass this function to purrr::map() to apply it to
+# each data frame in the "data" column.
+
+# Helper function
+my_kda_function <- function(df) {
+  kda_regression(
+    data = df,
+    outcome = "F600",
+    predictors = paste0("F800_", 1:14),
+    importance_method = "jrw",
+    diagnostics = TRUE
+  )
+}
+
+# Apply helper function to each data frame in the "data" column using purrr::map()
+bkw_kda_by_segment <- bkw_by_segment |>
+  dplyr::mutate(kda_result = purrr::map(data, my_kda_function))
+
+# Note how we added the column "kda_result" which now contains the KDA results
+# for each segment:
+print(bkw_kda_by_segment)
+#> # A tibble: 6 × 3
+#>   cluster                                                  data     kda_result  
+#>   <dbl+lbl>                                                <list>   <list>      
+#> 1 1 [Cluster 1: Betrieb, Installation & Instandhaltung vo… <tibble> <named list>
+#> 2 2 [Cluster 2: Planung, Projektierung, Engineering, Arch… <tibble> <named list>
+#> 3 3 [Cluster 3: Energie-, Finanz- & Commodity-Handel / Tr… <tibble> <named list>
+#> 4 4 [Cluster 4: IT, Software, Daten & digitale Lösungen]   <tibble> <named list>
+#> 5 5 [Cluster 5: Support- & Querschnittsfunktionen]         <tibble> <named list>
+#> 6 6 [Cluster 6: Early Careers]                             <tibble> <named list>
+```
+
+All results for each segment are now stored in the `kda_result` column
+of the `bkw_kda_by_segment` data frame. You can access the results for
+each segment using
+[`dplyr::filter()`](https://dplyr.tidyverse.org/reference/filter.html),
+[`dplyr::select()`](https://dplyr.tidyverse.org/reference/select.html)
+and
+[`purrr::pluck()`](https://purrr.tidyverse.org/reference/pluck.html).
+For example, to access the KDA results for the sixth segment, you can
+do:
+
+``` r
+
+cluster6_ipma_ScatterPlot <- bkw_kda_by_segment |>
+  dplyr::filter(cluster == 6) |>
+  dplyr::select(kda_result) |>
+  purrr::pluck(1, 1, "plots", "ipma_scatterPlot", "p")
+print(cluster6_ipma_ScatterPlot)
+```
+
+![](kda_files/figure-html/extract-kda-results-for-second-segment-1.png)
+
+If you would like to save all IPMA scatter plots for each segment, you
+can do this using
+[`purrr::iwalk()`](https://purrr.tidyverse.org/reference/imap.html),
+which allows you to iterate over the rows of the `bkw_kda_by_segment`
+data frame and save the IPMA scatter plot for each segment using the
+[`ya_save_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_save_plot.md)
+function. Here’s how to do this:
+
+``` r
+
+# Choose the output folder interactively. You can also specify a path directly
+# as a string, e.g. "C:/Users/YourAbbreviation/Downloads/"
+my_output_folder <- tcltk::tk_choose.dir()
+
+# Iterate over the rows of the bkw_kda_by_segment data frame and save the IPMA
+# scatter plot for each segment.
+purrr::walk2(
+  .x = bkw_kda_by_segment$kda_result,
+  .y = bkw_kda_by_segment$cluster,
+  .f = \(kda_result, cluster) {
+    ipma_plot <- kda_result$plots$ipma_scatterPlot$p
+    cluster_id <- as.integer(cluster)
+
+    ya_save_plot(
+      plot = ipma_plot,
+      file_path = paste0(
+        my_output_folder,
+        "/segment_",
+        cluster_id,
+        "_ipma_scatterPlot.jpeg"
+      ),
+      width = 30,
+      height = 20,
+      verbose = FALSE
+    )
+  }
+)
+```
+
+As a final note: Please be aware that results for subgroups should only
+be interpreted if the sample size for the subgroup is sufficiently
+large. If the sample size is too small, the results may be unstable and
+not generalizable to the population of interest. There is no hard rule
+for what constitutes a “sufficiently large” sample size, as it depends
+on various factors such as the number of predictors in the model, the
+expected effect sizes, and the desired level of statistical power.
+However, as a general guideline, it is often recommended to have at
+least 10-15 observations per predictor variable in the model for
+reliable estimation. Therefore, if you have a model with 14 predictors,
+you would ideally want at least 140-210 observations in each subgroup to
+ensure stable and interpretable results.
+
+## 4. Missing Data
+
 ------------------------------------------------------------------------
+
+## Extended Discussion of Importance Methods
 
 ### Dominance Analysis
 

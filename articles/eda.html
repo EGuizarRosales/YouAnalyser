@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Exploratory Data Analysis (EDA) • YouAnalyser</title>
+<title>2. Exploratory Data Analysis (EDA) • YouAnalyser</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -15,7 +15,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Exploratory Data Analysis (EDA)">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="2. Exploratory Data Analysis (EDA)">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">YouAnalyser</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,10 +38,9 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/dp.html">Data Processing</a></li>
-    <li><a class="dropdown-item" href="../articles/eda.html">Exploratory Data Analysis (EDA)</a></li>
-    <li><a class="dropdown-item" href="../articles/kda-article.html">Key Driver Analysis: Article</a></li>
-    <li><a class="dropdown-item" href="../articles/kda.html">Key Driver Analysis</a></li>
+<li><a class="dropdown-item" href="../articles/dp.html">1. Data Processing</a></li>
+    <li><a class="dropdown-item" href="../articles/eda.html">2. Exploratory Data Analysis (EDA)</a></li>
+    <li><a class="dropdown-item" href="../articles/kda.html">3. Key Driver Analysis</a></li>
   </ul>
 </li>
       </ul>
@@ -62,7 +61,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Exploratory Data Analysis (EDA)</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>2. Exploratory Data Analysis (EDA)</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/EGuizarRosales/YouAnalyser/blob/main/vignettes/eda.Rmd" class="external-link"><code>vignettes/eda.Rmd</code></a></small>
@@ -116,43 +115,43 @@ arguments.</p>
 <span><span class="co">#&gt; ── Data Frame Summary</span></span>
 <span><span class="co">#&gt; Data Frame Summary  </span></span>
 <span><span class="co">#&gt; data  </span></span>
-<span><span class="co">#&gt; Dimensions: 1171 x 3  </span></span>
-<span><span class="co">#&gt; Duplicates: 1013  </span></span>
+<span><span class="co">#&gt; Dimensions: 1104 x 3  </span></span>
+<span><span class="co">#&gt; Duplicates: 946  </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; Variable           Label                                     Stats / Values                 Freqs (% of Valid)   Graph       Valid      Missing  </span></span>
-<span><span class="co">#&gt; ------------------ ----------------------------------------- ------------------------------ -------------------- ----------- ---------- ---------</span></span>
-<span><span class="co">#&gt; F600               Wie attraktiv finden Sie die BKW als      1. [1] 1 - Überhaupt nicht a    43 ( 3.7%)                      1171       0        </span></span>
-<span><span class="co">#&gt; [haven_labelled,   Arbeitgeberin?                            2. [2] 2                        50 ( 4.3%)                      (100.0%)   (0.0%)   </span></span>
-<span><span class="co">#&gt; vctrs_vctr,                                                  3. [3] 3                       130 (11.1%)          II                              </span></span>
-<span><span class="co">#&gt; double]                                                      4. [4] 4                       461 (39.4%)          IIIIIII                         </span></span>
-<span><span class="co">#&gt;                                                              5. [5] 5                       303 (25.9%)          IIIII                           </span></span>
-<span><span class="co">#&gt;                                                              6. [6] 6                       109 ( 9.3%)          I                               </span></span>
-<span><span class="co">#&gt;                                                              7. [7] 7 - Sehr attraktiv       75 ( 6.4%)          I                               </span></span>
+<span><span class="co">#&gt; --------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Variable           Label                                     Stats / Values                 Freqs (% of Valid)   Graph        Valid      Missing  </span></span>
+<span><span class="co">#&gt; ------------------ ----------------------------------------- ------------------------------ -------------------- ------------ ---------- ---------</span></span>
+<span><span class="co">#&gt; F600               Wie attraktiv finden Sie die BKW als      1. [1] 1 - Überhaupt nicht a    42 ( 3.8%)                       1104       0        </span></span>
+<span><span class="co">#&gt; [haven_labelled,   Arbeitgeberin?                            2. [2] 2                        49 ( 4.4%)                       (100.0%)   (0.0%)   </span></span>
+<span><span class="co">#&gt; vctrs_vctr,                                                  3. [3] 3                       127 (11.5%)          II                               </span></span>
+<span><span class="co">#&gt; double]                                                      4. [4] 4                       443 (40.1%)          IIIIIIII                         </span></span>
+<span><span class="co">#&gt;                                                              5. [5] 5                       282 (25.5%)          IIIII                            </span></span>
+<span><span class="co">#&gt;                                                              6. [6] 6                       100 ( 9.1%)          I                                </span></span>
+<span><span class="co">#&gt;                                                              7. [7] 7 - Sehr attraktiv       61 ( 5.5%)          I                                </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      11 ( 0.9%)                      1171       0        </span></span>
-<span><span class="co">#&gt; [haven_labelled,   des Arbeitgebers                          2. [2] 2                        19 ( 1.6%)                      (100.0%)   (0.0%)   </span></span>
-<span><span class="co">#&gt; vctrs_vctr,                                                  3. [3] 3                        66 ( 5.6%)          I                               </span></span>
-<span><span class="co">#&gt; double]                                                      4. [4] 4                       301 (25.7%)          IIIII                           </span></span>
-<span><span class="co">#&gt;                                                              5. [5] 5                       270 (23.1%)          IIII                            </span></span>
-<span><span class="co">#&gt;                                                              6. [6] 6                       322 (27.5%)          IIIII                           </span></span>
-<span><span class="co">#&gt;                                                              7. [7] Sehr gut  7             182 (15.5%)          III                             </span></span>
+<span><span class="co">#&gt; F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      11 ( 1.0%)                       1104       0        </span></span>
+<span><span class="co">#&gt; [haven_labelled,   des Arbeitgebers                          2. [2] 2                        21 ( 1.9%)                       (100.0%)   (0.0%)   </span></span>
+<span><span class="co">#&gt; vctrs_vctr,                                                  3. [3] 3                        65 ( 5.9%)          I                                </span></span>
+<span><span class="co">#&gt; double]                                                      4. [4] 4                       295 (26.7%)          IIIII                            </span></span>
+<span><span class="co">#&gt;                                                              5. [5] 5                       256 (23.2%)          IIII                             </span></span>
+<span><span class="co">#&gt;                                                              6. [6] 6                       300 (27.2%)          IIIII                            </span></span>
+<span><span class="co">#&gt;                                                              7. [7] Sehr gut  7             156 (14.1%)          II                               </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      11 ( 0.9%)                      1171       0        </span></span>
-<span><span class="co">#&gt; [haven_labelled,                                             2. [2] 2                        34 ( 2.9%)                      (100.0%)   (0.0%)   </span></span>
-<span><span class="co">#&gt; vctrs_vctr,                                                  3. [3] 3                        70 ( 6.0%)          I                               </span></span>
-<span><span class="co">#&gt; double]                                                      4. [4] 4                       417 (35.6%)          IIIIIII                         </span></span>
-<span><span class="co">#&gt;                                                              5. [5] 5                       316 (27.0%)          IIIII                           </span></span>
-<span><span class="co">#&gt;                                                              6. [6] 6                       234 (20.0%)          III                             </span></span>
-<span><span class="co">#&gt;                                                              7. [7] Sehr gut  7              89 ( 7.6%)          I                               </span></span>
-<span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      11 ( 1.0%)                       1104       0        </span></span>
+<span><span class="co">#&gt; [haven_labelled,                                             2. [2] 2                        33 ( 3.0%)                       (100.0%)   (0.0%)   </span></span>
+<span><span class="co">#&gt; vctrs_vctr,                                                  3. [3] 3                        69 ( 6.2%)          I                                </span></span>
+<span><span class="co">#&gt; double]                                                      4. [4] 4                       405 (36.7%)          IIIIIII                          </span></span>
+<span><span class="co">#&gt;                                                              5. [5] 5                       300 (27.2%)          IIIII                            </span></span>
+<span><span class="co">#&gt;                                                              6. [6] 6                       209 (18.9%)          III                              </span></span>
+<span><span class="co">#&gt;                                                              7. [7] Sehr gut  7              77 ( 7.0%)          I                                </span></span>
+<span><span class="co">#&gt; --------------------------------------------------------------------------------------------------------------------------------------------------</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── Descriptive Statistics</span></span>
 <span><span class="co">#&gt; Variable | Mean |   SD |        Range |  Quartiles | Skewness | Kurtosis |    n | n_Missing</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; F600     | 4.33 | 1.31 | [1.00, 7.00] | 4.00, 5.00 |    -0.20 |     0.48 | 1171 |         0</span></span>
-<span><span class="co">#&gt; F800_1   | 5.13 | 1.29 | [1.00, 7.00] | 4.00, 6.00 |    -0.41 |    -0.11 | 1171 |         0</span></span>
-<span><span class="co">#&gt; F800_2   | 4.75 | 1.20 | [1.00, 7.00] | 4.00, 6.00 |    -0.18 |     0.16 | 1171 |         0</span></span></code></pre></div>
+<span><span class="co">#&gt; F600     | 4.28 | 1.29 | [1.00, 7.00] | 4.00, 5.00 |    -0.22 |     0.53 | 1104 |         0</span></span>
+<span><span class="co">#&gt; F800_1   | 5.07 | 1.29 | [1.00, 7.00] | 4.00, 6.00 |    -0.40 |    -0.10 | 1104 |         0</span></span>
+<span><span class="co">#&gt; F800_2   | 4.71 | 1.20 | [1.00, 7.00] | 4.00, 6.00 |    -0.17 |     0.23 | 1104 |         0</span></span></code></pre></div>
 <p>If <code>browser_output</code> is set to <code>TRUE</code>, the
 summary table looks like this:</p>
 <div class="float">
@@ -177,47 +176,47 @@ visualization of the correlations.</p>
 <span><span class="va">out</span><span class="op">$</span><span class="va">d</span></span>
 <span><span class="co">#&gt; # Correlation Matrix (pearson-method)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Parameter1 | Parameter2 |    r |       95% CI | t(1169) |         p</span></span>
+<span><span class="co">#&gt; Parameter1 | Parameter2 |    r |       95% CI | t(1102) |         p</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; F600       |     F800_1 | 0.34 | [0.29, 0.39] |   12.43 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F600       |     F800_2 | 0.44 | [0.39, 0.48] |   16.68 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F600       |     F800_3 | 0.41 | [0.37, 0.46] |   15.58 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F600       |     F800_4 | 0.47 | [0.42, 0.51] |   18.21 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F600       |     F800_5 | 0.43 | [0.38, 0.48] |   16.36 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F600       |     F800_6 | 0.37 | [0.32, 0.42] |   13.58 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F600       |     F800_7 | 0.42 | [0.37, 0.46] |   15.66 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F600       |     F800_8 | 0.45 | [0.40, 0.49] |   17.12 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_1     |     F800_2 | 0.56 | [0.52, 0.60] |   23.25 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_1     |     F800_3 | 0.61 | [0.57, 0.64] |   26.16 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_1     |     F800_4 | 0.54 | [0.50, 0.58] |   21.99 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_1     |     F800_5 | 0.51 | [0.46, 0.55] |   20.13 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_1     |     F800_6 | 0.55 | [0.51, 0.59] |   22.57 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_1     |     F800_7 | 0.50 | [0.45, 0.54] |   19.69 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_1     |     F800_8 | 0.52 | [0.48, 0.56] |   20.91 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_2     |     F800_3 | 0.54 | [0.50, 0.58] |   21.98 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_2     |     F800_4 | 0.60 | [0.56, 0.63] |   25.57 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_2     |     F800_5 | 0.54 | [0.50, 0.58] |   22.11 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_2     |     F800_6 | 0.66 | [0.62, 0.69] |   29.66 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_2     |     F800_7 | 0.65 | [0.62, 0.68] |   29.49 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_2     |     F800_8 | 0.56 | [0.52, 0.60] |   23.31 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_3     |     F800_4 | 0.59 | [0.56, 0.63] |   25.26 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_3     |     F800_5 | 0.51 | [0.47, 0.55] |   20.33 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_3     |     F800_6 | 0.53 | [0.49, 0.57] |   21.62 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_3     |     F800_7 | 0.49 | [0.44, 0.53] |   19.04 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_3     |     F800_8 | 0.54 | [0.49, 0.57] |   21.67 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_4     |     F800_5 | 0.58 | [0.54, 0.62] |   24.52 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_4     |     F800_6 | 0.58 | [0.55, 0.62] |   24.65 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_4     |     F800_7 | 0.60 | [0.56, 0.63] |   25.44 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_4     |     F800_8 | 0.70 | [0.67, 0.73] |   33.43 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_5     |     F800_6 | 0.53 | [0.49, 0.57] |   21.29 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_5     |     F800_7 | 0.60 | [0.56, 0.63] |   25.50 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_5     |     F800_8 | 0.62 | [0.59, 0.66] |   27.27 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_6     |     F800_7 | 0.59 | [0.55, 0.63] |   24.93 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_6     |     F800_8 | 0.57 | [0.53, 0.61] |   23.75 | &lt; .001***</span></span>
-<span><span class="co">#&gt; F800_7     |     F800_8 | 0.60 | [0.56, 0.63] |   25.48 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F600       |     F800_1 | 0.33 | [0.27, 0.38] |   11.45 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F600       |     F800_2 | 0.43 | [0.38, 0.48] |   15.78 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F600       |     F800_3 | 0.40 | [0.35, 0.45] |   14.52 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F600       |     F800_4 | 0.46 | [0.41, 0.50] |   17.13 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F600       |     F800_5 | 0.42 | [0.37, 0.47] |   15.56 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F600       |     F800_6 | 0.36 | [0.31, 0.41] |   13.00 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F600       |     F800_7 | 0.41 | [0.36, 0.46] |   15.05 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F600       |     F800_8 | 0.44 | [0.39, 0.49] |   16.29 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_1     |     F800_2 | 0.56 | [0.51, 0.59] |   22.17 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_1     |     F800_3 | 0.60 | [0.56, 0.64] |   25.09 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_1     |     F800_4 | 0.53 | [0.49, 0.57] |   20.80 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_1     |     F800_5 | 0.51 | [0.47, 0.55] |   19.76 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_1     |     F800_6 | 0.54 | [0.50, 0.58] |   21.41 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_1     |     F800_7 | 0.48 | [0.44, 0.53] |   18.40 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_1     |     F800_8 | 0.52 | [0.47, 0.56] |   19.96 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_2     |     F800_3 | 0.54 | [0.49, 0.58] |   21.18 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_2     |     F800_4 | 0.60 | [0.56, 0.64] |   24.98 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_2     |     F800_5 | 0.54 | [0.50, 0.58] |   21.27 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_2     |     F800_6 | 0.65 | [0.61, 0.68] |   28.26 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_2     |     F800_7 | 0.65 | [0.61, 0.68] |   28.42 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_2     |     F800_8 | 0.56 | [0.52, 0.60] |   22.35 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_3     |     F800_4 | 0.59 | [0.55, 0.62] |   24.03 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_3     |     F800_5 | 0.50 | [0.45, 0.54] |   19.07 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_3     |     F800_6 | 0.53 | [0.49, 0.58] |   21.00 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_3     |     F800_7 | 0.48 | [0.44, 0.53] |   18.33 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_3     |     F800_8 | 0.53 | [0.49, 0.57] |   20.72 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_4     |     F800_5 | 0.57 | [0.53, 0.61] |   23.30 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_4     |     F800_6 | 0.59 | [0.55, 0.62] |   23.97 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_4     |     F800_7 | 0.58 | [0.54, 0.62] |   23.77 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_4     |     F800_8 | 0.70 | [0.67, 0.73] |   32.47 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_5     |     F800_6 | 0.53 | [0.48, 0.57] |   20.58 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_5     |     F800_7 | 0.60 | [0.56, 0.64] |   24.91 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_5     |     F800_8 | 0.62 | [0.58, 0.65] |   25.92 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_6     |     F800_7 | 0.57 | [0.53, 0.61] |   23.33 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_6     |     F800_8 | 0.57 | [0.53, 0.61] |   23.32 | &lt; .001***</span></span>
+<span><span class="co">#&gt; F800_7     |     F800_8 | 0.60 | [0.56, 0.63] |   24.65 | &lt; .001***</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; p-value adjustment method: Holm (1979)</span></span>
-<span><span class="co">#&gt; Observations: 1171</span></span>
+<span><span class="co">#&gt; Observations: 1104</span></span>
 <span></span>
 <span><span class="co"># Display correlation heatmap</span></span>
 <span><span class="va">out</span><span class="op">$</span><span class="va">p</span></span></code></pre></div>

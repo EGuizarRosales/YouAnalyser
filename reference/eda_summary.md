@@ -66,40 +66,40 @@ eda_summary(data = bkw_missings, variables = c("F600", "F800_1", "F800_2"), cons
 #> Data Frame Summary  
 #> data  
 #> Dimensions: 1216 x 3  
-#> Duplicates: 1049  
+#> Duplicates: 1038  
 #> 
 #> ------------------------------------------------------------------------------------------------------------------------------------------------
 #> Variable           Label                                     Stats / Values                 Freqs (% of Valid)   Graph       Valid     Missing  
 #> ------------------ ----------------------------------------- ------------------------------ -------------------- ----------- --------- ---------
-#> F600               Wie attraktiv finden Sie die BKW als      1. [1] 1 - Überhaupt nicht a    44 ( 3.6%)                      1214      2        
-#> [haven_labelled,   Arbeitgeberin?                            2. [2] 2                        50 ( 4.1%)                      (99.8%)   (0.2%)   
+#> F600               Wie attraktiv finden Sie die BKW als      1. [1] 1 - Überhaupt nicht a    44 ( 3.6%)                      1211      5        
+#> [haven_labelled,   Arbeitgeberin?                            2. [2] 2                        50 ( 4.1%)                      (99.6%)   (0.4%)   
 #> vctrs_vctr,                                                  3. [3] 3                       132 (10.9%)          II                             
-#> double]                                                      4. [4] 4                       474 (39.0%)          IIIIIII                        
-#>                                                              5. [5] 5                       313 (25.8%)          IIIII                          
-#>                                                              6. [6] 6                       117 ( 9.6%)          I                              
+#> double]                                                      4. [4] 4                       472 (39.0%)          IIIIIII                        
+#>                                                              5. [5] 5                       312 (25.8%)          IIIII                          
+#>                                                              6. [6] 6                       117 ( 9.7%)          I                              
 #>                                                              7. [7] 7 - Sehr attraktiv       84 ( 6.9%)          I                              
 #> 
-#> F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      11 ( 0.9%)                      1215      1        
-#> [haven_labelled,   des Arbeitgebers                          2. [2] 2                        21 ( 1.7%)                      (99.9%)   (0.1%)   
+#> F800_1             Sicherheit und langfristige Stabilität    1. [1] Überhaupt nicht gut      11 ( 0.9%)                      1210      6        
+#> [haven_labelled,   des Arbeitgebers                          2. [2] 2                        21 ( 1.7%)                      (99.5%)   (0.5%)   
 #> vctrs_vctr,                                                  3. [3] 3                        67 ( 5.5%)          I                              
-#> double]                                                      4. [4] 4                       304 (25.0%)          IIIII                          
-#>                                                              5. [5] 5                       277 (22.8%)          IIII                           
-#>                                                              6. [6] 6                       340 (28.0%)          IIIII                          
-#>                                                              7. [7] Sehr gut  7             195 (16.0%)          III                            
+#> double]                                                      4. [4] 4                       303 (25.0%)          IIIII                          
+#>                                                              5. [5] 5                       276 (22.8%)          IIII                           
+#>                                                              6. [6] 6                       338 (27.9%)          IIIII                          
+#>                                                              7. [7] Sehr gut  7             194 (16.0%)          III                            
 #> 
-#> F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      11 ( 0.9%)                      1211      5        
-#> [haven_labelled,                                             2. [2] 2                        34 ( 2.8%)                      (99.6%)   (0.4%)   
+#> F800_2             Karriere- und Entwicklungsmöglichkeiten   1. [1] Überhaupt nicht gut      11 ( 0.9%)                      1204      12       
+#> [haven_labelled,                                             2. [2] 2                        34 ( 2.8%)                      (99.0%)   (1.0%)   
 #> vctrs_vctr,                                                  3. [3] 3                        70 ( 5.8%)          I                              
-#> double]                                                      4. [4] 4                       420 (34.7%)          IIIIII                         
-#>                                                              5. [5] 5                       331 (27.3%)          IIIII                          
-#>                                                              6. [6] 6                       247 (20.4%)          IIII                           
-#>                                                              7. [7] Sehr gut  7              98 ( 8.1%)          I                              
+#> double]                                                      4. [4] 4                       418 (34.7%)          IIIIII                         
+#>                                                              5. [5] 5                       330 (27.4%)          IIIII                          
+#>                                                              6. [6] 6                       244 (20.3%)          IIII                           
+#>                                                              7. [7] Sehr gut  7              97 ( 8.1%)          I                              
 #> ------------------------------------------------------------------------------------------------------------------------------------------------
 #> 
 #> ── Descriptive Statistics 
 #> Variable | Mean |   SD |        Range |  Quartiles | Skewness | Kurtosis |    n | n_Missing
 #> -------------------------------------------------------------------------------------------
-#> F600     | 4.36 | 1.32 | [1.00, 7.00] | 4.00, 5.00 |    -0.19 |     0.44 | 1214 |         2
-#> F800_1   | 5.15 | 1.29 | [1.00, 7.00] | 4.00, 6.00 |    -0.44 |    -0.11 | 1215 |         1
-#> F800_2   | 4.78 | 1.21 | [1.00, 7.00] | 4.00, 6.00 |    -0.19 |     0.15 | 1211 |         5
+#> F600     | 4.36 | 1.32 | [1.00, 7.00] | 4.00, 5.00 |    -0.19 |     0.44 | 1211 |         5
+#> F800_1   | 5.15 | 1.29 | [1.00, 7.00] | 4.00, 6.00 |    -0.44 |    -0.11 | 1210 |         6
+#> F800_2   | 4.78 | 1.21 | [1.00, 7.00] | 4.00, 6.00 |    -0.19 |     0.15 | 1204 |        12
 ```
