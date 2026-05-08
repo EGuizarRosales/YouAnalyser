@@ -32,6 +32,7 @@ reference:
       Example datasets included in the YouAnalyser package.
   - contents:
       - starts_with("bkw_")
+      - starts_with("deka_")
   - title: Other Functions
     desc: >
       Other functions or data that do not fit into the above categories.

@@ -10,6 +10,7 @@ dp_inspect_codebook <- function(data, ...) {
     data,
     variable_label_width = 15,
     value_label_width = 15,
+    max_values = 30,
     ...
   )
 }
@@ -221,46 +222,86 @@ dp_label_automatically <- function(data, theoretical_min_max_values = NULL) {
   data
 }
 
-#' Zap missing values and their labels
+#' Recode user-defined missing values to NA
 #'
 #' @param data A haven::labelled data frame.
-#' @param missing_labels A character vector of missing value labels. If NULL (default), the function will attempt to automatically detect suspicious values that may indicate missings (e.g., -99, 9999) if they are `<= 0` or `>= 99`.
+#' @param missing_values A numeric vector of values to be treated as missing. If NULL (default), the function will attempt to automatically detect suspicious values that may indicate missings (e.g., -99, 9999) if they are `<= 0` or `>= 99`.
 #'
-#' @returns A haven::labelled data frame with missing values and their labels removed.
+#' @returns A haven::labelled data frame with user-defined missing values recoded to NA.
 #'
 #' @export
-dp_zap_missings <- function(data, missing_labels = NULL) {
-  if (is.null(missing_labels)) {
-    example_var <- kda_data[[length(kda_data) - 1]]
-    vals <- sjlabelled::get_values(example_var)
+dp_recode_missing <- function(data, missing_values = NULL) {
+  if (is.null(missing_values)) {
+    suspicious_tbl <- purrr::imap_dfr(data, \(x, nm) {
+      vals <- sjlabelled::get_values(x)
+      vals <- unique(vals[!is.na(vals)])
 
-    suspicious_values_idx <- vals >= 99 | vals <= 0
-    suspicious_values <- vals[suspicious_values_idx]
+      vals_num <- suppressWarnings(as.numeric(vals))
+      suspicious_idx <- !is.na(vals_num) & (vals_num >= 99 | vals_num <= 0)
 
-    suspicious_val_labels <- example_var |>
-      sjlabelled::get_labels(values = "p") |>
-      (\(labels) labels[suspicious_values_idx])()
+      if (!any(suspicious_idx)) {
+        return(tibble::tibble())
+      }
 
-    suspicious_labels <- example_var |>
-      sjlabelled::get_labels() |>
-      (\(labels) labels[suspicious_values_idx])()
+      tibble::tibble(
+        variable = nm,
+        suspicious_value = vals_num[suspicious_idx]
+      )
+    })
 
-    missing_labels_code <- paste0('"', suspicious_labels, '"', collapse = ", ")
+    if (nrow(suspicious_tbl) == 0) {
+      cli::cli_abort(c(
+        "x" = "Missing values not provided.",
+        "i" = "No suspicious values were detected across variables using the rule {.code <= 0 | >= 99}."
+      ))
+    }
+
+    suspicious_lines <- suspicious_tbl |>
+      dplyr::summarise(
+        values = paste(sort(unique(suspicious_value)), collapse = ", "),
+        .by = variable
+      ) |>
+      dplyr::mutate(
+        line = paste0("{.var ", variable, "}: {.val ", values, "}")
+      ) |>
+      dplyr::pull(line)
+
+    missing_values_code <- suspicious_tbl |>
+      dplyr::pull(suspicious_value) |>
+      unique() |>
+      sort() |>
+      paste(collapse = ", ")
 
     cli::cli_abort(c(
-      "x" = "Missing labels not provided.",
-      "i" = "The following value{?s} seem suspicious: {suspicious_val_labels}",
-      "i" = "Consider setting {.arg missing_labels}: {.code missing_labels = c({missing_labels_code})}"
+      "x" = "Missing values not provided.",
+      "i" = "Suspicious values were detected in the following variables:",
+      stats::setNames(suspicious_lines, rep("i", length(suspicious_lines))),
+      "i" = "Consider setting {.arg missing_values}: {.code missing_values = c({missing_values_code})}"
     ))
   } else {
-    data |>
-      haven::zap_missing() |>
-      tidyr::drop_na() |>
+    out <- data |>
       dplyr::mutate(
         dplyr::across(
-          where(sjlabelled::is_labelled),
-          \(x) sjlabelled::remove_labels(x, labels = missing_labels)
+          dplyr::everything(),
+          \(x) {
+            # recode user-defined missing values to NA
+            x[x %in% missing_values] <- NA
+
+            # drop value labels for those missing values (if present)
+            lbl <- attr(x, "labels", exact = TRUE)
+            if (!is.null(lbl)) {
+              attr(x, "labels") <- lbl[!unname(lbl) %in% missing_values]
+            }
+
+            x
+          }
         )
       )
+    cli::cli_bullets(c(
+      "v" = "User-defined missing values recoded to NA for values: {.val {missing_values}}.",
+      "i" = "You might want to inspect the codebook again to check that the user-defined missing values have been recoded and their labels removed: {.code dp_inspect_codebook({substitute(data)})}",
+      "i" = "You might want to remove missing values: {.code tidyr::drop_na({substitute(data)})}"
+    ))
+    return(out)
   }
 }

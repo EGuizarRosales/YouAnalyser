@@ -80,7 +80,35 @@ dp_inspect_codebook(myData[, 1:2])
 
 ### Important Note on Missing Values
 
-If you need to remove some missing values from your data, make sure to use the `dp_zap_missings()` function, which not only removes the missing values but also removes the corresponding value labels. This is important because if you simply remove the missing values without removing the value labels, this will lead to errors further down the analysis pipeline.
+In many cases, survey data contains user-defined missing values, which are specific values that represent missing data (e.g. "99" for "Don't know"). These user-defined missing values can cause problems in your analysis if they are not properly handled, as they may be treated as valid responses rather than missing data. Therefore, it is important to recode these user-defined missing values to `NA` in R, which is the standard way to represent missing data in R. You can do this using the `dp_recode_missing()` function, which allows you to specify the user-defined missing values for each variable and recodes them to `NA`.
+
+```{r recode-missing, error = TRUE}
+# Inspect the labels used in the data to identify user-defined missing values
+dp_inspect_codebook(deka_sample)
+
+# Note the 977 and 777 values representing "keine Angabe" (no answer)
+
+# Call `dp_recode_missing()` without the `missing_values` argument to get a
+# warning about the user-defined missing values in the data and how to recode them.
+dp_recode_missing(deka_sample)
+
+# Call `dp_recode_missing()` with the `missing_values` argument to recode the
+# user-defined missing values to NA.
+deka_sample_recoded <- dp_recode_missing(
+  data = deka_sample,
+  missing_values = c(777, 977)
+)
+
+# Check the results as suggested:
+dp_inspect_codebook(deka_sample_recoded)
+
+# Note that the user-defined missing values (777 and 977) have been recoded to
+# NA (see column "Missings") and their labels have been removed.
+
+# If you would like to remove the missing values from your data, follow the
+# suggestion in the message and use `tidyr::drop_na()`:
+deka_sample_clean <- tidyr::drop_na(deka_sample_recoded)
+```
 
 ## Convert Unlabelled to Labelled Data
 
