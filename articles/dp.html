@@ -203,12 +203,254 @@ value labels in a tidy format:</p>
 <div class="section level3">
 <h3 id="important-note-on-missing-values">Important Note on Missing Values<a class="anchor" aria-label="anchor" href="#important-note-on-missing-values"></a>
 </h3>
-<p>If you need to remove some missing values from your data, make sure
-to use the <code><a href="../reference/dp_zap_missings.html">dp_zap_missings()</a></code> function, which not only
-removes the missing values but also removes the corresponding value
-labels. This is important because if you simply remove the missing
-values without removing the value labels, this will lead to errors
-further down the analysis pipeline.</p>
+<p>In many cases, survey data contains user-defined missing values,
+which are specific values that represent missing data (e.g. “99” for
+“Don’t know”). These user-defined missing values can cause problems in
+your analysis if they are not properly handled, as they may be treated
+as valid responses rather than missing data. Therefore, it is important
+to recode these user-defined missing values to <code>NA</code> in R,
+which is the standard way to represent missing data in R. You can do
+this using the <code><a href="../reference/dp_recode_missing.html">dp_recode_missing()</a></code> function, which allows
+you to specify the user-defined missing values for each variable and
+recodes them to <code>NA</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Inspect the labels used in the data to identify user-defined missing values</span></span>
+<span><span class="fu"><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook</a></span><span class="op">(</span><span class="va">deka_sample</span><span class="op">)</span></span>
+<span><span class="co">#&gt; data (1000 rows and 3 variables, 3 shown)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ID | Name | Label                      | Type    | Missings | Values</span></span>
+<span><span class="co">#&gt; ---+------+----------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 1  | q120 | Und wie hoch               | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |      | ist in etwa                |         |          |      2</span></span>
+<span><span class="co">#&gt;    |      | das Geld- und              |         |          |      3</span></span>
+<span><span class="co">#&gt;    |      | Wertpapiervermögen         |         |          |      4</span></span>
+<span><span class="co">#&gt;    |      | in Ihrem                   |         |          |      5</span></span>
+<span><span class="co">#&gt;    |      | Haushalt, also             |         |          |      6</span></span>
+<span><span class="co">#&gt;    |      | die Summe                  |         |          |      7</span></span>
+<span><span class="co">#&gt;    |      | aller                      |         |          |      8</span></span>
+<span><span class="co">#&gt;    |      | Geldanlagen                |         |          |      9</span></span>
+<span><span class="co">#&gt;    |      | wie z.B.                   |         |          |     10</span></span>
+<span><span class="co">#&gt;    |      | Sparanlagen,               |         |          |     11</span></span>
+<span><span class="co">#&gt;    |      | Aktien,                    |         |          |     12</span></span>
+<span><span class="co">#&gt;    |      | Investmentfonds,           |         |          |     13</span></span>
+<span><span class="co">#&gt;    |      | Festgeld,                  |         |          |     14</span></span>
+<span><span class="co">#&gt;    |      | Tagesgeld,                 |         |          |     15</span></span>
+<span><span class="co">#&gt;    |      | Girokonto                  |         |          |    977</span></span>
+<span><span class="co">#&gt; ---+------+----------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 2  | q117 | Wie hoch ist               | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |      | das                        |         |          |      2</span></span>
+<span><span class="co">#&gt;    |      | Nettoeinkommen             |         |          |      3</span></span>
+<span><span class="co">#&gt;    |      | Ihres gesamten             |         |          |      4</span></span>
+<span><span class="co">#&gt;    |      | Haushaltes pro             |         |          |      5</span></span>
+<span><span class="co">#&gt;    |      | Monat?                     |         |          |      6</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |      7</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |      8</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |      9</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |     10</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |     11</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |     12</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |     13</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |    777</span></span>
+<span><span class="co">#&gt; ---+------+----------------------------+---------+----------+-------</span></span>
+<span><span class="co">#&gt; 3  | q118 | Wie hoch ist               | numeric | 0 (0.0%) |      1</span></span>
+<span><span class="co">#&gt;    |      | Ihr                        |         |          |      2</span></span>
+<span><span class="co">#&gt;    |      | persönliches               |         |          |      3</span></span>
+<span><span class="co">#&gt;    |      | Nettoeinkommen             |         |          |      4</span></span>
+<span><span class="co">#&gt;    |      | pro Monat?                 |         |          |      5</span></span>
+<span><span class="co">#&gt;    |      | Hiermit ist                |         |          |      6</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |      7</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |      8</span></span>
+<span><span class="co">#&gt;    |      | Einkommen nach             |         |          |      9</span></span>
+<span><span class="co">#&gt;    |      | Abzug von                  |         |          |     10</span></span>
+<span><span class="co">#&gt;    |      | Steuern und                |         |          |     11</span></span>
+<span><span class="co">#&gt;    |      | Sozialversicherungsabgaben |         |          |     12</span></span>
+<span><span class="co">#&gt;    |      | gemeint.                   |         |          |     13</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |     14</span></span>
+<span><span class="co">#&gt;    |      |                            |         |          |    777</span></span>
+<span><span class="co">#&gt; --------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ID | Value Labels       |           N</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 1  | ich habe kein...   | 231 (23.1%)</span></span>
+<span><span class="co">#&gt;    | unter 2.500...     |  78 ( 7.8%)</span></span>
+<span><span class="co">#&gt;    | 2.500 bis unter... |  65 ( 6.5%)</span></span>
+<span><span class="co">#&gt;    | 5.000 bis unter... |  62 ( 6.2%)</span></span>
+<span><span class="co">#&gt;    | 10.000 bis...      |  51 ( 5.1%)</span></span>
+<span><span class="co">#&gt;    | 20.000 bis...      |  58 ( 5.8%)</span></span>
+<span><span class="co">#&gt;    | 30.000 bis...      |  55 ( 5.5%)</span></span>
+<span><span class="co">#&gt;    | 50.000 bis...      |  29 ( 2.9%)</span></span>
+<span><span class="co">#&gt;    | 70.000 bis...      |  44 ( 4.4%)</span></span>
+<span><span class="co">#&gt;    | 100.000 bis...     |  41 ( 4.1%)</span></span>
+<span><span class="co">#&gt;    | 150.000 bis...     |  21 ( 2.1%)</span></span>
+<span><span class="co">#&gt;    | 200.000 bis...     |   7 ( 0.7%)</span></span>
+<span><span class="co">#&gt;    | 250.000 bis...     |  24 ( 2.4%)</span></span>
+<span><span class="co">#&gt;    | 500.000 bis...     |  12 ( 1.2%)</span></span>
+<span><span class="co">#&gt;    | 1 Mio. Euro und... |  12 ( 1.2%)</span></span>
+<span><span class="co">#&gt;    | keine Angabe       | 210 (21.0%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 2  | unter EUR 500      |  14 ( 1.4%)</span></span>
+<span><span class="co">#&gt;    | EUR 500 bis...     |  45 ( 4.5%)</span></span>
+<span><span class="co">#&gt;    | EUR 1.000 bis...   |  64 ( 6.4%)</span></span>
+<span><span class="co">#&gt;    | EUR 1.500 bis...   |  88 ( 8.8%)</span></span>
+<span><span class="co">#&gt;    | EUR 2.000 bis...   |  87 ( 8.7%)</span></span>
+<span><span class="co">#&gt;    | EUR 2.500 bis...   |  82 ( 8.2%)</span></span>
+<span><span class="co">#&gt;    | EUR 3.000 bis...   |  89 ( 8.9%)</span></span>
+<span><span class="co">#&gt;    | EUR 3.500 bis...   |  90 ( 9.0%)</span></span>
+<span><span class="co">#&gt;    | EUR 4.000 bis...   |  81 ( 8.1%)</span></span>
+<span><span class="co">#&gt;    | EUR 4.500 bis...   |  62 ( 6.2%)</span></span>
+<span><span class="co">#&gt;    | 5.000 Euro bis...  |  81 ( 8.1%)</span></span>
+<span><span class="co">#&gt;    | 7.500 Euro bis...  |  55 ( 5.5%)</span></span>
+<span><span class="co">#&gt;    | EUR 10.000 und...  |  20 ( 2.0%)</span></span>
+<span><span class="co">#&gt;    | keine Angabe       | 142 (14.2%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 3  | unter EUR 500      |  46 ( 4.6%)</span></span>
+<span><span class="co">#&gt;    | EUR 500 bis...     |  87 ( 8.7%)</span></span>
+<span><span class="co">#&gt;    | EUR 1.000 bis...   | 125 (12.5%)</span></span>
+<span><span class="co">#&gt;    | EUR 1.500 bis...   | 111 (11.1%)</span></span>
+<span><span class="co">#&gt;    | EUR 2.000 bis...   | 139 (13.9%)</span></span>
+<span><span class="co">#&gt;    | EUR 2.500 bis...   |  99 ( 9.9%)</span></span>
+<span><span class="co">#&gt;    | EUR 3.000 bis...   |  80 ( 8.0%)</span></span>
+<span><span class="co">#&gt;    | EUR 3.500 bis...   |  63 ( 6.3%)</span></span>
+<span><span class="co">#&gt;    | EUR 4.000 bis...   |  36 ( 3.6%)</span></span>
+<span><span class="co">#&gt;    | EUR 4.500 bis...   |  33 ( 3.3%)</span></span>
+<span><span class="co">#&gt;    | 5.000 Euro bis...  |  17 ( 1.7%)</span></span>
+<span><span class="co">#&gt;    | 7.500 Euro bis...  |   7 ( 0.7%)</span></span>
+<span><span class="co">#&gt;    | EUR 10.000 und...  |   8 ( 0.8%)</span></span>
+<span><span class="co">#&gt;    | habe kein...       |  18 ( 1.8%)</span></span>
+<span><span class="co">#&gt;    | keine Angabe       | 131 (13.1%)</span></span>
+<span><span class="co">#&gt; -------------------------------------</span></span>
+<span></span>
+<span><span class="co"># Note the 977 and 777 values representing "keine Angabe" (no answer)</span></span>
+<span></span>
+<span><span class="co"># Call `dp_recode_missing()` without the `missing_values` argument to get a</span></span>
+<span><span class="co"># warning about the user-defined missing values in the data and how to recode them.</span></span>
+<span><span class="fu"><a href="../reference/dp_recode_missing.html">dp_recode_missing</a></span><span class="op">(</span><span class="va">deka_sample</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `dp_recode_missing()`:</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BB0000;">✖</span> Missing values not provided.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Suspicious values were detected in the following variables:</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> `q120`: <span style="color: #0000BB;">"977"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> `q117`: <span style="color: #0000BB;">"777"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> `q118`: <span style="color: #0000BB;">"777"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Consider setting `missing_values`: `missing_values = c(777, 977)`</span></span>
+<span></span>
+<span><span class="co"># Call `dp_recode_missing()` with the `missing_values` argument to recode the</span></span>
+<span><span class="co"># user-defined missing values to NA.</span></span>
+<span><span class="va">deka_sample_recoded</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dp_recode_missing.html">dp_recode_missing</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">deka_sample</span>,</span>
+<span>  missing_values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">777</span>, <span class="fl">977</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> User-defined missing values recoded to NA for values: <span style="color: #0000BB;">777</span> and <span style="color: #0000BB;">977</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> You might want to inspect the codebook again to check that the user-defined</span></span>
+<span><span class="co">#&gt;   missing values have been recoded and their labels removed:</span></span>
+<span><span class="co">#&gt;   `dp_inspect_codebook(deka_sample)`</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> You might want to remove missing values: `tidyr::drop_na(deka_sample)`</span></span>
+<span></span>
+<span><span class="co"># Check the results as suggested:</span></span>
+<span><span class="fu"><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook</a></span><span class="op">(</span><span class="va">deka_sample_recoded</span><span class="op">)</span></span>
+<span><span class="co">#&gt; data (1000 rows and 3 variables, 3 shown)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ID | Name | Label                      | Type    |    Missings | Values</span></span>
+<span><span class="co">#&gt; ---+------+----------------------------+---------+-------------+-------</span></span>
+<span><span class="co">#&gt; 1  | q120 | Und wie hoch               | numeric | 210 (21.0%) |      1</span></span>
+<span><span class="co">#&gt;    |      | ist in etwa                |         |             |      2</span></span>
+<span><span class="co">#&gt;    |      | das Geld- und              |         |             |      3</span></span>
+<span><span class="co">#&gt;    |      | Wertpapiervermögen         |         |             |      4</span></span>
+<span><span class="co">#&gt;    |      | in Ihrem                   |         |             |      5</span></span>
+<span><span class="co">#&gt;    |      | Haushalt, also             |         |             |      6</span></span>
+<span><span class="co">#&gt;    |      | die Summe                  |         |             |      7</span></span>
+<span><span class="co">#&gt;    |      | aller                      |         |             |      8</span></span>
+<span><span class="co">#&gt;    |      | Geldanlagen                |         |             |      9</span></span>
+<span><span class="co">#&gt;    |      | wie z.B.                   |         |             |     10</span></span>
+<span><span class="co">#&gt;    |      | Sparanlagen,               |         |             |     11</span></span>
+<span><span class="co">#&gt;    |      | Aktien,                    |         |             |     12</span></span>
+<span><span class="co">#&gt;    |      | Investmentfonds,           |         |             |     13</span></span>
+<span><span class="co">#&gt;    |      | Festgeld,                  |         |             |     14</span></span>
+<span><span class="co">#&gt;    |      | Tagesgeld,                 |         |             |     15</span></span>
+<span><span class="co">#&gt; ---+------+----------------------------+---------+-------------+-------</span></span>
+<span><span class="co">#&gt; 2  | q117 | Wie hoch ist               | numeric | 142 (14.2%) |      1</span></span>
+<span><span class="co">#&gt;    |      | das                        |         |             |      2</span></span>
+<span><span class="co">#&gt;    |      | Nettoeinkommen             |         |             |      3</span></span>
+<span><span class="co">#&gt;    |      | Ihres gesamten             |         |             |      4</span></span>
+<span><span class="co">#&gt;    |      | Haushaltes pro             |         |             |      5</span></span>
+<span><span class="co">#&gt;    |      | Monat?                     |         |             |      6</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |      7</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |      8</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |      9</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |     10</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |     11</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |     12</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |     13</span></span>
+<span><span class="co">#&gt; ---+------+----------------------------+---------+-------------+-------</span></span>
+<span><span class="co">#&gt; 3  | q118 | Wie hoch ist               | numeric | 131 (13.1%) |      1</span></span>
+<span><span class="co">#&gt;    |      | Ihr                        |         |             |      2</span></span>
+<span><span class="co">#&gt;    |      | persönliches               |         |             |      3</span></span>
+<span><span class="co">#&gt;    |      | Nettoeinkommen             |         |             |      4</span></span>
+<span><span class="co">#&gt;    |      | pro Monat?                 |         |             |      5</span></span>
+<span><span class="co">#&gt;    |      | Hiermit ist                |         |             |      6</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |      7</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |      8</span></span>
+<span><span class="co">#&gt;    |      | Einkommen nach             |         |             |      9</span></span>
+<span><span class="co">#&gt;    |      | Abzug von                  |         |             |     10</span></span>
+<span><span class="co">#&gt;    |      | Steuern und                |         |             |     11</span></span>
+<span><span class="co">#&gt;    |      | Sozialversicherungsabgaben |         |             |     12</span></span>
+<span><span class="co">#&gt;    |      | gemeint.                   |         |             |     13</span></span>
+<span><span class="co">#&gt;    |      |                            |         |             |     14</span></span>
+<span><span class="co">#&gt; -----------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ID | Value Labels       |           N</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 1  | ich habe kein...   | 231 (29.2%)</span></span>
+<span><span class="co">#&gt;    | unter 2.500...     |  78 ( 9.9%)</span></span>
+<span><span class="co">#&gt;    | 2.500 bis unter... |  65 ( 8.2%)</span></span>
+<span><span class="co">#&gt;    | 5.000 bis unter... |  62 ( 7.8%)</span></span>
+<span><span class="co">#&gt;    | 10.000 bis...      |  51 ( 6.5%)</span></span>
+<span><span class="co">#&gt;    | 20.000 bis...      |  58 ( 7.3%)</span></span>
+<span><span class="co">#&gt;    | 30.000 bis...      |  55 ( 7.0%)</span></span>
+<span><span class="co">#&gt;    | 50.000 bis...      |  29 ( 3.7%)</span></span>
+<span><span class="co">#&gt;    | 70.000 bis...      |  44 ( 5.6%)</span></span>
+<span><span class="co">#&gt;    | 100.000 bis...     |  41 ( 5.2%)</span></span>
+<span><span class="co">#&gt;    | 150.000 bis...     |  21 ( 2.7%)</span></span>
+<span><span class="co">#&gt;    | 200.000 bis...     |   7 ( 0.9%)</span></span>
+<span><span class="co">#&gt;    | 250.000 bis...     |  24 ( 3.0%)</span></span>
+<span><span class="co">#&gt;    | 500.000 bis...     |  12 ( 1.5%)</span></span>
+<span><span class="co">#&gt;    | 1 Mio. Euro und... |  12 ( 1.5%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 2  | unter EUR 500      |  14 ( 1.6%)</span></span>
+<span><span class="co">#&gt;    | EUR 500 bis...     |  45 ( 5.2%)</span></span>
+<span><span class="co">#&gt;    | EUR 1.000 bis...   |  64 ( 7.5%)</span></span>
+<span><span class="co">#&gt;    | EUR 1.500 bis...   |  88 (10.3%)</span></span>
+<span><span class="co">#&gt;    | EUR 2.000 bis...   |  87 (10.1%)</span></span>
+<span><span class="co">#&gt;    | EUR 2.500 bis...   |  82 ( 9.6%)</span></span>
+<span><span class="co">#&gt;    | EUR 3.000 bis...   |  89 (10.4%)</span></span>
+<span><span class="co">#&gt;    | EUR 3.500 bis...   |  90 (10.5%)</span></span>
+<span><span class="co">#&gt;    | EUR 4.000 bis...   |  81 ( 9.4%)</span></span>
+<span><span class="co">#&gt;    | EUR 4.500 bis...   |  62 ( 7.2%)</span></span>
+<span><span class="co">#&gt;    | 5.000 Euro bis...  |  81 ( 9.4%)</span></span>
+<span><span class="co">#&gt;    | 7.500 Euro bis...  |  55 ( 6.4%)</span></span>
+<span><span class="co">#&gt;    | EUR 10.000 und...  |  20 ( 2.3%)</span></span>
+<span><span class="co">#&gt; ---+--------------------+------------</span></span>
+<span><span class="co">#&gt; 3  | unter EUR 500      |  46 ( 5.3%)</span></span>
+<span><span class="co">#&gt;    | EUR 500 bis...     |  87 (10.0%)</span></span>
+<span><span class="co">#&gt;    | EUR 1.000 bis...   | 125 (14.4%)</span></span>
+<span><span class="co">#&gt;    | EUR 1.500 bis...   | 111 (12.8%)</span></span>
+<span><span class="co">#&gt;    | EUR 2.000 bis...   | 139 (16.0%)</span></span>
+<span><span class="co">#&gt;    | EUR 2.500 bis...   |  99 (11.4%)</span></span>
+<span><span class="co">#&gt;    | EUR 3.000 bis...   |  80 ( 9.2%)</span></span>
+<span><span class="co">#&gt;    | EUR 3.500 bis...   |  63 ( 7.2%)</span></span>
+<span><span class="co">#&gt;    | EUR 4.000 bis...   |  36 ( 4.1%)</span></span>
+<span><span class="co">#&gt;    | EUR 4.500 bis...   |  33 ( 3.8%)</span></span>
+<span><span class="co">#&gt;    | 5.000 Euro bis...  |  17 ( 2.0%)</span></span>
+<span><span class="co">#&gt;    | 7.500 Euro bis...  |   7 ( 0.8%)</span></span>
+<span><span class="co">#&gt;    | EUR 10.000 und...  |   8 ( 0.9%)</span></span>
+<span><span class="co">#&gt;    | habe kein...       |  18 ( 2.1%)</span></span>
+<span><span class="co">#&gt; -------------------------------------</span></span>
+<span></span>
+<span><span class="co"># Note that the user-defined missing values (777 and 977) have been recoded to</span></span>
+<span><span class="co"># NA (see column "Missings") and their labels have been removed.</span></span>
+<span></span>
+<span><span class="co"># If you would like to remove the missing values from your data, follow the</span></span>
+<span><span class="co"># suggestion in the message and use `tidyr::drop_na()`:</span></span>
+<span><span class="va">deka_sample_clean</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">drop_na</a></span><span class="op">(</span><span class="va">deka_sample_recoded</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -217,7 +459,7 @@ further down the analysis pipeline.</p>
 <p>Sometimes, your data comes in an unlabelled format, for example if
 you receive a <code>.csv</code> or a <code>.xlsx</code> file. Then, this
 data looks like this:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Provide a file path to your unlabelled survey data in Excel .xlsx format.</span></span>
 <span><span class="co"># Here we accesss the example data shipped with the `YouAnalyser` package.</span></span>
 <span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
@@ -230,7 +472,7 @@ data looks like this:</p>
 <span><span class="co"># Read in the unlabelled data using openxlsx::read.xlsx() and convert it to a tibble</span></span>
 <span><span class="va">myData_unlabelled</span> <span class="op">&lt;-</span> <span class="fu">openxlsx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/read.xlsx.html" class="external-link">read.xlsx</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Inspect the structure of the data for the first two variables.</span></span>
 <span><span class="co"># Note that there are no variable labels or value labels.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">myData_unlabelled</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span>
@@ -334,7 +576,7 @@ row per variable and columns for the variable name, variable label, and
 value labels. This codebook can be created manually using a spreadsheet
 software like Excel. Use the following code to save a copy of the
 codebook template provided with <code>YouAnalyser</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Choose interactively where the template should be copied to</span></span>
 <span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ya_choose_file_path.html">ya_choose_file_path</a></span><span class="op">(</span><span class="st">"my_codebook.xlsx"</span><span class="op">)</span></span>
 <span></span>
@@ -344,7 +586,7 @@ codebook template provided with <code>YouAnalyser</code>:</p>
 names. Then, fill in the codebook with the variable names, variable
 labels and value labels for your data. Import the codebook into R and
 inspect it to make sure it looks correct.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Choose the codebook file you just edited</span></span>
 <span><span class="va">codebook_file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ya_choose_file.html">ya_choose_file</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -355,7 +597,7 @@ inspect it to make sure it looks correct.</p>
 <span><span class="co"># Display the first few rows of the codebook</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">myCodebook</span>, n <span class="op">=</span> <span class="fl">3</span> <span class="op">*</span> <span class="fl">7</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Display the first few rows of the codebook</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">myCodebook</span>, n <span class="op">=</span> <span class="fl">3</span> <span class="op">*</span> <span class="fl">7</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span>n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
@@ -386,7 +628,7 @@ inspect it to make sure it looks correct.</p>
 <p>Once your codebook is ready, you can use the
 <code><a href="../reference/dp_convert_to_labelled.html">dp_convert_to_labelled()</a></code> function to convert your
 unlabelled data into a labelled format:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Convert unlabelled data to labelled format using the codebook</span></span>
 <span><span class="va">myData_labelled</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/dp_convert_to_labelled.html">dp_convert_to_labelled</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">myData_unlabelled</span>,</span>
@@ -473,7 +715,7 @@ unlabelled data into a labelled format:</p>
 </h3>
 <p>If your data is unlabelled (<code>.csv</code>, <code>.xlsx</code>),
 use the following code snippets to convert it to a labelled format:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Read in your .xlsx data</span></span>
 <span><span class="va">file_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ya_choose_file.html">ya_choose_file</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">myData_unlabelled</span> <span class="op">&lt;-</span> <span class="fu">openxlsx</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/openxlsx/man/read.xlsx.html" class="external-link">read.xlsx</a></span><span class="op">(</span><span class="va">file_path</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -518,7 +760,7 @@ always the case. Therefore, it is recommended to provide a codebook with
 <code><a href="../reference/dp_label_automatically.html">dp_label_automatically()</a></code>, make sure to inspect the results
 carefully using <code><a href="../reference/dp_inspect_codebook.html">dp_inspect_codebook()</a></code> to check whether the
 labelling worked as expected.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create an example data frame with some missing variable labels and value labels</span></span>
 <span><span class="va">bkw_processed_missing_labels</span> <span class="op">&lt;-</span> <span class="va">bkw_processed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
@@ -1013,7 +1255,7 @@ labelling worked as expected.</p>
 <span><span class="co">#&gt; -------------------------------------</span></span></code></pre></div>
 <p>You can do better by providing theoretical minimum and maximum values
 for the variables:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a theoretical min/max data frame</span></span>
 <span><span class="va">theoretical_min_max</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"F800_"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>,</span>

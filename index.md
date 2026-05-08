@@ -76,9 +76,8 @@ not already in this format:
 - [`dp_inspect_codebook()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_inspect_codebook.md):
   Inspect the codebook of a labelled data frame (useful to check whether
   labelling worked as expected)
-- [`dp_zap_missings()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_zap_missings.md):
-  Remove missing values and their value labels from a labelled data
-  frame.
+- `dp_zap_missings()`: Remove missing values and their value labels from
+  a labelled data frame.
 
 The convenience functions starting with `ya_` mostly take care of
 selecting files, defining file names, and saving plots:

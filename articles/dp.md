@@ -146,13 +146,257 @@ dp_inspect_codebook(myData[, 1:2])
 
 ### Important Note on Missing Values
 
-If you need to remove some missing values from your data, make sure to
-use the
-[`dp_zap_missings()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_zap_missings.md)
-function, which not only removes the missing values but also removes the
-corresponding value labels. This is important because if you simply
-remove the missing values without removing the value labels, this will
-lead to errors further down the analysis pipeline.
+In many cases, survey data contains user-defined missing values, which
+are specific values that represent missing data (e.g. “99” for “Don’t
+know”). These user-defined missing values can cause problems in your
+analysis if they are not properly handled, as they may be treated as
+valid responses rather than missing data. Therefore, it is important to
+recode these user-defined missing values to `NA` in R, which is the
+standard way to represent missing data in R. You can do this using the
+[`dp_recode_missing()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_recode_missing.md)
+function, which allows you to specify the user-defined missing values
+for each variable and recodes them to `NA`.
+
+``` r
+
+# Inspect the labels used in the data to identify user-defined missing values
+dp_inspect_codebook(deka_sample)
+#> data (1000 rows and 3 variables, 3 shown)
+#> 
+#> ID | Name | Label                      | Type    | Missings | Values
+#> ---+------+----------------------------+---------+----------+-------
+#> 1  | q120 | Und wie hoch               | numeric | 0 (0.0%) |      1
+#>    |      | ist in etwa                |         |          |      2
+#>    |      | das Geld- und              |         |          |      3
+#>    |      | Wertpapiervermögen         |         |          |      4
+#>    |      | in Ihrem                   |         |          |      5
+#>    |      | Haushalt, also             |         |          |      6
+#>    |      | die Summe                  |         |          |      7
+#>    |      | aller                      |         |          |      8
+#>    |      | Geldanlagen                |         |          |      9
+#>    |      | wie z.B.                   |         |          |     10
+#>    |      | Sparanlagen,               |         |          |     11
+#>    |      | Aktien,                    |         |          |     12
+#>    |      | Investmentfonds,           |         |          |     13
+#>    |      | Festgeld,                  |         |          |     14
+#>    |      | Tagesgeld,                 |         |          |     15
+#>    |      | Girokonto                  |         |          |    977
+#> ---+------+----------------------------+---------+----------+-------
+#> 2  | q117 | Wie hoch ist               | numeric | 0 (0.0%) |      1
+#>    |      | das                        |         |          |      2
+#>    |      | Nettoeinkommen             |         |          |      3
+#>    |      | Ihres gesamten             |         |          |      4
+#>    |      | Haushaltes pro             |         |          |      5
+#>    |      | Monat?                     |         |          |      6
+#>    |      |                            |         |          |      7
+#>    |      |                            |         |          |      8
+#>    |      |                            |         |          |      9
+#>    |      |                            |         |          |     10
+#>    |      |                            |         |          |     11
+#>    |      |                            |         |          |     12
+#>    |      |                            |         |          |     13
+#>    |      |                            |         |          |    777
+#> ---+------+----------------------------+---------+----------+-------
+#> 3  | q118 | Wie hoch ist               | numeric | 0 (0.0%) |      1
+#>    |      | Ihr                        |         |          |      2
+#>    |      | persönliches               |         |          |      3
+#>    |      | Nettoeinkommen             |         |          |      4
+#>    |      | pro Monat?                 |         |          |      5
+#>    |      | Hiermit ist                |         |          |      6
+#>    |      |                            |         |          |      7
+#>    |      |                            |         |          |      8
+#>    |      | Einkommen nach             |         |          |      9
+#>    |      | Abzug von                  |         |          |     10
+#>    |      | Steuern und                |         |          |     11
+#>    |      | Sozialversicherungsabgaben |         |          |     12
+#>    |      | gemeint.                   |         |          |     13
+#>    |      |                            |         |          |     14
+#>    |      |                            |         |          |    777
+#> --------------------------------------------------------------------
+#> 
+#> ID | Value Labels       |           N
+#> ---+--------------------+------------
+#> 1  | ich habe kein...   | 231 (23.1%)
+#>    | unter 2.500...     |  78 ( 7.8%)
+#>    | 2.500 bis unter... |  65 ( 6.5%)
+#>    | 5.000 bis unter... |  62 ( 6.2%)
+#>    | 10.000 bis...      |  51 ( 5.1%)
+#>    | 20.000 bis...      |  58 ( 5.8%)
+#>    | 30.000 bis...      |  55 ( 5.5%)
+#>    | 50.000 bis...      |  29 ( 2.9%)
+#>    | 70.000 bis...      |  44 ( 4.4%)
+#>    | 100.000 bis...     |  41 ( 4.1%)
+#>    | 150.000 bis...     |  21 ( 2.1%)
+#>    | 200.000 bis...     |   7 ( 0.7%)
+#>    | 250.000 bis...     |  24 ( 2.4%)
+#>    | 500.000 bis...     |  12 ( 1.2%)
+#>    | 1 Mio. Euro und... |  12 ( 1.2%)
+#>    | keine Angabe       | 210 (21.0%)
+#> ---+--------------------+------------
+#> 2  | unter EUR 500      |  14 ( 1.4%)
+#>    | EUR 500 bis...     |  45 ( 4.5%)
+#>    | EUR 1.000 bis...   |  64 ( 6.4%)
+#>    | EUR 1.500 bis...   |  88 ( 8.8%)
+#>    | EUR 2.000 bis...   |  87 ( 8.7%)
+#>    | EUR 2.500 bis...   |  82 ( 8.2%)
+#>    | EUR 3.000 bis...   |  89 ( 8.9%)
+#>    | EUR 3.500 bis...   |  90 ( 9.0%)
+#>    | EUR 4.000 bis...   |  81 ( 8.1%)
+#>    | EUR 4.500 bis...   |  62 ( 6.2%)
+#>    | 5.000 Euro bis...  |  81 ( 8.1%)
+#>    | 7.500 Euro bis...  |  55 ( 5.5%)
+#>    | EUR 10.000 und...  |  20 ( 2.0%)
+#>    | keine Angabe       | 142 (14.2%)
+#> ---+--------------------+------------
+#> 3  | unter EUR 500      |  46 ( 4.6%)
+#>    | EUR 500 bis...     |  87 ( 8.7%)
+#>    | EUR 1.000 bis...   | 125 (12.5%)
+#>    | EUR 1.500 bis...   | 111 (11.1%)
+#>    | EUR 2.000 bis...   | 139 (13.9%)
+#>    | EUR 2.500 bis...   |  99 ( 9.9%)
+#>    | EUR 3.000 bis...   |  80 ( 8.0%)
+#>    | EUR 3.500 bis...   |  63 ( 6.3%)
+#>    | EUR 4.000 bis...   |  36 ( 3.6%)
+#>    | EUR 4.500 bis...   |  33 ( 3.3%)
+#>    | 5.000 Euro bis...  |  17 ( 1.7%)
+#>    | 7.500 Euro bis...  |   7 ( 0.7%)
+#>    | EUR 10.000 und...  |   8 ( 0.8%)
+#>    | habe kein...       |  18 ( 1.8%)
+#>    | keine Angabe       | 131 (13.1%)
+#> -------------------------------------
+
+# Note the 977 and 777 values representing "keine Angabe" (no answer)
+
+# Call `dp_recode_missing()` without the `missing_values` argument to get a
+# warning about the user-defined missing values in the data and how to recode them.
+dp_recode_missing(deka_sample)
+#> Error in `dp_recode_missing()`:
+#> ✖ Missing values not provided.
+#> ℹ Suspicious values were detected in the following variables:
+#> ℹ `q120`: "977"
+#> ℹ `q117`: "777"
+#> ℹ `q118`: "777"
+#> ℹ Consider setting `missing_values`: `missing_values = c(777, 977)`
+
+# Call `dp_recode_missing()` with the `missing_values` argument to recode the
+# user-defined missing values to NA.
+deka_sample_recoded <- dp_recode_missing(
+  data = deka_sample,
+  missing_values = c(777, 977)
+)
+#> ✔ User-defined missing values recoded to NA for values: 777 and 977.
+#> ℹ You might want to inspect the codebook again to check that the user-defined
+#>   missing values have been recoded and their labels removed:
+#>   `dp_inspect_codebook(deka_sample)`
+#> ℹ You might want to remove missing values: `tidyr::drop_na(deka_sample)`
+
+# Check the results as suggested:
+dp_inspect_codebook(deka_sample_recoded)
+#> data (1000 rows and 3 variables, 3 shown)
+#> 
+#> ID | Name | Label                      | Type    |    Missings | Values
+#> ---+------+----------------------------+---------+-------------+-------
+#> 1  | q120 | Und wie hoch               | numeric | 210 (21.0%) |      1
+#>    |      | ist in etwa                |         |             |      2
+#>    |      | das Geld- und              |         |             |      3
+#>    |      | Wertpapiervermögen         |         |             |      4
+#>    |      | in Ihrem                   |         |             |      5
+#>    |      | Haushalt, also             |         |             |      6
+#>    |      | die Summe                  |         |             |      7
+#>    |      | aller                      |         |             |      8
+#>    |      | Geldanlagen                |         |             |      9
+#>    |      | wie z.B.                   |         |             |     10
+#>    |      | Sparanlagen,               |         |             |     11
+#>    |      | Aktien,                    |         |             |     12
+#>    |      | Investmentfonds,           |         |             |     13
+#>    |      | Festgeld,                  |         |             |     14
+#>    |      | Tagesgeld,                 |         |             |     15
+#> ---+------+----------------------------+---------+-------------+-------
+#> 2  | q117 | Wie hoch ist               | numeric | 142 (14.2%) |      1
+#>    |      | das                        |         |             |      2
+#>    |      | Nettoeinkommen             |         |             |      3
+#>    |      | Ihres gesamten             |         |             |      4
+#>    |      | Haushaltes pro             |         |             |      5
+#>    |      | Monat?                     |         |             |      6
+#>    |      |                            |         |             |      7
+#>    |      |                            |         |             |      8
+#>    |      |                            |         |             |      9
+#>    |      |                            |         |             |     10
+#>    |      |                            |         |             |     11
+#>    |      |                            |         |             |     12
+#>    |      |                            |         |             |     13
+#> ---+------+----------------------------+---------+-------------+-------
+#> 3  | q118 | Wie hoch ist               | numeric | 131 (13.1%) |      1
+#>    |      | Ihr                        |         |             |      2
+#>    |      | persönliches               |         |             |      3
+#>    |      | Nettoeinkommen             |         |             |      4
+#>    |      | pro Monat?                 |         |             |      5
+#>    |      | Hiermit ist                |         |             |      6
+#>    |      |                            |         |             |      7
+#>    |      |                            |         |             |      8
+#>    |      | Einkommen nach             |         |             |      9
+#>    |      | Abzug von                  |         |             |     10
+#>    |      | Steuern und                |         |             |     11
+#>    |      | Sozialversicherungsabgaben |         |             |     12
+#>    |      | gemeint.                   |         |             |     13
+#>    |      |                            |         |             |     14
+#> -----------------------------------------------------------------------
+#> 
+#> ID | Value Labels       |           N
+#> ---+--------------------+------------
+#> 1  | ich habe kein...   | 231 (29.2%)
+#>    | unter 2.500...     |  78 ( 9.9%)
+#>    | 2.500 bis unter... |  65 ( 8.2%)
+#>    | 5.000 bis unter... |  62 ( 7.8%)
+#>    | 10.000 bis...      |  51 ( 6.5%)
+#>    | 20.000 bis...      |  58 ( 7.3%)
+#>    | 30.000 bis...      |  55 ( 7.0%)
+#>    | 50.000 bis...      |  29 ( 3.7%)
+#>    | 70.000 bis...      |  44 ( 5.6%)
+#>    | 100.000 bis...     |  41 ( 5.2%)
+#>    | 150.000 bis...     |  21 ( 2.7%)
+#>    | 200.000 bis...     |   7 ( 0.9%)
+#>    | 250.000 bis...     |  24 ( 3.0%)
+#>    | 500.000 bis...     |  12 ( 1.5%)
+#>    | 1 Mio. Euro und... |  12 ( 1.5%)
+#> ---+--------------------+------------
+#> 2  | unter EUR 500      |  14 ( 1.6%)
+#>    | EUR 500 bis...     |  45 ( 5.2%)
+#>    | EUR 1.000 bis...   |  64 ( 7.5%)
+#>    | EUR 1.500 bis...   |  88 (10.3%)
+#>    | EUR 2.000 bis...   |  87 (10.1%)
+#>    | EUR 2.500 bis...   |  82 ( 9.6%)
+#>    | EUR 3.000 bis...   |  89 (10.4%)
+#>    | EUR 3.500 bis...   |  90 (10.5%)
+#>    | EUR 4.000 bis...   |  81 ( 9.4%)
+#>    | EUR 4.500 bis...   |  62 ( 7.2%)
+#>    | 5.000 Euro bis...  |  81 ( 9.4%)
+#>    | 7.500 Euro bis...  |  55 ( 6.4%)
+#>    | EUR 10.000 und...  |  20 ( 2.3%)
+#> ---+--------------------+------------
+#> 3  | unter EUR 500      |  46 ( 5.3%)
+#>    | EUR 500 bis...     |  87 (10.0%)
+#>    | EUR 1.000 bis...   | 125 (14.4%)
+#>    | EUR 1.500 bis...   | 111 (12.8%)
+#>    | EUR 2.000 bis...   | 139 (16.0%)
+#>    | EUR 2.500 bis...   |  99 (11.4%)
+#>    | EUR 3.000 bis...   |  80 ( 9.2%)
+#>    | EUR 3.500 bis...   |  63 ( 7.2%)
+#>    | EUR 4.000 bis...   |  36 ( 4.1%)
+#>    | EUR 4.500 bis...   |  33 ( 3.8%)
+#>    | 5.000 Euro bis...  |  17 ( 2.0%)
+#>    | 7.500 Euro bis...  |   7 ( 0.8%)
+#>    | EUR 10.000 und...  |   8 ( 0.9%)
+#>    | habe kein...       |  18 ( 2.1%)
+#> -------------------------------------
+
+# Note that the user-defined missing values (777 and 977) have been recoded to
+# NA (see column "Missings") and their labels have been removed.
+
+# If you would like to remove the missing values from your data, follow the
+# suggestion in the message and use `tidyr::drop_na()`:
+deka_sample_clean <- tidyr::drop_na(deka_sample_recoded)
+```
 
 ## Convert Unlabelled to Labelled Data
 

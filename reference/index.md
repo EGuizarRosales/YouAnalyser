@@ -13,8 +13,8 @@ variable and value labels.
   : Inspect the codebook of a labelled data frame
 - [`dp_label_automatically()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_label_automatically.md)
   : Automatically label a data frame
-- [`dp_zap_missings()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_zap_missings.md)
-  : Zap missing values and their labels
+- [`dp_recode_missing()`](https://eguizarrosales.github.io/YouAnalyser/reference/dp_recode_missing.md)
+  : Recode user-defined missing values to NA
 
 ## Exploratory Data Analysis (EDA)
 
@@ -102,6 +102,8 @@ Example datasets included in the YouAnalyser package.
   : Synthetic BKW Employer Brand Positioning Study Data (Synthetic)
 - [`bkw_unlabelled`](https://eguizarrosales.github.io/YouAnalyser/reference/bkw_unlabelled.md)
   : BKW Employer Brand Positioning Study Data (Unlabelled Data)
+- [`deka_sample`](https://eguizarrosales.github.io/YouAnalyser/reference/deka_sample.md)
+  : Anonymized Random Subsample of a DEKA Study
 
 ## Other Functions
 
