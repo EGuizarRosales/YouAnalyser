@@ -452,7 +452,7 @@ Before running the `kda_regression_with_imputation()` function, make sure that t
 
 For demonstration purposes, a version of the `bkw_processed` dataset with missing values has been created and is available as `bkw_missings`. Let's have a look at the distribution of missing values in this dataset:
 
-```{r, summary-bkw_missings}
+```{r, summary-bkw_missings, warning = FALSE}
 eda_summary(bkw_missings, console_output = TRUE, browser_output = FALSE)
 ```
 
@@ -509,11 +509,11 @@ Two plots are different from the regular `kda_regression()` function: `res_imp$p
 
 Imputation worked well if the distribution of variable importance and performance across the imputations is relatively narrow, i.e., if the points are close together and the intervals are not too wide. If the distribution is very wide, this may indicate that the results are not stable across the imputations and should be interpreted with caution. The examples below show very good imputation diagnostics (narrow distributions).
 
-```{r kda_regression_with_imputation-diagnostics-importance, fig.width=12, fig.height=8, out.width="100%"}
+```{r kda_regression_with_imputation-diagnostics-importance, fig.width=14, fig.height=8, out.width="100%"}
 res_imp$plots$diagnostics_importance
 ```
 
-```{r kda_regression_with_imputation-diagnostics-performance, fig.width=12, fig.height=8, out.width="100%"}
+```{r kda_regression_with_imputation-diagnostics-performance, fig.width=14, fig.height=8, out.width="100%"}
 res_imp$plots$diagnostics_performance
 ```
 
