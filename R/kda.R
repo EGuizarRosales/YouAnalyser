@@ -1390,7 +1390,7 @@ kda_interactive_workflow <- function(
 #' @param outcome A single string naming the outcome variable. Optional if model is provided.
 #' @param predictors A character vector of predictor variable names. Optional if model is provided.
 #' @param model A fitted regression model object. Optional if data, outcome, and predictors are provided.
-#' @param imputation_args A list of arguments passed to the mice function for imputation. Defaults to `list(m = 100, method = "pmm", seed = 123, printFlag = FALSE)`, which translates 100 imputations with the predictive mean matching method and a seed of 123 for reproducibility. See [mice::mice()] for details.
+#' @param imputation_args A list of arguments passed to the mice function for imputation. Defaults to `list(m = 100, method = "pmm", seed = 123, printFlag = FALSE)`, which translates to 100 imputations with the predictive mean matching method and a seed of 123 for reproducibility. See [mice::mice()] for details.
 #' @param importance_method A string specifying the method for calculating variable importance. Options are 'auto', 'domir', 'jrw', or 'sumOfCoefficients'. Defaults to 'auto'.
 #' @param show_progress A logical indicating whether to show progress during the application of the different kda functions to the imputed datasets. Defaults to TRUE.
 #' @param imputation_aggregation_function A string specifying the function to aggregate imputed values. Defaults to 'median' but could also be set to 'mean'.

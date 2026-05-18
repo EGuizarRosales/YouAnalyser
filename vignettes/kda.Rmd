@@ -444,6 +444,79 @@ As a final note: Please be aware that results for subgroups should only be inter
 
 # 4. Missing Data
 
+Often it is the case that your data contains missing values, e.g., due to "no-response" answers in surveys. While **it is stongly recommendend to carefully consider whether to include such "no-response" answer options for crtical questions that are planned to be submitted to KDA later in your survey in the first place (do not include such an answer option if not necessary)**, you may find yourself in a situation where you have to deal with missing data.
+
+You can use the `kda_regression_with_imputation()` function to conduct a KDA with imputed data. This function is a wrapper around the `kda_regression()` function that first imputes the missing data using the `mice` package and then conducts the KDA on the imputed data. The `kda_regression_with_imputation()` function has the same arguments as the `kda_regression()` function, with some additional arguments for controlling the imputation process. You can get help on the function and its arguments by running `help("kda_regression_with_imputation")` or `?kda_regression_with_imputation` in your R console.
+
+Before running the `kda_regression_with_imputation()` function, make sure that the data you provide only includes the variables that are relevant for the imputation and the KDA, i.e., the outcome variable and the predictor variables as well as a few (optional) variables you think might also affect the outcome and predictor variables. Also, make sure that the missing values are coded correctly as `NA` and the "no-answer" labels are removed from the data. See the "Important Note on Missing Values" section in the `vignette("dp", package = "YouAnalyser")` vignette on Data Processing for more information on how to prepare your data. **This is especially important if your data was collected using Survalyzer**.
+
+For demonstration purposes, a version of the `bkw_processed` dataset with missing values has been created and is available as `bkw_missings`. Let's have a look at the distribution of missing values in this dataset:
+
+```{r, summary-bkw_missings}
+eda_summary(bkw_missings, console_output = TRUE, browser_output = FALSE)
+```
+
+We already see that there are some missing values in outcome as well as in the predictor variables. A more detailed overview of the missing values can be obtained by running the following code.
+
+```{r missing-values-overview}
+mice::md.pattern(bkw_missings, rotate.names = TRUE)
+```
+
+These outputs can be interpreted as follows:
+
+- **Columns:** Variables in the dataset.
+- **Left Row Numbers:** Answer to the question "How many rows show this specific pattern of missingness?" For example, the first row shows that there are 1,104 rows with no missing values (i.e., all variables have a value). The second row shows that there are 12 rows with only the variable "F800_2" missing, and so on. Missings are coded as a 0 in the table in the colomn output and as red squares in the plot output. Non-missings are coded as a 1 in the table output and as blue squares in the plot output.
+- **Right Row Numbers:** Answer to the question "How many missings are in this specific missing pattern?" In the example we see that all missing patern have only 1 missing value. This pattern is unusual and is due to the fact that this missing data were synthetically generated for demonstration purposes. In real data, it is more common to have missing patterns with multiple missing values.
+- **Bottom Column Numbers:** Answer to the question "How many missings are in this specific variable?" For example, the fourth column shows that there are 3 missing values in the variable "F800_1", the last column shows that there are 12 missing values in the variable "F800_2".
+- **Number in the bottom right corner:** Answer to the question "How many missings are in the entire dataset?" In this example, there are 112 missing values in total.
+
+Let's apply the `kda_regression_with_imputation()` function to the `bkw_missings` dataset. We will use the default arguments for the imputation process, but we will set `importance_method = "jrw"` to save compute time. These default settings will run `m = 100` imputations using the predictive mean matching method (`method = "pmm"`) and a seed of `seed = 123` for reproducibility. You can change these settings by providing a list of imputation arguments to the `imputation_args` argument of the `kda_regression_with_imputation()` function. For more information on the available imputation arguments, please refer to the documentation of the `mice::mice` package. **Be aware that code execution will take a while (some minutes)**. If it takes too long for your use case, consider lowering m to, e.g. `m = 20`.
+
+```{r run-kda_regression_with_imputation_dontshow, eval = TRUE, include = FALSE}
+if (FALSE) {
+  res_imp <- kda_regression_with_imputation(
+    data = bkw_missings |>
+      # Select only  the relevant variables for the imputation and KDA
+      dplyr::select(country, cluster, F600, paste0("F800_", 1:14)),
+    outcome = "F600",
+    predictors = paste0("F800_", 1:14),
+    importance_method = "jrw"
+  )
+  saveRDS(res_imp, "./vignettes/kda_res_imp.rds")
+} else {
+  res_imp <- readRDS("./kda_res_imp.rds")
+}
+```
+
+```{r run-kda_regression_with_imputation_show, eval = FALSE}
+res_imp <- kda_regression_with_imputation(
+  data = bkw_missings |>
+    # Select only  the relevant variables for the imputation and KDA
+    dplyr::select(country, cluster, F600, paste0("F800_", 1:14)),
+  outcome = "F600",
+  predictors = paste0("F800_", 1:14),
+  importance_method = "jrw"
+)
+```
+
+The output is essentially the same as for the usual `kda_regression()` function, but the results are now based on the imputed data. You can access the plots and other outputs in the same way as for the usual `kda_regression()` function, e.g., `res_imp$plots$ipma_scatterPlot$p` to access the IPMA scatter plot. Note that there is an additional line in the subtitle, indicating that the results are based on imputed data (number of missing values, number of imputations, and method of aggregating the results across imputations).
+
+```{r kda_regression_with_imputation-ipmaPlot, fig.width=10, fig.height=8, out.width="100%"}
+res_imp$plots$ipma_scatterPlot$p
+```
+
+Two plots are different from the regular `kda_regression()` function: `res_imp$plots$diagnostics_importance` and `res_imp$plots$diagnostics_performance` shows the distribution of variable importance and performance across the imputations.The plots show histograms (background) and the points with intervals at the bottom. The points indicate the median, the bolder inner line contains 66% (2/3) of the probability density and the thinner outer line contains 95% of the probability density.
+
+Imputation worked well if the distribution of variable importance and performance across the imputations is relatively narrow, i.e., if the points are close together and the intervals are not too wide. If the distribution is very wide, this may indicate that the results are not stable across the imputations and should be interpreted with caution. The examples below show very good imputation diagnostics (narrow distributions).
+
+```{r kda_regression_with_imputation-diagnostics-importance, fig.width=12, fig.height=8, out.width="100%"}
+res_imp$plots$diagnostics_importance
+```
+
+```{r kda_regression_with_imputation-diagnostics-performance, fig.width=12, fig.height=8, out.width="100%"}
+res_imp$plots$diagnostics_performance
+```
+
 ---
 
 # Extended Discussion of Importance Methods
