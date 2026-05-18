@@ -836,7 +836,6 @@ kda_ipma_scatterPlot <- function(
         ggrepel::geom_label_repel(
           ggplot2::aes(label = stringr::str_wrap(label, width = 30)),
           size = 3,
-          linewidth = 0.5,
           box.padding = 0.5,
           point.padding = 0.5,
           min.segment.length = 0,

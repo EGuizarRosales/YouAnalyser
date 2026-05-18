@@ -29,7 +29,7 @@ Imports:
     fs (>= 2.0.1),
     GGally (>= 2.4.0),
     ggdist,
-    ggrepel (>= 0.9.6),
+    ggrepel (>= 0.9.8),
     glue,
     haven,
     insight,
