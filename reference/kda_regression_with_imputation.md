@@ -45,7 +45,7 @@ kda_regression_with_imputation(
   A list of arguments passed to the mice function for imputation.
   Defaults to
   `list(m = 100, method = "pmm", seed = 123, printFlag = FALSE)`, which
-  translates 100 imputations with the predictive mean matching method
+  translates to 100 imputations with the predictive mean matching method
   and a seed of 123 for reproducibility. See
   [`mice::mice()`](https://amices.org/mice/reference/mice.html) for
   details.

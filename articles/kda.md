@@ -817,6 +817,433 @@ ensure stable and interpretable results.
 
 ## 4. Missing Data
 
+Often it is the case that your data contains missing values, e.g., due
+to “no-response” answers in surveys. While **it is stongly recommendend
+to carefully consider whether to include such “no-response” answer
+options for crtical questions that are planned to be submitted to KDA
+later in your survey in the first place (do not include such an answer
+option if not necessary)**, you may find yourself in a situation where
+you have to deal with missing data.
+
+You can use the
+[`kda_regression_with_imputation()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression_with_imputation.md)
+function to conduct a KDA with imputed data. This function is a wrapper
+around the
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function that first imputes the missing data using the `mice` package
+and then conducts the KDA on the imputed data. The
+[`kda_regression_with_imputation()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression_with_imputation.md)
+function has the same arguments as the
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function, with some additional arguments for controlling the imputation
+process. You can get help on the function and its arguments by running
+[`help("kda_regression_with_imputation")`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression_with_imputation.md)
+or
+[`?kda_regression_with_imputation`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression_with_imputation.md)
+in your R console.
+
+Before running the
+[`kda_regression_with_imputation()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression_with_imputation.md)
+function, make sure that the data you provide only includes the
+variables that are relevant for the imputation and the KDA, i.e., the
+outcome variable and the predictor variables as well as a few (optional)
+variables you think might also affect the outcome and predictor
+variables. Also, make sure that the missing values are coded correctly
+as `NA` and the “no-answer” labels are removed from the data. See the
+“Important Note on Missing Values” section in the
+[`vignette("dp", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/dp.md)
+vignette on Data Processing for more information on how to prepare your
+data. **This is especially important if your data was collected using
+Survalyzer**.
+
+For demonstration purposes, a version of the `bkw_processed` dataset
+with missing values has been created and is available as `bkw_missings`.
+Let’s have a look at the distribution of missing values in this dataset:
+
+``` r
+
+eda_summary(bkw_missings, console_output = TRUE, browser_output = FALSE)
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
+#> graph.magnif, : unable to open connection to X11 display ''
+#> 
+#> ── Data Frame Summary
+#> Data Frame Summary  
+#> data  
+#> Dimensions: 1216 x 18  
+#> Duplicates: 0  
+#> 
+#> --------------------------------------------------------------------------------------------------------------------------------------------------------------
+#> Variable           Label                                      Stats / Values                 Freqs (% of Valid)     Graph                 Valid      Missing  
+#> ------------------ ------------------------------------------ ------------------------------ ---------------------- --------------------- ---------- ---------
+#> id                 Unique Identifier                          Mean (sd) : 608.5 (351.2)      1216 distinct values   : : : : : : : : : :   1216       0        
+#> [haven_labelled,                                              min < med < max:                                      : : : : : : : : : :   (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                   1 < 608.5 < 1216                                      : : : : : : : : : :                       
+#> double]                                                       IQR (CV) : 607.5 (0.6)                                : : : : : : : : : :                       
+#>                                                                                                                     : : : : : : : : : :                       
+#> 
+#> country            Land                                       1. [1] CH                      855 (70.3%)            IIIIIIIIIIIIII        1216       0        
+#> [haven_labelled,                                              2. [2] DE                      361 (29.7%)            IIIII                 (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                                                                                                                   
+#> double]                                                                                                                                                       
+#> 
+#> cluster            Cluster                                    1. [1] Cluster 1: Betrieb, I   146 (12.0%)            II                    1216       0        
+#> [haven_labelled,                                              2. [2] Cluster 2: Planung, P   202 (16.6%)            III                   (100.0%)   (0.0%)   
+#> vctrs_vctr,                                                   3. [3] Cluster 3: Energie-,     98 ( 8.1%)            I                                         
+#> double]                                                       4. [4] Cluster 4: IT, Softwa   270 (22.2%)            IIII                                      
+#>                                                               5. [5] Cluster 5: Support- &   229 (18.8%)            III                                       
+#>                                                               6. [6] Cluster 6: Early Care   271 (22.3%)            IIII                                      
+#> 
+#> F600               Wie attraktiv finden Sie die BKW als       1. [1] 1 - Überhaupt nicht a    44 ( 3.6%)                                  1211       5        
+#> [haven_labelled,   Arbeitgeberin?                             2. [2] 2                        50 ( 4.1%)                                  (99.6%)    (0.4%)   
+#> vctrs_vctr,                                                   3. [3] 3                       132 (10.9%)            II                                        
+#> double]                                                       4. [4] 4                       472 (39.0%)            IIIIIII                                   
+#>                                                               5. [5] 5                       312 (25.8%)            IIIII                                     
+#>                                                               6. [6] 6                       117 ( 9.7%)            I                                         
+#>                                                               7. [7] 7 - Sehr attraktiv       84 ( 6.9%)            I                                         
+#> 
+#> F800_1             Sicherheit und langfristige Stabilität     1. [1] Überhaupt nicht gut      11 ( 0.9%)                                  1210       6        
+#> [haven_labelled,   des Arbeitgebers                           2. [2] 2                        21 ( 1.7%)                                  (99.5%)    (0.5%)   
+#> vctrs_vctr,                                                   3. [3] 3                        67 ( 5.5%)            I                                         
+#> double]                                                       4. [4] 4                       303 (25.0%)            IIIII                                     
+#>                                                               5. [5] 5                       276 (22.8%)            IIII                                      
+#>                                                               6. [6] 6                       338 (27.9%)            IIIII                                     
+#>                                                               7. [7] Sehr gut  7             194 (16.0%)            III                                       
+#> 
+#> F800_2             Karriere- und Entwicklungsmöglichkeiten    1. [1] Überhaupt nicht gut      11 ( 0.9%)                                  1204       12       
+#> [haven_labelled,                                              2. [2] 2                        34 ( 2.8%)                                  (99.0%)    (1.0%)   
+#> vctrs_vctr,                                                   3. [3] 3                        70 ( 5.8%)            I                                         
+#> double]                                                       4. [4] 4                       418 (34.7%)            IIIIII                                    
+#>                                                               5. [5] 5                       330 (27.4%)            IIIII                                     
+#>                                                               6. [6] 6                       244 (20.3%)            IIII                                      
+#>                                                               7. [7] Sehr gut  7              97 ( 8.1%)            I                                         
+#> 
+#> F800_3             Sinnvolle Tätigkeit und                    1. [1] Überhaupt nicht gut      12 ( 1.0%)                                  1207       9        
+#> [haven_labelled,   gesellschaftlicher Beitrag                 2. [2] 2                        27 ( 2.2%)                                  (99.3%)    (0.7%)   
+#> vctrs_vctr,                                                   3. [3] 3                        91 ( 7.5%)            I                                         
+#> double]                                                       4. [4] 4                       363 (30.1%)            IIIIII                                    
+#>                                                               5. [5] 5                       313 (25.9%)            IIIII                                     
+#>                                                               6. [6] 6                       270 (22.4%)            IIII                                      
+#>                                                               7. [7] Sehr gut  7             131 (10.9%)            II                                        
+#> 
+#> F800_4             Gute Zusammenarbeit und Teamkultur         1. [1] Überhaupt nicht gut      13 ( 1.1%)                                  1209       7        
+#> [haven_labelled,                                              2. [2] 2                        21 ( 1.7%)                                  (99.4%)    (0.6%)   
+#> vctrs_vctr,                                                   3. [3] 3                        82 ( 6.8%)            I                                         
+#> double]                                                       4. [4] 4                       466 (38.5%)            IIIIIII                                   
+#>                                                               5. [5] 5                       335 (27.7%)            IIIII                                     
+#>                                                               6. [6] 6                       207 (17.1%)            III                                       
+#>                                                               7. [7] Sehr gut  7              85 ( 7.0%)            I                                         
+#> 
+#> F800_5             Vereinbarkeit von Beruf und Privatleben    1. [1] Überhaupt nicht gut      14 ( 1.2%)                                  1208       8        
+#> [haven_labelled,                                              2. [2] 2                        28 ( 2.3%)                                  (99.3%)    (0.7%)   
+#> vctrs_vctr,                                                   3. [3] 3                       107 ( 8.9%)            I                                         
+#> double]                                                       4. [4] 4                       448 (37.1%)            IIIIIII                                   
+#>                                                               5. [5] 5                       315 (26.1%)            IIIII                                     
+#>                                                               6. [6] 6                       191 (15.8%)            III                                       
+#>                                                               7. [7] Sehr gut  7             105 ( 8.7%)            I                                         
+#> 
+#> F800_6             Moderne Arbeitsumgebung und Technologien   1. [1] Überhaupt nicht gut      14 ( 1.2%)                                  1209       7        
+#> [haven_labelled,                                              2. [2] 2                        26 ( 2.2%)                                  (99.4%)    (0.6%)   
+#> vctrs_vctr,                                                   3. [3] 3                        67 ( 5.5%)            I                                         
+#> double]                                                       4. [4] 4                       325 (26.9%)            IIIII                                     
+#>                                                               5. [5] 5                       340 (28.1%)            IIIII                                     
+#>                                                               6. [6] 6                       285 (23.6%)            IIII                                      
+#>                                                               7. [7] Sehr gut  7             152 (12.6%)            II                                        
+#> 
+#> F800_7             Attraktive Vergütung und                   1. [1] Überhaupt nicht gut      13 ( 1.1%)                                  1206       10       
+#> [haven_labelled,   Zusatzleistungen                           2. [2] 2                        18 ( 1.5%)                                  (99.2%)    (0.8%)   
+#> vctrs_vctr,                                                   3. [3] 3                        82 ( 6.8%)            I                                         
+#> double]                                                       4. [4] 4                       443 (36.7%)            IIIIIII                                   
+#>                                                               5. [5] 5                       292 (24.2%)            IIII                                      
+#>                                                               6. [6] 6                       239 (19.8%)            III                                       
+#>                                                               7. [7] Sehr gut  7             119 ( 9.9%)            I                                         
+#> 
+#> F800_8             Gute Führung und wertschätzende            1. [1] Überhaupt nicht gut      16 ( 1.3%)                                  1207       9        
+#> [haven_labelled,   Unternehmenskultur                         2. [2] 2                        32 ( 2.7%)                                  (99.3%)    (0.7%)   
+#> vctrs_vctr,                                                   3. [3] 3                        98 ( 8.1%)            I                                         
+#> double]                                                       4. [4] 4                       472 (39.1%)            IIIIIII                                   
+#>                                                               5. [5] 5                       310 (25.7%)            IIIII                                     
+#>                                                               6. [6] 6                       187 (15.5%)            III                                       
+#>                                                               7. [7] Sehr gut  7              92 ( 7.6%)            I                                         
+#> 
+#> F800_9             Verantwortung und Gestaltungsspielraum     1. [1] Überhaupt nicht gut      22 ( 1.8%)                                  1209       7        
+#> [haven_labelled,                                              2. [2] 2                        19 ( 1.6%)                                  (99.4%)    (0.6%)   
+#> vctrs_vctr,                                                   3. [3] 3                       120 ( 9.9%)            I                                         
+#> double]                                                       4. [4] 4                       457 (37.8%)            IIIIIII                                   
+#>                                                               5. [5] 5                       304 (25.1%)            IIIII                                     
+#>                                                               6. [6] 6                       190 (15.7%)            III                                       
+#>                                                               7. [7] Sehr gut  7              97 ( 8.0%)            I                                         
+#> 
+#> F800_10            Zukunftsorientierung und Nachhaltigkeit    1. [1] Überhaupt nicht gut      22 ( 1.8%)                                  1207       9        
+#> [haven_labelled,   des Unternehmens                           2. [2] 2                        20 ( 1.7%)                                  (99.3%)    (0.7%)   
+#> vctrs_vctr,                                                   3. [3] 3                        66 ( 5.5%)            I                                         
+#> double]                                                       4. [4] 4                       325 (26.9%)            IIIII                                     
+#>                                                               5. [5] 5                       330 (27.3%)            IIIII                                     
+#>                                                               6. [6] 6                       322 (26.7%)            IIIII                                     
+#>                                                               7. [7] Sehr gut  7             122 (10.1%)            II                                        
+#> 
+#> F800_11            Internationales Arbeitsumfeld und          1. [1] Überhaupt nicht gut      27 ( 2.2%)                                  1213       3        
+#> [haven_labelled,   kulturelle Vielfalt                        2. [2] 2                        75 ( 6.2%)            I                     (99.8%)    (0.2%)   
+#> vctrs_vctr,                                                   3. [3] 3                       156 (12.9%)            II                                        
+#> double]                                                       4. [4] 4                       394 (32.5%)            IIIIII                                    
+#>                                                               5. [5] 5                       266 (21.9%)            IIII                                      
+#>                                                               6. [6] 6                       193 (15.9%)            III                                       
+#>                                                               7. [7] Sehr gut  7             102 ( 8.4%)            I                                         
+#> 
+#> F800_12            Innovationskultur und                      1. [1] Überhaupt nicht gut      18 ( 1.5%)                                  1210       6        
+#> [haven_labelled,   Veränderungsbereitschaft des               2. [2] 2                        27 ( 2.2%)                                  (99.5%)    (0.5%)   
+#> vctrs_vctr,        Unternehmens                               3. [3] 3                       116 ( 9.6%)            I                                         
+#> double]                                                       4. [4] 4                       413 (34.1%)            IIIIII                                    
+#>                                                               5. [5] 5                       331 (27.4%)            IIIII                                     
+#>                                                               6. [6] 6                       210 (17.4%)            III                                       
+#>                                                               7. [7] Sehr gut  7              95 ( 7.9%)            I                                         
+#> 
+#> F800_13            Arbeitszeit- und Arbeitsortflexibilität    1. [1] Überhaupt nicht gut      12 ( 1.0%)                                  1208       8        
+#> [haven_labelled,                                              2. [2] 2                        32 ( 2.6%)                                  (99.3%)    (0.7%)   
+#> vctrs_vctr,                                                   3. [3] 3                       114 ( 9.4%)            I                                         
+#> double]                                                       4. [4] 4                       424 (35.1%)            IIIIIII                                   
+#>                                                               5. [5] 5                       332 (27.5%)            IIIII                                     
+#>                                                               6. [6] 6                       199 (16.5%)            III                                       
+#>                                                               7. [7] Sehr gut  7              95 ( 7.9%)            I                                         
+#> 
+#> F800_14            Diversität, Gleichstellung und Inklusion   1. [1] Überhaupt nicht gut      34 ( 2.8%)                                  1210       6        
+#> [haven_labelled,                                              2. [2] 2                        47 ( 3.9%)                                  (99.5%)    (0.5%)   
+#> vctrs_vctr,                                                   3. [3] 3                        94 ( 7.8%)            I                                         
+#> double]                                                       4. [4] 4                       470 (38.8%)            IIIIIII                                   
+#>                                                               5. [5] 5                       328 (27.1%)            IIIII                                     
+#>                                                               6. [6] 6                       168 (13.9%)            II                                        
+#>                                                               7. [7] Sehr gut  7              69 ( 5.7%)            I                                         
+#> --------------------------------------------------------------------------------------------------------------------------------------------------------------
+#> 
+#> ── Descriptive Statistics
+#> Variable |   Mean |     SD |           Range |      Quartiles | Skewness
+#> ------------------------------------------------------------------------
+#> id       | 608.50 | 351.17 | [1.00, 1216.00] | 304.75, 912.25 |     0.00
+#> country  |   1.30 |   0.46 |    [1.00, 2.00] |     1.00, 2.00 |     0.89
+#> cluster  |   3.86 |   1.70 |    [1.00, 6.00] |     2.00, 5.00 |    -0.30
+#> F600     |   4.36 |   1.32 |    [1.00, 7.00] |     4.00, 5.00 |    -0.19
+#> F800_1   |   5.15 |   1.29 |    [1.00, 7.00] |     4.00, 6.00 |    -0.44
+#> F800_2   |   4.78 |   1.21 |    [1.00, 7.00] |     4.00, 6.00 |    -0.19
+#> F800_3   |   4.88 |   1.27 |    [1.00, 7.00] |     4.00, 6.00 |    -0.24
+#> F800_4   |   4.70 |   1.16 |    [1.00, 7.00] |     4.00, 5.00 |    -0.06
+#> F800_5   |   4.67 |   1.23 |    [1.00, 7.00] |     4.00, 5.00 |    -0.03
+#> F800_6   |   5.00 |   1.27 |    [1.00, 7.00] |     4.00, 6.00 |    -0.38
+#> F800_7   |   4.80 |   1.23 |    [1.00, 7.00] |     4.00, 6.00 |    -0.07
+#> F800_8   |   4.62 |   1.22 |    [1.00, 7.00] |     4.00, 5.00 |    -0.06
+#> F800_9   |   4.62 |   1.24 |    [1.00, 7.00] |     4.00, 5.00 |    -0.08
+#> F800_10  |   4.97 |   1.26 |    [1.00, 7.00] |     4.00, 6.00 |    -0.54
+#> F800_11  |   4.47 |   1.40 |    [1.00, 7.00] |     4.00, 5.00 |    -0.12
+#> F800_12  |   4.67 |   1.24 |    [1.00, 7.00] |     4.00, 6.00 |    -0.16
+#> F800_13  |   4.66 |   1.22 |    [1.00, 7.00] |     4.00, 5.00 |    -0.06
+#> F800_14  |   4.48 |   1.26 |    [1.00, 7.00] |     4.00, 5.00 |    -0.32
+#> 
+#> Variable | Kurtosis |    n | n_Missing
+#> --------------------------------------
+#> id       |    -1.20 | 1216 |         0
+#> country  |    -1.21 | 1216 |         0
+#> cluster  |    -1.19 | 1216 |         0
+#> F600     |     0.44 | 1211 |         5
+#> F800_1   |    -0.11 | 1210 |         6
+#> F800_2   |     0.15 | 1204 |        12
+#> F800_3   |    -0.10 | 1207 |         9
+#> F800_4   |     0.35 | 1209 |         7
+#> F800_5   |     0.10 | 1208 |         8
+#> F800_6   |     0.14 | 1209 |         7
+#> F800_7   | 4.11e-03 | 1206 |        10
+#> F800_8   |     0.26 | 1207 |         9
+#> F800_9   |     0.27 | 1209 |         7
+#> F800_10  |     0.48 | 1207 |         9
+#> F800_11  |    -0.29 | 1213 |         3
+#> F800_12  |     0.16 | 1210 |         6
+#> F800_13  |     0.06 | 1208 |         8
+#> F800_14  |     0.56 | 1210 |         6
+```
+
+We already see that there are some missing values in outcome as well as
+in the predictor variables. A more detailed overview of the missing
+values can be obtained by running the following code.
+
+``` r
+
+mice::md.pattern(bkw_missings, rotate.names = TRUE)
+```
+
+![](kda_files/figure-html/missing-values-overview-1.png)
+
+    #>      id country cluster F800_11 F600 F800_1 F800_12 F800_14 F800_4 F800_6
+    #> 1104  1       1       1       1    1      1       1       1      1      1
+    #> 12    1       1       1       1    1      1       1       1      1      1
+    #> 10    1       1       1       1    1      1       1       1      1      1
+    #> 9     1       1       1       1    1      1       1       1      1      1
+    #> 9     1       1       1       1    1      1       1       1      1      1
+    #> 9     1       1       1       1    1      1       1       1      1      1
+    #> 8     1       1       1       1    1      1       1       1      1      1
+    #> 8     1       1       1       1    1      1       1       1      1      1
+    #> 7     1       1       1       1    1      1       1       1      1      1
+    #> 7     1       1       1       1    1      1       1       1      1      0
+    #> 7     1       1       1       1    1      1       1       1      0      1
+    #> 6     1       1       1       1    1      1       1       0      1      1
+    #> 6     1       1       1       1    1      1       0       1      1      1
+    #> 6     1       1       1       1    1      0       1       1      1      1
+    #> 5     1       1       1       1    0      1       1       1      1      1
+    #> 3     1       1       1       0    1      1       1       1      1      1
+    #>       0       0       0       3    5      6       6       6      7      7
+    #>      F800_9 F800_5 F800_13 F800_3 F800_8 F800_10 F800_7 F800_2    
+    #> 1104      1      1       1      1      1       1      1      1   0
+    #> 12        1      1       1      1      1       1      1      0   1
+    #> 10        1      1       1      1      1       1      0      1   1
+    #> 9         1      1       1      1      1       0      1      1   1
+    #> 9         1      1       1      1      0       1      1      1   1
+    #> 9         1      1       1      0      1       1      1      1   1
+    #> 8         1      1       0      1      1       1      1      1   1
+    #> 8         1      0       1      1      1       1      1      1   1
+    #> 7         0      1       1      1      1       1      1      1   1
+    #> 7         1      1       1      1      1       1      1      1   1
+    #> 7         1      1       1      1      1       1      1      1   1
+    #> 6         1      1       1      1      1       1      1      1   1
+    #> 6         1      1       1      1      1       1      1      1   1
+    #> 6         1      1       1      1      1       1      1      1   1
+    #> 5         1      1       1      1      1       1      1      1   1
+    #> 3         1      1       1      1      1       1      1      1   1
+    #>           7      8       8      9      9       9     10     12 112
+
+These outputs can be interpreted as follows:
+
+- **Columns:** Variables in the dataset.
+- **Left Row Numbers:** Answer to the question “How many rows show this
+  specific pattern of missingness?” For example, the first row shows
+  that there are 1,104 rows with no missing values (i.e., all variables
+  have a value). The second row shows that there are 12 rows with only
+  the variable “F800_2” missing, and so on. Missings are coded as a 0 in
+  the table in the colomn output and as red squares in the plot output.
+  Non-missings are coded as a 1 in the table output and as blue squares
+  in the plot output.
+- **Right Row Numbers:** Answer to the question “How many missings are
+  in this specific missing pattern?” In the example we see that all
+  missing patern have only 1 missing value. This pattern is unusual and
+  is due to the fact that this missing data were synthetically generated
+  for demonstration purposes. In real data, it is more common to have
+  missing patterns with multiple missing values.
+- **Bottom Column Numbers:** Answer to the question “How many missings
+  are in this specific variable?” For example, the fourth column shows
+  that there are 3 missing values in the variable “F800_1”, the last
+  column shows that there are 12 missing values in the variable
+  “F800_2”.
+- **Number in the bottom right corner:** Answer to the question “How
+  many missings are in the entire dataset?” In this example, there are
+  112 missing values in total.
+
+Let’s apply the
+[`kda_regression_with_imputation()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression_with_imputation.md)
+function to the `bkw_missings` dataset. We will use the default
+arguments for the imputation process, but we will set
+`importance_method = "jrw"` to save compute time. These default settings
+will run `m = 100` imputations using the predictive mean matching method
+(`method = "pmm"`) and a seed of `seed = 123` for reproducibility. You
+can change these settings by providing a list of imputation arguments to
+the `imputation_args` argument of the
+[`kda_regression_with_imputation()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression_with_imputation.md)
+function. For more information on the available imputation arguments,
+please refer to the documentation of the
+[`mice::mice`](https://amices.org/mice/reference/mice.html) package.
+**Be aware that code execution will take a while (some minutes)**. If it
+takes too long for your use case, consider lowering m to, e.g. `m = 20`.
+
+``` r
+
+res_imp <- kda_regression_with_imputation(
+  data = bkw_missings |>
+    # Select only  the relevant variables for the imputation and KDA
+    dplyr::select(country, cluster, F600, paste0("F800_", 1:14)),
+  outcome = "F600",
+  predictors = paste0("F800_", 1:14),
+  importance_method = "jrw"
+)
+```
+
+The output is essentially the same as for the usual
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function, but the results are now based on the imputed data. You can
+access the plots and other outputs in the same way as for the usual
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function, e.g., `res_imp$plots$ipma_scatterPlot$p` to access the IPMA
+scatter plot. Note that there is an additional line in the subtitle,
+indicating that the results are based on imputed data (number of missing
+values, number of imputations, and method of aggregating the results
+across imputations).
+
+``` r
+
+res_imp$plots$ipma_scatterPlot$p
+```
+
+![](kda_files/figure-html/kda_regression_with_imputation-ipmaPlot-1.png)
+
+Two plots are different from the regular
+[`kda_regression()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_regression.md)
+function: `res_imp$plots$diagnostics_importance` and
+`res_imp$plots$diagnostics_performance` shows the distribution of
+variable importance and performance across the imputations.The plots
+show histograms (background) and the points with intervals at the
+bottom. The points indicate the median, the bolder inner line contains
+66% (2/3) of the probability density and the thinner outer line contains
+95% of the probability density.
+
+Imputation worked well if the distribution of variable importance and
+performance across the imputations is relatively narrow, i.e., if the
+points are close together and the intervals are not too wide. If the
+distribution is very wide, this may indicate that the results are not
+stable across the imputations and should be interpreted with caution.
+The examples below show very good imputation diagnostics (narrow
+distributions).
+
+``` r
+
+res_imp$plots$diagnostics_importance
+```
+
+![](kda_files/figure-html/kda_regression_with_imputation-diagnostics-importance-1.png)
+
+``` r
+
+res_imp$plots$diagnostics_performance
+```
+
+![](kda_files/figure-html/kda_regression_with_imputation-diagnostics-performance-1.png)
+
 ------------------------------------------------------------------------
 
 ## Extended Discussion of Importance Methods
