@@ -25,7 +25,7 @@ kda_regression_with_imputation(
 
 \item{model}{A fitted regression model object. Optional if data, outcome, and predictors are provided.}
 
-\item{imputation_args}{A list of arguments passed to the mice function for imputation. Defaults to \code{list(m = 100, method = "pmm", seed = 123, printFlag = FALSE)}, which translates 100 imputations with the predictive mean matching method and a seed of 123 for reproducibility. See \code{\link[mice:mice]{mice::mice()}} for details.}
+\item{imputation_args}{A list of arguments passed to the mice function for imputation. Defaults to \code{list(m = 100, method = "pmm", seed = 123, printFlag = FALSE)}, which translates to 100 imputations with the predictive mean matching method and a seed of 123 for reproducibility. See \code{\link[mice:mice]{mice::mice()}} for details.}
 
 \item{importance_method}{A string specifying the method for calculating variable importance. Options are 'auto', 'domir', 'jrw', or 'sumOfCoefficients'. Defaults to 'auto'.}
 

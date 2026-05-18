@@ -41,10 +41,10 @@ dp_copy_codebook_template <- function(file_path) {
 #' @export
 #' @examples
 #' # `data` should be a unlabelled data frame
-#' print(head(bkw_unlabelled, 5), n = Inf)
+#' head(bkw_unlabelled, 5)
 #'
 #' # `codebook` should be a data frame with columns "variable", "variable_label", "value", and "value_label" in *long* format
-#' print(head(bkw_labels, 3*7), n = Inf)
+#' head(bkw_labels, 3*7)
 #'
 #' # Convert the unlabelled data to a labelled data frame using the codebook
 #' data_labelled <- dp_convert_to_labelled(bkw_unlabelled, bkw_labels)
