@@ -863,42 +863,6 @@ Let’s have a look at the distribution of missing values in this dataset:
 ``` r
 
 eda_summary(bkw_missings, console_output = TRUE, browser_output = FALSE)
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
 #> 
 #> ── Data Frame Summary
 #> Data Frame Summary  
