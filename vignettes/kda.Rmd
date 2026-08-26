@@ -180,7 +180,7 @@ It is also possible to conduct a KDA with a binary outcome variable using the `k
 
 Let's have a look at the example data with a binary outcome variable ("F600") and the first three predictor variables ("F800_1" to "F800_3"):
 
-```{r eda-binary-outcome}
+```{r eda-binary-outcome, warning = FALSE}
 eda_summary(
   data = bkw_bin_outcome,
   variables = c("F600", paste0("F800_", 1:3)),
