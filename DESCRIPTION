@@ -1,6 +1,6 @@
 Package: YouAnalyser
 Title: Provide Standardized Analytics Products for YouGov DACH
-Version: 0.9.1
+Version: 0.9.2
 Authors@R: 
     person(
         "Emmanuel", "Guizar Rosales",
@@ -37,6 +37,7 @@ Imports:
     openxlsx (>= 4.2.8.1),
     parameters,
     performance,
+    pricesensitivitymeter,
     psych (>= 2.6.3),
     purrr,
     rlang,

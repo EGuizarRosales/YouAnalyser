@@ -22,6 +22,12 @@ reference:
       are helper functions that can be used to run specific steps of the KDA process.
   - contents:
     - starts_with("kda_")
+  - title: Price Sensitivity Meter (PSM)
+    desc: >
+      Functions to perform Van Westendorp Price Sensitivity Meter Analysis,
+      including the Newton Miller Smith Extension (NMS-Extension).
+  - contents:
+      - starts_with("psm_")
   - title: YouAnalyser (YA) Utility Functions
     desc: >
       Miscellaneous utility functions for the YouAnalyser package.
@@ -33,6 +39,7 @@ reference:
   - contents:
       - starts_with("bkw_")
       - starts_with("deka_")
+      - starts_with("chm_")
   - title: Other Functions
     desc: >
       Other functions or data that do not fit into the above categories.
