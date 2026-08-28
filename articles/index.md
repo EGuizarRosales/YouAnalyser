@@ -8,3 +8,5 @@
   (EDA)](https://eguizarrosales.github.io/YouAnalyser/articles/eda.md):
 - [3. Key Driver
   Analysis](https://eguizarrosales.github.io/YouAnalyser/articles/kda.md):
+- [4. Price Sensitivity
+  Meter](https://eguizarrosales.github.io/YouAnalyser/articles/psm.md):

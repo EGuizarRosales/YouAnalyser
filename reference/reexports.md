@@ -10,3 +10,8 @@ to see their documentation.
 - parameters:
 
   [`model_parameters`](https://easystats.github.io/parameters/reference/model_parameters.html)
+
+- pricesensitivitymeter:
+
+  [`psm_analysis`](https://max-alletsee.github.io/pricesensitivitymeter/reference/psm_analysis.html),
+  [`psm_analysis_weighted`](https://max-alletsee.github.io/pricesensitivitymeter/reference/psm_analysis_weighted.html)

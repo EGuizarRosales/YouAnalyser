@@ -280,15 +280,6 @@ eda_summary(
   variables = c("F600", paste0("F800_", 1:3)),
   browser_output = FALSE
 )
-#> Warning: no DISPLAY variable so Tk is not available
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
-#> Warning in png(png_loc <- tempfile(fileext = ".png"), width = 150 *
-#> graph.magnif, : unable to open connection to X11 display ''
 #> 
 #> ── Data Frame Summary
 #> Data Frame Summary  
@@ -356,8 +347,6 @@ kda_bin <- kda_regression(
   importance_method = "jrw",
   diagnostics = TRUE
 )
-#> Cannot simulate residuals for models of class `glm`. Please try
-#>   `check_model(..., residual_type = "normal")` instead.
 ```
 
 We get essentially the same plots as for the KDA with the continuous

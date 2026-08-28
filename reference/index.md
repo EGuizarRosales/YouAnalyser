@@ -66,6 +66,20 @@ specific steps of the KDA process.
 - [`kda_save_data_for_chart()`](https://eguizarrosales.github.io/YouAnalyser/reference/kda_save_data_for_chart.md)
   : Save KDA data for chart in Excel template
 
+## Price Sensitivity Meter (PSM)
+
+Functions to perform Van Westendorp Price Sensitivity Meter Analysis,
+including the Newton Miller Smith Extension (NMS-Extension).
+
+- [`psm_copy_pptx_template()`](https://eguizarrosales.github.io/YouAnalyser/reference/psm_copy_pptx_template.md)
+  : Copy PowerPoint template to specified file path
+- [`psm_design_for_weighted()`](https://eguizarrosales.github.io/YouAnalyser/reference/psm_design_for_weighted.md)
+  : Build a survey design object for weighted PSM analysis
+- [`psm_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/psm_plot.md)
+  : Plot Price Sensitivity Meter (van Westendorp) results
+- [`psm_save_data_for_chart()`](https://eguizarrosales.github.io/YouAnalyser/reference/psm_save_data_for_chart.md)
+  : Save PSM data for chart in Excel template
+
 ## YouAnalyser (YA) Utility Functions
 
 Miscellaneous utility functions for the YouAnalyser package.
@@ -104,6 +118,8 @@ Example datasets included in the YouAnalyser package.
   : BKW Employer Brand Positioning Study Data (Unlabelled Data)
 - [`deka_sample`](https://eguizarrosales.github.io/YouAnalyser/reference/deka_sample.md)
   : Anonymized Random Subsample of a DEKA Study
+- [`chm_synthetic`](https://eguizarrosales.github.io/YouAnalyser/reference/chm_synthetic.md)
+  : Synthetic CH Media Oneplus Streaming Study Data (Synthetic)
 
 ## Other Functions
 

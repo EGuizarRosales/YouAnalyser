@@ -31,7 +31,7 @@ provided codebook.
 
 ``` r
 # `data` should be a unlabelled data frame
-print(head(bkw_unlabelled, 5), n = Inf)
+head(bkw_unlabelled, 5)
 #> # A tibble: 5 × 15
 #>    F600 F800_1 F800_2 F800_3 F800_4 F800_5 F800_6 F800_7 F800_8 F800_9 F800_10
 #>   <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>   <dbl>
@@ -44,7 +44,7 @@ print(head(bkw_unlabelled, 5), n = Inf)
 #> #   F800_14 <dbl>
 
 # `codebook` should be a data frame with columns "variable", "variable_label", "value", and "value_label" in *long* format
-print(head(bkw_labels, 3*7), n = Inf)
+head(bkw_labels, 3*7)
 #> # A tibble: 21 × 4
 #>    variable variable_label                                     value value_label
 #>    <chr>    <chr>                                              <dbl> <chr>      
@@ -58,17 +58,7 @@ print(head(bkw_labels, 3*7), n = Inf)
 #>  8 F800_1   Sicherheit und langfristige Stabilität des Arbeit…     1 Überhaupt …
 #>  9 F800_1   Sicherheit und langfristige Stabilität des Arbeit…     2 2          
 #> 10 F800_1   Sicherheit und langfristige Stabilität des Arbeit…     3 3          
-#> 11 F800_1   Sicherheit und langfristige Stabilität des Arbeit…     4 4          
-#> 12 F800_1   Sicherheit und langfristige Stabilität des Arbeit…     5 5          
-#> 13 F800_1   Sicherheit und langfristige Stabilität des Arbeit…     6 6          
-#> 14 F800_1   Sicherheit und langfristige Stabilität des Arbeit…     7 Sehr gut  7
-#> 15 F800_2   Karriere- und Entwicklungsmöglichkeiten                1 Überhaupt …
-#> 16 F800_2   Karriere- und Entwicklungsmöglichkeiten                2 2          
-#> 17 F800_2   Karriere- und Entwicklungsmöglichkeiten                3 3          
-#> 18 F800_2   Karriere- und Entwicklungsmöglichkeiten                4 4          
-#> 19 F800_2   Karriere- und Entwicklungsmöglichkeiten                5 5          
-#> 20 F800_2   Karriere- und Entwicklungsmöglichkeiten                6 6          
-#> 21 F800_2   Karriere- und Entwicklungsmöglichkeiten                7 Sehr gut  7
+#> # ℹ 11 more rows
 
 # Convert the unlabelled data to a labelled data frame using the codebook
 data_labelled <- dp_convert_to_labelled(bkw_unlabelled, bkw_labels)
