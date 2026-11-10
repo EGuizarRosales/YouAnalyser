@@ -28,6 +28,28 @@ reference:
       including the Newton Miller Smith Extension (NMS-Extension).
   - contents:
       - starts_with("psm_")
+  - title: Segmentation (SEG)
+    desc: >
+      Functions to perform segmentation (cluster analysis) on survey data:
+      preparation of the data and distance matrices, assessment of the
+      clustering tendency, number of clusters and choice of the algorithm.
+  - contents:
+      - seg_prep_data
+      - seg_distance
+      - seg_clustering_tendency
+      - seg_optimal_clusters
+      - starts_with("seg_nbclust_")
+      - seg_compare_algorithms
+  - subtitle: Clustering
+    desc: >
+      Cluster analysis with different algorithms, returning standardized
+      solutions with visualizations.
+  - contents:
+      - seg_cluster
+      - starts_with("seg_cluster_")
+      - seg_dbscan_eps
+      - seg_as_cluster
+      - starts_with("seg_plot_")
   - title: YouAnalyser (YA) Utility Functions
     desc: >
       Miscellaneous utility functions for the YouAnalyser package.
@@ -40,8 +62,11 @@ reference:
       - starts_with("bkw_")
       - starts_with("deka_")
       - starts_with("chm_")
+      - starts_with("sm_")
+      - sim_segments
   - title: Other Functions
     desc: >
       Other functions or data that do not fit into the above categories.
   - contents:
       - yougov_colors
+      - yougov_palette

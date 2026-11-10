@@ -7,3 +7,5 @@
 ^pkgdown$
 ^\.github$
 ^README\.Rmd$
+^inst/extdata/.*_realData\.sav$
+^PLAYGROUND\.R$

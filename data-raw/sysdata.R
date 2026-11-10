@@ -27,4 +27,25 @@ yougov_colors <- c(
     "Yellow 2"   = "#ffe146"
   )
 
-usethis::use_data(yougov_colors, internal = TRUE, overwrite = TRUE)
+
+# Categorical palette for plots with groups (e.g. clusters), used instead of
+# palettes such as "jco" in factoextra. Unnamed on purpose: named vectors would
+# be matched against group levels by ggplot2's manual scales.
+yougov_palette <- unname(yougov_colors[c(
+  "Red 1",
+  "Purple 1",
+  "Blue 1",
+  "Teal 1",
+  "Yellow 1",
+  "Pink 1",
+  "Navy 1",
+  "Green 1",
+  "Lavender 1",
+  "Salmon 1",
+  "Blue 2",
+  "Teal 2",
+  "Pink 2",
+  "Yellow 2"
+)])
+
+usethis::use_data(yougov_colors, yougov_palette, internal = TRUE, overwrite = TRUE)
