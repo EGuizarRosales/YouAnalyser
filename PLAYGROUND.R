@@ -1,6 +1,6 @@
 # Playground for the segmentation (seg_) functions in R/seg_prep.R
-# (preparation, clustering tendency, number of clusters, algorithms) and
-# R/seg_cluster.R (clustering).
+# (preparation, clustering tendency, number of clusters, algorithms),
+# R/seg_cluster.R (clustering) and R/seg_post.R (validation).
 # Run section by section after devtools::load_all().
 
 devtools::load_all()
@@ -300,3 +300,73 @@ table(cluster = cl_sim$cluster, segment = cl_sim$data_full$segment)
 
 # Compare with our survey data: blurry blocks, weak structure
 cl_hk$plots$heatmap
+
+
+# ---- 9. seg_validation() -----------------------------------------------------
+
+# 9a. Single solution: silhouette plot, silhouette coefficient, Dunn index
+val_hk <- seg_validation(cl_hk)
+
+val_hk$summary # main measures
+val_hk$cluster_silhouette # average silhouette width per cluster
+val_hk$plots$silhouette[[1]] # silhouette plot
+val_hk$statistics # further statistics of fpc::cluster.stats()
+
+# Respondents with a negative silhouette (probably misclassified)
+val_hk$silhouette[[1]] |>
+  filter(sil_width < 0) |>
+  arrange(sil_width)
+
+# Silhouette plot directly from a solution (arguments -> fviz_silhouette())
+seg_plot_silhouette(cl_hk)
+seg_plot_silhouette(cl_pam$solutions$k3, ggtheme = theme_minimal())
+
+# 9b. Several numbers of clusters, benchmark segmentation as external grouping
+cl_km_set <- seg_cluster(prep_mice, "kmeans", k = 2:6, plots = FALSE)
+val_km <- seg_validation(cl_km_set, external = "cluster_benchmark")
+
+val_km$plot # all measures over k
+val_km$plot_silhouette # silhouette plots of all solutions
+val_km$plots$measures$`Corrected Rand` # individual measure
+val_km$optimal # best solution per measure
+val_km$crosstabs$`k-means, k = 4` # clusters vs. benchmark segments
+
+# 9c. Several algorithms (named list -> names in the plots), benchmark as
+# seg_cluster object (from seg_as_cluster()) for the external measures
+val_all <- seg_validation(
+  list(
+    `Hierarchical k-means` = seg_cluster(prep_mice, k = 2:6, plots = FALSE, verbose = FALSE),
+    `k-means` = cl_km_set,
+    PAM = cl_pam,
+    Benchmark = cl_benchmark
+  ),
+  external = cl_benchmark,
+  silhouette_plots = FALSE # faster
+)
+val_all$plot
+val_all$summary |> arrange(desc(silhouette))
+
+# External grouping as a vector, e.g. a sociodemographic variable
+seg_validation(cl_hk, external = prep_mice$data_full$cluster_benchmark, external_name = "Benchmark")
+
+# 9d. Sanity check: data with known clusters (see section 8)
+# iris k-means (cf. datanovia): silhouette 0.46, Dunn 0.027, corrected Rand 0.62, VI 0.75
+val_iris <- seg_validation(
+  seg_cluster(prep_iris, "kmeans", k = 2:5, plots = FALSE, verbose = FALSE),
+  external = "Species"
+)
+val_iris$plot
+val_iris$plot_silhouette
+
+# Simulated segments: clear structure, near-perfect recovery at k = 3
+val_sim <- seg_validation(
+  seg_cluster(prep_sim, k = 2:5, plots = FALSE, verbose = FALSE),
+  external = "segment"
+)
+val_sim$plot
+val_sim$crosstabs$`Hierarchical k-means, k = 3`
+
+# Density-based clustering: noise (cluster 0) is excluded from the internal
+# measures and treated as a group of its own for the external measures
+seg_cluster(prep_iris, method = "dbscan", eps = 0.8, min_pts = 8, plots = FALSE, verbose = FALSE) |>
+  seg_validation(external = "Species")

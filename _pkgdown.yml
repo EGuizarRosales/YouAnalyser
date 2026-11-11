@@ -32,7 +32,11 @@ reference:
     desc: >
       Functions to perform segmentation (cluster analysis) on survey data:
       preparation of the data and distance matrices, assessment of the
-      clustering tendency, number of clusters and choice of the algorithm.
+      clustering tendency, number of clusters and choice of the algorithm,
+      cluster analysis with different algorithms, returning standardized
+      solutions with visualizations, and validation of the cluster solutions
+      with internal measures (silhouette width, Dunn index) and external
+      measures (agreement with a reference grouping).
   - contents:
       - seg_prep_data
       - seg_distance
@@ -40,16 +44,15 @@ reference:
       - seg_optimal_clusters
       - starts_with("seg_nbclust_")
       - seg_compare_algorithms
-  - subtitle: Clustering
-    desc: >
-      Cluster analysis with different algorithms, returning standardized
-      solutions with visualizations.
-  - contents:
       - seg_cluster
       - starts_with("seg_cluster_")
       - seg_dbscan_eps
       - seg_as_cluster
-      - starts_with("seg_plot_")
+      - seg_plot_cluster
+      - seg_plot_dend
+      - seg_plot_heatmap
+      - seg_validation
+      - seg_plot_silhouette
   - title: YouAnalyser (YA) Utility Functions
     desc: >
       Miscellaneous utility functions for the YouAnalyser package.

@@ -2047,6 +2047,11 @@ seg_plot_mclust_bic <- function(fit) {
 }
 
 seg_solution_title <- function(object) {
+  paste0(seg_method_label(object), ", k = ", object$k_found)
+}
+
+# Readable name of the clustering method of a solution
+seg_method_label <- function(object) {
   method_txt <- switch(
     object$method,
     hkmeans = "Hierarchical k-means",
@@ -2063,7 +2068,7 @@ seg_solution_title <- function(object) {
   if (object$method == "mclust" && !is.null(object$fit$modelName)) {
     method_txt <- paste0(method_txt, " (", object$fit$modelName, ")")
   }
-  paste0(method_txt, ", k = ", object$k_found)
+  method_txt
 }
 
 seg_cluster_names <- function(object, cluster) {

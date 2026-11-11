@@ -28,6 +28,7 @@ Imports:
     dplyr,
     factoextra (>= 2.0.0),
     forcats,
+    fpc,
     fs (>= 2.0.1),
     GGally (>= 2.4.0),
     ggdist,

@@ -1975,7 +1975,12 @@ seg_clvalid_cluster_sizes <- function(cv, cl_methods, k) {
 }
 
 # Line plot of clValid measures by algorithm and number of clusters
-seg_clvalid_plot <- function(measures, min_cluster_share, facet) {
+seg_clvalid_plot <- function(
+  measures,
+  min_cluster_share,
+  facet,
+  color_name = "Algorithm"
+) {
   measures <- measures |>
     dplyr::mutate(
       label = paste0(.data$measure, " (", .data$better, " = better)"),
@@ -1996,7 +2001,7 @@ seg_clvalid_plot <- function(measures, min_cluster_share, facet) {
       ggplot2::aes(shape = .data$too_small),
       size = 2
     ) +
-    ggplot2::scale_color_manual(values = yougov_palette, name = "Algorithm") +
+    ggplot2::scale_color_manual(values = yougov_palette, name = color_name) +
     ggplot2::scale_shape_manual(
       values = c(`FALSE` = 16, `TRUE` = 4),
       labels = c(

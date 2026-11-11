@@ -10,6 +10,9 @@
   * `seg_dbscan_eps()` suggests `eps` for DBSCAN from the k-nearest-neighbor distances.
   * `seg_as_cluster()` converts an existing segmentation (e.g. from a previous wave) into the same format, so that it can be visualized, profiled and validated like new solutions.
   * `seg_plot_cluster()`, `seg_plot_dend()` and `seg_plot_heatmap()` (re)create the plots of a solution, passing further arguments to `factoextra::fviz_cluster()` and `factoextra::fviz_dend()`. The heatmap is built with ggplot2 for a random sample of respondents, with dendrograms of the variables and the respondents and a cluster color bar; respondents can be grouped by cluster or ordered by a hierarchical clustering.
+  * `seg_validation()` validates one or several cluster solutions (several numbers of clusters and/or algorithms) with internal measures (average silhouette width, share of negative silhouette widths, Dunn index and further statistics of `fpc::cluster.stats()`) and, if a reference grouping is supplied (a vector, a column of the original data or an existing segmentation), external measures (corrected Rand index, Meila's variation of information) with cross tabulations. It returns silhouette plots (`factoextra::fviz_silhouette()`) and ggplot2 plots of all measures over the number of clusters, and reports the best solution per measure.
+  * `seg_plot_silhouette()` (re)creates the silhouette plot of a solution.
+* `fpc` is now imported (for `fpc::cluster.stats()`).
 * `mclust` and `dbscan` are suggested for model-based and density-based clustering.
 * Added `yougov_palette`, an unnamed vector of YouGov colors for plots with groups (e.g. clusters), to be used e.g. instead of the `"jco"` palette in factoextra.
 * `factoextra`, `cluster`, `NbClust` and `clValid` are now imported. `ggplot2`, which was already used, is now declared in Imports.
