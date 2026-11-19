@@ -26,6 +26,7 @@ Imports:
     datawizard (>= 1.3.0),
     domir (>= 1.2.0),
     dplyr,
+    effectsize,
     factoextra (>= 2.0.0),
     forcats,
     fpc,
@@ -37,7 +38,9 @@ Imports:
     glue,
     haven,
     insight,
+    marginaleffects,
     mice (>= 3.19.0),
+    modelbased (>= 0.17.0),
     NbClust,
     openxlsx (>= 4.2.8.1),
     parameters,
@@ -47,6 +50,7 @@ Imports:
     purrr,
     rlang,
     rwa (>= 0.1.1),
+    sandwich,
     see (>= 0.13.0),
     showtext (>= 0.9.8),
     sjlabelled,
@@ -57,11 +61,15 @@ Depends:
     R (>= 3.5)
 LazyData: true
 Suggests: 
+    bslib,
     dbscan,
+    DT,
+    ggstatsplot,
     hexSticker (>= 0.5.1),
     knitr,
     mclust,
     rmarkdown,
+    shiny,
     synthpop
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown

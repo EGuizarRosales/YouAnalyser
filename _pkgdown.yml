@@ -12,7 +12,9 @@ reference:
   - title: Exploratory Data Analysis (EDA)
     desc: >
       Functions to perform exploratory data analysis (EDA) on survey data, 
-      including summary statistics and correlations.
+      including summary statistics, correlations, descriptive statistics,
+      tests and plots of several variables by group (e.g. clusters), and an
+      interactive Shiny gadget (`eda_explore()`).
   - contents:
     - starts_with("eda_")
   - title: Key Driver Analysis (KDA)

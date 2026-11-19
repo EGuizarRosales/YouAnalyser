@@ -252,7 +252,11 @@ seg_plot_heatmap(cl_hk, row_order = "dendrogram")
 seg_plot_heatmap(cl_hk, n = NULL)
 
 # Existing segmentation (benchmark 2024) in the same format
-cl_benchmark <- seg_as_cluster(prep_mice, "cluster_benchmark", name = "Benchmark 2024")
+cl_benchmark <- seg_as_cluster(
+  prep_mice,
+  "cluster_benchmark",
+  name = "Benchmark 2024"
+)
 cl_benchmark$plots$heatmap
 
 # Agreement of a new solution with the benchmark
@@ -335,7 +339,12 @@ val_km$crosstabs$`k-means, k = 4` # clusters vs. benchmark segments
 # seg_cluster object (from seg_as_cluster()) for the external measures
 val_all <- seg_validation(
   list(
-    `Hierarchical k-means` = seg_cluster(prep_mice, k = 2:6, plots = FALSE, verbose = FALSE),
+    `Hierarchical k-means` = seg_cluster(
+      prep_mice,
+      k = 2:6,
+      plots = FALSE,
+      verbose = FALSE
+    ),
     `k-means` = cl_km_set,
     PAM = cl_pam,
     Benchmark = cl_benchmark
@@ -347,7 +356,11 @@ val_all$plot
 val_all$summary |> arrange(desc(silhouette))
 
 # External grouping as a vector, e.g. a sociodemographic variable
-seg_validation(cl_hk, external = prep_mice$data_full$cluster_benchmark, external_name = "Benchmark")
+seg_validation(
+  cl_hk,
+  external = prep_mice$data_full$cluster_benchmark,
+  external_name = "Benchmark"
+)
 
 # 9d. Sanity check: data with known clusters (see section 8)
 # iris k-means (cf. datanovia): silhouette 0.46, Dunn 0.027, corrected Rand 0.62, VI 0.75
@@ -368,5 +381,141 @@ val_sim$crosstabs$`Hierarchical k-means, k = 3`
 
 # Density-based clustering: noise (cluster 0) is excluded from the internal
 # measures and treated as a group of its own for the external measures
-seg_cluster(prep_iris, method = "dbscan", eps = 0.8, min_pts = 8, plots = FALSE, verbose = FALSE) |>
+seg_cluster(
+  prep_iris,
+  method = "dbscan",
+  eps = 0.8,
+  min_pts = 8,
+  plots = FALSE,
+  verbose = FALSE
+) |>
   seg_validation(external = "Species")
+
+# ---- 10. Descriptive statistics and plots by cluster (eda_) ------------------
+# (R/eda_interactive.R; eda_explore() needs shiny, bslib and DT, the detailed
+# test plots in its "Tests" tab ggstatsplot)
+
+items <- paste0("F50_0_", 1:6)
+
+# 10a. Descriptive statistics: means of numeric items, distributions of
+# categorical variables (auto: numeric if >= 5 value labels or values)
+eda_describe(sm_synthetic, vars = starts_with("F50_0_"))
+eda_describe(
+  sm_synthetic,
+  vars = c(items, "gender", "education"),
+  group = "cluster_benchmark",
+  weight = "weight",
+  total = TRUE,
+  test = TRUE
+)
+
+# 10b. Tests of group differences: omnibus ANOVA / Kruskal-Wallis /
+# chi-square; contrasts with modelbased::estimate_contrasts() (robust SE,
+# Holm-adjusted): vs. total incl. the group (default), rest of the sample,
+# mean of the group means, or all pairs of groups (see ?eda_test)
+eda_test(
+  sm_synthetic,
+  vars = items,
+  group = "cluster_benchmark",
+  weight = "weight"
+)
+eda_test(
+  sm_synthetic,
+  vars = items,
+  group = "cluster_benchmark",
+  reference = "rest"
+) # same p as "total"
+eda_test(
+  sm_synthetic,
+  vars = items,
+  group = "cluster_benchmark",
+  reference = "meandev"
+)
+eda_test(
+  sm_synthetic,
+  vars = items,
+  group = "cluster_benchmark",
+  reference = "groups"
+)
+eda_test(
+  sm_synthetic,
+  vars = items,
+  group = "cluster_benchmark",
+  method = "nonparametric"
+)
+
+# 10c. Plots of several variables in one plot
+eda_plot(sm_synthetic, vars = items)
+eda_plot(
+  sm_synthetic,
+  vars = items,
+  group = "cluster_benchmark",
+  weight = "weight",
+  show_sig = TRUE, # default: higher / lower than the total
+  total = TRUE
+)
+# Letters for the differences between the groups, nonparametric tests
+eda_plot(
+  sm_synthetic,
+  vars = items,
+  group = "cluster_benchmark",
+  show_sig = TRUE,
+  reference = "groups",
+  test_method = "nonparametric"
+)
+eda_plot(
+  sm_synthetic,
+  vars = items,
+  group = "cluster_benchmark",
+  orientation = "vertical",
+  error = "se"
+)
+eda_plot(
+  sm_synthetic,
+  vars = items,
+  group = "cluster_benchmark",
+  type = "box",
+  show_sig = TRUE
+)
+eda_plot(
+  sm_synthetic,
+  vars = c("F50_0_1", "age"),
+  group = "cluster_benchmark",
+  facet = TRUE
+)
+eda_plot(
+  sm_synthetic,
+  vars = c("gender", "education"),
+  group = "cluster_benchmark"
+)
+eda_plot(sm_synthetic, vars = items[1:3], type = "stacked") # 1-10 scale as distribution
+
+# 10d. Cluster solutions as grouping variables: a seg_cluster(_set) supplies
+# its original data (data_full) plus one variable per solution (cluster_k2, ...)
+eda_plot(cl_hk, vars = items, group = "cluster_k4", show_sig = TRUE)
+eda_describe(
+  cl_km_set,
+  vars = c(items, "gender"),
+  group = "cluster_k3",
+  test = TRUE
+)
+
+# 10e. Detailed plot of one variable with ggstatsplot tests
+eda_plot_detail(sm_synthetic, var = "F50_0_1", group = "cluster_benchmark")
+eda_plot_detail(
+  sm_synthetic,
+  var = "F50_0_1",
+  group = "cluster_benchmark",
+  type = "robust",
+  violin = FALSE,
+  points = FALSE,
+  pairwise_display = "all"
+)
+eda_plot_detail(cl_hk, var = "gender", group = "cluster_k4")
+
+# 10f. Interactive gadget (viewer pane; "Done" returns plot, statistics, code)
+res <- eda_explore(cl_km_set)
+res$plot
+res$describe
+cat(res$code)
+eda_explore(viewer = "browser") # all data frames / seg_cluster outputs in the session
