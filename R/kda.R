@@ -240,7 +240,7 @@ kda_importance_domir <- function(
       Importance_Percent = Importance_Ratio * 100,
       Importance_Rank = as.numeric(da$Ranks)
     )
-  attr(out, "importance_type") <- "R²"
+  attr(out, "importance_type") <- "R\u00b2"
 
   return(list(
     out = out,
@@ -299,7 +299,7 @@ kda_importance_jrw <- function(model) {
       Importance_Percent = Importance_Ratio * 100,
       Importance_Rank = dplyr::row_number(dplyr::desc(Raw.RelWeight))
     )
-  attr(out, "importance_type") <- "R²"
+  attr(out, "importance_type") <- "R\u00b2"
 
   return(list(
     out = out,
@@ -544,7 +544,7 @@ kda_forestPlot <- function(model, model_parameters_args = list()) {
     ggplot2::labs(
       title = "Forest Plot of Regression Results",
       x = attr(m_params, "coefficient_name"),
-      subtitle = paste0("R² = ", R2, "; N = ", N),
+      subtitle = paste0("R\u00b2 = ", R2, "; N = ", N),
       caption = paste0(
         "Outcome: ",
         stringr::str_wrap(
@@ -604,8 +604,8 @@ kda_importance_barPlot <- function(
         "%\n(",
         paste0(
           ifelse(
-            attr(importance_obj$out, "importance_type") == "R²",
-            "R² = ",
+            attr(importance_obj$out, "importance_type") == "R\u00b2",
+            "R\u00b2 = ",
             "Coeff = "
           ),
           ya_format_numeric(Importance_Raw)
@@ -646,7 +646,7 @@ kda_importance_barPlot <- function(
           ),
           ""
         ),
-        "Total R² = ",
+        "Total R\u00b2 = ",
         ya_format_numeric(sum(importance_obj$out$Importance_Raw) * 100),
         "%; N = ",
         nrow(data)
@@ -867,7 +867,7 @@ kda_ipma_scatterPlot <- function(
         "Mean Performance = ",
         ya_format_numeric(ipma_obj$means$Performance_Ratio_Mean * 100),
         "%; ",
-        "R² = ",
+        "R\u00b2 = ",
         ya_format_numeric(performance::r2(model)$R2 * 100),
         "%; N = ",
         nrow(data)
@@ -1242,7 +1242,7 @@ kda_interactive_workflow <- function(
     )
     cli::cli_bullets(
       c(
-        "x" = "Low R² detected (R² < 0.2): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
+        "x" = "Low R\u00b2 detected (R\u00b2 < 0.2): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
         "i" = "Consider reviewing your model specification, adding relevant predictors, or checking for data quality issues."
       )
     )
@@ -1255,7 +1255,7 @@ kda_interactive_workflow <- function(
     )
     cli::cli_bullets(
       c(
-        ">" = "Moderate R² detected (0.2 ≤ R² < 0.4): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
+        ">" = "Moderate R\u00b2 detected (0.2 \u2264 R\u00b2 < 0.4): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
         "i" = "While this is not necessarily a problem, consider whether additional predictors or model adjustments could improve the explanatory power."
       )
     )
@@ -1268,7 +1268,7 @@ kda_interactive_workflow <- function(
     )
     cli::cli_bullets(
       c(
-        "v" = "High R² detected (R² ≥ 0.4): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
+        "v" = "High R\u00b2 detected (R\u00b2 \u2265 0.4): {ya_format_numeric(r2$R2 * 100)}% of variance explained.",
         "i" = "This suggests that your model is capturing a substantial portion of the variance in the outcome variable."
       )
     )

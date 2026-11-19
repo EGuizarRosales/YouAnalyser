@@ -22,8 +22,6 @@ eda_summary(
 \item{browser_output}{A logical value indicating whether to display the summary table in the browser. Defaults to TRUE.}
 
 \item{describe_distribution_args}{A list of additional arguments passed to \code{\link[datawizard:describe_distribution]{datawizard::describe_distribution()}}.}
-
-\item{dfSummary_args}{A list of additional arguments passed to \code{\link[summarytools:dfSummary]{summarytools::dfSummary()}}.}
 }
 \value{
 A temporary html summary table of the data, which is displayed in the browser.

@@ -9,10 +9,11 @@ Authors@R:
         comment = c(Position = "Data & Analytics Innovation Scientist")
     )
 Description: A collection of functions that serve as tools for
-    YouGov DACH Analytics Partners. The function currently provides functions
-    for Key Driver Analysis. Planned addtions include
-    Structural Equation Modeling, Implicit Association Tests,
-    Segmentation (Cluster Analysis), and MaxDiff.
+    YouGov DACH Analytics Partners. The package currently provides functions
+    for data processing of labelled survey data, exploratory data analysis,
+    Key Driver Analysis, Van Westendorp Price Sensitivity Meter analysis,
+    and Segmentation (Cluster Analysis). Planned additions include
+    Structural Equation Modeling, Implicit Association Tests, and MaxDiff.
 License: file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -51,11 +52,13 @@ Imports:
     rlang,
     rwa (>= 0.1.1),
     sandwich,
+    scales,
     see (>= 0.13.0),
     showtext (>= 0.9.8),
     sjlabelled,
     stringr,
     summarytools,
+    survey,
     tibble,
     tidyr
 Depends: 
@@ -71,9 +74,11 @@ Suggests:
     knitr,
     mclust,
     rmarkdown,
+    rstudioapi,
     shiny,
     synthpop,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    usethis
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown
 Config/roxygen2/version: 8.1.0

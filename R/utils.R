@@ -128,6 +128,10 @@ ya_setup_folder_structure <- function(
 
   # Make the projet an R project
   if (make_rproj) {
+    rlang::check_installed(
+      c("usethis", "rstudioapi"),
+      reason = "to set up the folder as an R project (`make_rproj = TRUE`)."
+    )
     usethis::create_project(
       path = base_path,
       rstudio = rstudioapi::isAvailable(),
@@ -215,7 +219,7 @@ ya_save_plot <- function(
     cli::cli_inform(
       c(
         "v" = "Plot saved to {.path {fs::path_norm(file_path)}}",
-        "i" = "Dimensions: {width} cm × {height} cm at {resolution} dpi"
+        "i" = "Dimensions: {width} cm \u00d7 {height} cm at {resolution} dpi"
       )
     )
   }

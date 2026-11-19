@@ -7,7 +7,6 @@
 #' @param variables An optional vector of variable names to include in the inspection. If NULL, all variables are included.
 #' @param console_output A logical value indicating whether to print descriptive statistics in the console. Defaults to TRUE.
 #' @param browser_output A logical value indicating whether to display the summary table in the browser. Defaults to TRUE.
-#' @param dfSummary_args A list of additional arguments passed to [summarytools::dfSummary()].
 #' @param describe_distribution_args A list of additional arguments passed to [datawizard::describe_distribution()].
 #'
 #' @returns A temporary html summary table of the data, which is displayed in the browser.

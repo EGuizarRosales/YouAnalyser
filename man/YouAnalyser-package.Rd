@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-A collection of functions that serve as tools for YouGov DACH Analytics Partners. The function currently provides functions for Key Driver Analysis. Planned addtions include Structural Equation Modeling, Implicit Association Tests, Segmentation (Cluster Analysis), and MaxDiff.
+A collection of functions that serve as tools for YouGov DACH Analytics Partners. The package currently provides functions for data processing of labelled survey data, exploratory data analysis, Key Driver Analysis, Van Westendorp Price Sensitivity Meter analysis, and Segmentation (Cluster Analysis). Planned additions include Structural Equation Modeling, Implicit Association Tests, and MaxDiff.
 }
 \seealso{
 Useful links:

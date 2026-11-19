@@ -1,6 +1,7 @@
 url: https://eguizarrosales.github.io/YouAnalyser/
 template:
   bootstrap: 5
+  math-rendering: katex
 
 reference:
   - title: Data Processing
