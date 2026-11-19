@@ -8,7 +8,7 @@ ya_setup_folder_structure(
   folder_name,
   base_path = tcltk::tk_choose.dir(),
   template = NULL,
-  make_rproj = TRUE
+  make_rproj = FALSE
 )
 }
 \arguments{
@@ -16,13 +16,25 @@ ya_setup_folder_structure(
 
 \item{base_path}{A single string specifying the base directory where the folder structure should be created.}
 
-\item{template}{Optional. A single string specifying the name of the template file to be copied into the scripts folder. The template should be an R script located in the "templates" directory of the YouAnalyser package. Currently, \code{"kda"} is supported}
+\item{template}{Optional. A single string specifying the template script to be copied into the scripts folder (\verb{02_scripts}). The templates are R scripts in the "templates" directory of the YouAnalyser package:
+\itemize{
+\item \code{"kda"}: Key Driver Analysis, see \code{vignette("kda", package = "YouAnalyser")}.
+\item \code{"seg"}: Segmentation (cluster analysis) with hierarchical k-means, from the data preparation to the validation, interpretation and export of the segments and the assignment of new respondents, see \code{vignette("seg", package = "YouAnalyser")}.
+}
 
-\item{make_rproj}{Optional. A logical value indicating whether to create an R project file in the main folder. Defaults to TRUE.}
+Defaults to \code{NULL} (no template).}
+
+\item{make_rproj}{Optional. A logical value indicating whether to create an R project file in the main folder. Defaults to FALSE.}
 }
 \value{
 NULL, invisibly. The function creates a standardized folder structure for a project at the specified location and optionally copies a template script and creates an R project file. Informative messages about the created folder structure are printed to the console.
 }
 \description{
 Set up a standardized folder structure for a project, including subfolders for input data, scripts, and output. Optionally, copy a template script into the scripts folder and create an R project file in the main folder. The function provides informative messages about the created folder structure and any actions taken.
+}
+\examples{
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+# Segmentation project with the segmentation template
+ya_setup_folder_structure("my_segmentation", template = "seg")
+\dontshow{\}) # examplesIf}
 }

@@ -101,13 +101,14 @@ following folder structure:
 │   ├── data
 │   ├── plots
 │   └── reports
-├── Project2.Rproj
-└── R
 ```
 
-The `ya_setup_folder_structure()` function is used in workflows. See
-`vignette("kda", package = "YouAnalyser")` for an example of how to use
-it in a workflow.
+With `make_rproj = TRUE`, the folder is also set up as an RStudio
+project. With `template`, a template script for an analysis is copied
+into `02_scripts`: `"kda"` for a Key Driver Analysis (see
+`vignette("kda", package = "YouAnalyser")`) or `"seg"` for a
+segmentation (see `vignette("seg", package = "YouAnalyser")`), e.g.
+`ya_setup_folder_structure("mySegmentation", template = "seg")`.
 
 ## 2. Exploratory Data Analysis (EDA)
 

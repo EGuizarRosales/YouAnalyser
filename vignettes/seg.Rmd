@@ -45,6 +45,8 @@ The segmentation functions of YouAnalyser all start with `seg_` and follow the s
 
 The methodology closely follows the excellent tutorials on [datanovia](https://www.datanovia.com/learn/machine-learning/clustering) and the book by Kassambara (2017), and builds on the R packages factoextra, cluster, NbClust, clValid and fpc. The documentation of each function (e.g. `?seg_validation`) contains more details, formulas and references.
 
+**Getting started with your own project:** `ya_setup_folder_structure("mySegmentation", template = "seg")` creates a project folder with a template script (`02_scripts/seg.R`) that follows the steps of this vignette with the recommended settings (hierarchical k-means), from the data preparation to the export of the segments.
+
 ## Example data
 
 We use two datasets throughout this vignette:

@@ -686,8 +686,12 @@ eda_select <- function(data, vars, call = rlang::caller_env()) {
     cli::cli_abort("Please select at least one variable in {.arg vars}.", call = call)
   }
   # A character vector (e.g. `vars = items`) is selected with all_of() to
-  # avoid tidyselect's deprecation warning for external vectors
-  value <- tryCatch(rlang::eval_tidy(quo), error = function(e) NULL)
+  # avoid tidyselect's deprecation warning for external vectors. Only plain
+  # symbols are evaluated: evaluating calls such as all_of() outside of a
+  # selection context triggers a deprecation warning of tidyselect.
+  value <- if (rlang::quo_is_symbol(quo)) {
+    tryCatch(rlang::eval_tidy(quo), error = function(e) NULL)
+  }
   out <- if (is.character(value)) {
     names(dplyr::select(data, dplyr::all_of(value)))
   } else {

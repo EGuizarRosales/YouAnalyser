@@ -61,18 +61,38 @@ ya_choose_file <- function() {
 #'
 #' @param base_path A single string specifying the base directory where the folder structure should be created.
 #' @param folder_name A single string specifying the name of the main folder to be created within the base directory. This folder will contain the standardized subfolder structure for organizing project files.
-#' @param template Optional. A single string specifying the name of the template file to be copied into the scripts folder. The template should be an R script located in the "templates" directory of the YouAnalyser package. Currently, `"kda"` is supported
-#' @param make_rproj Optional. A logical value indicating whether to create an R project file in the main folder. Defaults to TRUE.
+#' @param template Optional. A single string specifying the template script to be copied into the scripts folder (`02_scripts`). The templates are R scripts in the "templates" directory of the YouAnalyser package:
+#'   * `"kda"`: Key Driver Analysis, see `vignette("kda", package = "YouAnalyser")`.
+#'   * `"seg"`: Segmentation (cluster analysis) with hierarchical k-means, from the data preparation to the validation, interpretation and export of the segments and the assignment of new respondents, see `vignette("seg", package = "YouAnalyser")`.
+#'
+#'   Defaults to `NULL` (no template).
+#' @param make_rproj Optional. A logical value indicating whether to create an R project file in the main folder. Defaults to FALSE.
 #'
 #' @returns NULL, invisibly. The function creates a standardized folder structure for a project at the specified location and optionally copies a template script and creates an R project file. Informative messages about the created folder structure are printed to the console.
+#'
+#' @examplesIf interactive()
+#' # Segmentation project with the segmentation template
+#' ya_setup_folder_structure("my_segmentation", template = "seg")
 #'
 #' @export
 ya_setup_folder_structure <- function(
   folder_name,
   base_path = tcltk::tk_choose.dir(),
   template = NULL,
-  make_rproj = TRUE
+  make_rproj = FALSE
 ) {
+  if (!is.null(template)) {
+    available <- fs::path_ext_remove(fs::path_file(
+      fs::dir_ls(system.file("templates", package = "YouAnalyser"), glob = "*.R")
+    ))
+    if (!rlang::is_string(template) || !template %in% available) {
+      cli::cli_abort(c(
+        "Template {.val {template}} not found in YouAnalyser package.",
+        "i" = "Available templates: {.val {available}}."
+      ))
+    }
+  }
+
   base_path <- fs::path(base_path, folder_name)
 
   # Data
