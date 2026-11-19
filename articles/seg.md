@@ -659,9 +659,7 @@ covers all three types for one or several solutions.
 and *b_(i)* the average distance to the members of the nearest other
 cluster (the *neighbour*). The silhouette width is
 
-``` math
 s_i = \frac{b_i - a_i}{\max(a_i, b_i)}
-```
 
 - *s_(i)* close to **1**: the respondent is much closer to its own
   cluster than to the neighbour, i.e. well clustered.

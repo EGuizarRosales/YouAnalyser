@@ -367,12 +367,12 @@ outcome variable. Some differences include:
   predictor are associated with higher probabilities of the outcome
   being 1. The further away from zero, the stronger the association
   between the predictor and the outcome.
-- $`R^2`$ values in the `kda_bin$plots$importance_barPlot`,
+- R^2 values in the `kda_bin$plots$importance_barPlot`,
   `kda_bin$plots$performance_barPlot`, and
-  `kda_bin$plots$ipma_scatterPlot` now refer to $`R^2_{Tjur}`$, which is
-  a pseudo-$`R^2`$ measure that is commonly used for logistic regression
-  models. The same rules for interpretation apply as for the $`R^2`$
-  values in the KDA with a continuous outcome variable.
+  `kda_bin$plots$ipma_scatterPlot` now refer to R^2\_{Tjur}, which is a
+  pseudo-R^2 measure that is commonly used for logistic regression
+  models. The same rules for interpretation apply as for the R^2 values
+  in the KDA with a continuous outcome variable.
 
 `kda_bin$plots$diagnostics_correlation`
 
@@ -1224,10 +1224,10 @@ res_imp$plots$diagnostics_performance
 In many applied regression settings—particularly with observational
 data—predictors are **correlated**, making it unclear how much each
 predictor truly contributes to the model. Standard regression outputs
-(e.g., standardized coefficients, partial $`R^2`$ , or $`t`$-statistics)
-depend on the specific set of covariates included and can change
-dramatically under multicollinearity. As a result, they often provide
-**unstable or misleading assessments of predictor importance**.
+(e.g., standardized coefficients, partial R^2 , or t-statistics) depend
+on the specific set of covariates included and can change dramatically
+under multicollinearity. As a result, they often provide **unstable or
+misleading assessments of predictor importance**.
 
 Dominance analysis addresses this problem by evaluating predictor
 importance **across all possible regression models**, rather than
@@ -1245,24 +1245,21 @@ computationally efficient approaches can be compared.
 #### Methodology
 
 Dominance analysis defines the importance of a predictor as its
-**average marginal contribution to $`R^2`$** across all subset models in
+**average marginal contribution to R^2** across all subset models in
 which it appears.
 
-Formally, for each predictor $`X_j`$:
+Formally, for each predictor X_j:
 
 1.  All possible subsets of the remaining predictors are considered.
-2.  For each subset $`S`$, the increase in explained variance,
-    ``` math
-    \Delta R^2 = R^2(S \cup {X_j}) - R^2(S)
-    ```
-    is computed.
+2.  For each subset S, the increase in explained variance, \Delta R^2 =
+    R^2(S \cup {X_j}) - R^2(S) is computed.
 3.  These incremental contributions are **averaged over all subsets**,
-    yielding a non‑negative importance value for $`X_j`$.
+    yielding a non‑negative importance value for X_j.
 
 The resulting dominance statistics **sum exactly to the total model
-$`R^2`$** and can be expressed as percentages of explained variance.
+R^2** and can be expressed as percentages of explained variance.
 Dominance analysis is mathematically equivalent to the **LMG / Shapley
-value decomposition** of $`R^2`$, ensuring a fair and order‑independent
+value decomposition** of R^2, ensuring a fair and order‑independent
 allocation of shared variance. Its principal drawback is computational
 complexity, as the number of subset models grows exponentially with the
 number of predictors.
@@ -1295,7 +1292,7 @@ estimates are needed for communication or reporting.
 #### Methodology
 
 Johnson’s relative weights method estimates each predictor’s
-contribution to $`R^2`$ by combining orthogonalization with variance
+contribution to R^2 by combining orthogonalization with variance
 reallocation.
 
 The procedure can be summarized in four steps:
@@ -1310,7 +1307,7 @@ The procedure can be summarized in four steps:
 2.  **Regression on orthogonal variables**  
     The outcome is regressed on the orthogonal predictors. Because these
     predictors are uncorrelated, each squared standardized coefficient
-    represents the portion of $`R^2`$ attributable to that orthogonal
+    represents the portion of R^2 attributable to that orthogonal
     component.
 
 3.  **Mapping variance back to original predictors**  
@@ -1322,7 +1319,7 @@ The procedure can be summarized in four steps:
 4.  **Computation of relative weights**  
     A predictor’s relative weight is obtained by summing its allocated
     contributions across all orthogonal components. The resulting
-    weights are **non‑negative and sum exactly to $`R^2`$**, and are
+    weights are **non‑negative and sum exactly to R^2**, and are
     typically reported as percentages of explained variance.
 
 Empirically, Johnson showed that these relative weights closely

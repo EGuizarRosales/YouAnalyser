@@ -141,10 +141,10 @@ prep <- seg_prep_data(
 # Quick exploration without the expensive methods
 optimal <- seg_optimal_clusters(prep, methods = c("wss", "silhouette"))
 #> ℹ Running "wss"
-#> ✔ Running "wss" [1s]
+#> ✔ Running "wss" [1.2s]
 #> 
 #> ℹ Running "silhouette"
-#> ✔ Running "silhouette" [850ms]
+#> ✔ Running "silhouette" [1.1s]
 #> 
 #> 
 #> ── Optimal number of clusters (kmeans) ──

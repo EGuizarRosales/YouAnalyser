@@ -10,7 +10,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
-<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="../katex-auto.js"></script><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -398,17 +399,13 @@ values of the predictor are associated with higher probabilities of the
 outcome being 1. The further away from zero, the stronger the
 association between the predictor and the outcome.</li>
 <li>
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-values in the <code>kda_bin$plots$importance_barPlot</code>,
+<span class="math inline">R^2</span> values in the
+<code>kda_bin$plots$importance_barPlot</code>,
 <code>kda_bin$plots$performance_barPlot</code>, and
-<code>kda_bin$plots$ipma_scatterPlot</code> now refer to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>R</mi><mrow><mi>T</mi><mi>j</mi><mi>u</mi><mi>r</mi></mrow><mn>2</mn></msubsup><annotation encoding="application/x-tex">R^2_{Tjur}</annotation></semantics></math>,
-which is a
-pseudo-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-measure that is commonly used for logistic regression models. The same
-rules for interpretation apply as for the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-values in the KDA with a continuous outcome variable.</li>
+<code>kda_bin$plots$ipma_scatterPlot</code> now refer to <span class="math inline">R^2_{Tjur}</span>, which is a pseudo-<span class="math inline">R^2</span> measure that is commonly used for
+logistic regression models. The same rules for interpretation apply as
+for the <span class="math inline">R^2</span> values in the KDA with a
+continuous outcome variable.</li>
 </ul>
 <p><code>kda_bin$plots$diagnostics_correlation</code></p>
 <p><img src="fig/bin_diagnostics_corelation.jpeg"></p>
@@ -1177,14 +1174,10 @@ distributions).</p>
 <p>In many applied regression settings—particularly with observational
 data—predictors are <strong>correlated</strong>, making it unclear how
 much each predictor truly contributes to the model. Standard regression
-outputs (e.g., standardized coefficients, partial
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-, or
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>-statistics)
-depend on the specific set of covariates included and can change
-dramatically under multicollinearity. As a result, they often provide
-<strong>unstable or misleading assessments of predictor
-importance</strong>.</p>
+outputs (e.g., standardized coefficients, partial <span class="math inline">R^2</span> , or <span class="math inline">t</span>-statistics) depend on the specific set of
+covariates included and can change dramatically under multicollinearity.
+As a result, they often provide <strong>unstable or misleading
+assessments of predictor importance</strong>.</p>
 <p>Dominance analysis addresses this problem by evaluating predictor
 importance <strong>across all possible regression models</strong>,
 rather than conditioning on a single model specification. By averaging
@@ -1203,32 +1196,25 @@ be compared.</p>
 <h4 id="methodology">Methodology<a class="anchor" aria-label="anchor" href="#methodology"></a>
 </h4>
 <p>Dominance analysis defines the importance of a predictor as its
-<strong>average marginal contribution to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></strong>
-across all subset models in which it appears.</p>
-<p>Formally, for each predictor
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mi>j</mi></msub><annotation encoding="application/x-tex">X_j</annotation></semantics></math>:</p>
+<strong>average marginal contribution to <span class="math inline">R^2</span></strong> across all subset models in
+which it appears.</p>
+<p>Formally, for each predictor <span class="math inline">X_j</span>:</p>
 <ol style="list-style-type: decimal">
 <li>All possible subsets of the remaining predictors are
 considered.</li>
-<li>For each subset
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>,
-the increase in explained variance,
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msup><mi>R</mi><mn>2</mn></msup><mo>=</mo><msup><mi>R</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mi>S</mi><mo>∪</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>−</mo><msup><mi>R</mi><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mi>S</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">
+<li>For each subset <span class="math inline">S</span>, the increase in
+explained variance, <span class="math display">
 \Delta R^2 = R^2(S \cup {X_j}) - R^2(S)
-</annotation></semantics></math> is computed.</li>
+</span> is computed.</li>
 <li>These incremental contributions are <strong>averaged over all
-subsets</strong>, yielding a non‑negative importance value for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>X</mi><mi>j</mi></msub><annotation encoding="application/x-tex">X_j</annotation></semantics></math>.</li>
+subsets</strong>, yielding a non‑negative importance value for <span class="math inline">X_j</span>.</li>
 </ol>
 <p>The resulting dominance statistics <strong>sum exactly to the total
-model
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></strong>
-and can be expressed as percentages of explained variance. Dominance
-analysis is mathematically equivalent to the <strong>LMG / Shapley value
-decomposition</strong> of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>,
-ensuring a fair and order‑independent allocation of shared variance. Its
+model <span class="math inline">R^2</span></strong> and can be expressed
+as percentages of explained variance. Dominance analysis is
+mathematically equivalent to the <strong>LMG / Shapley value
+decomposition</strong> of <span class="math inline">R^2</span>, ensuring
+a fair and order‑independent allocation of shared variance. Its
 principal drawback is computational complexity, as the number of subset
 models grows exponentially with the number of predictors.</p>
 </div>
@@ -1263,9 +1249,8 @@ reporting.</p>
 <h4 id="methodology-1">Methodology<a class="anchor" aria-label="anchor" href="#methodology-1"></a>
 </h4>
 <p>Johnson’s relative weights method estimates each predictor’s
-contribution to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
-by combining orthogonalization with variance reallocation.</p>
+contribution to <span class="math inline">R^2</span> by combining
+orthogonalization with variance reallocation.</p>
 <p>The procedure can be summarized in four steps:</p>
 <ol style="list-style-type: decimal">
 <li><p><strong>Orthogonalization of predictors</strong><br>
@@ -1278,8 +1263,7 @@ predictors.</p></li>
 <li><p><strong>Regression on orthogonal variables</strong><br>
 The outcome is regressed on the orthogonal predictors. Because these
 predictors are uncorrelated, each squared standardized coefficient
-represents the portion of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math>
+represents the portion of <span class="math inline">R^2</span>
 attributable to that orthogonal component.</p></li>
 <li><p><strong>Mapping variance back to original
 predictors</strong><br>
@@ -1290,10 +1274,8 @@ according to their squared correlations with that component.</p></li>
 <li><p><strong>Computation of relative weights</strong><br>
 A predictor’s relative weight is obtained by summing its allocated
 contributions across all orthogonal components. The resulting weights
-are <strong>non‑negative and sum exactly to
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>R</mi><mn>2</mn></msup><annotation encoding="application/x-tex">R^2</annotation></semantics></math></strong>,
-and are typically reported as percentages of explained
-variance.</p></li>
+are <strong>non‑negative and sum exactly to <span class="math inline">R^2</span></strong>, and are typically reported as
+percentages of explained variance.</p></li>
 </ol>
 <p>Empirically, Johnson showed that these relative weights closely
 approximate dominance analysis results, especially for moderate
