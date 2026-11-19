@@ -60,8 +60,8 @@ print(eda_corrs$p)
 # Perform Key Driver Analysis
 kda <- kda_regression(
   data = myData,
-  outcome = "F600",
-  predictors = paste0("F800_", 1:8),
+  outcome = myOutcome,
+  predictors = myPredictors,
   diagnostics = TRUE
 )
 
