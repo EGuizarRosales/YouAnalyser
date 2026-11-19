@@ -57,6 +57,8 @@ A list containing:
 m <- lm(F600 ~ ., data = bkw_processed)
 # Fit importance and performance objects
 importance_obj <- kda_importance_jrw(m)
+#> Parsing `F600` as a non-binary variable.
+#> Applying multiple regression to calculate relative weights...
 performance_obj <- kda_performance(m)
 ipma_obj <- kda_ipma(importance_obj, performance_obj)
 # Create IPMA scatter plot

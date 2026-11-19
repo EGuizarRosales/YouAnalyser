@@ -13,7 +13,7 @@ ya_setup_folder_structure(
   folder_name,
   base_path = tcltk::tk_choose.dir(),
   template = NULL,
-  make_rproj = TRUE
+  make_rproj = FALSE
 )
 ```
 
@@ -32,15 +32,24 @@ ya_setup_folder_structure(
 
 - template:
 
-  Optional. A single string specifying the name of the template file to
-  be copied into the scripts folder. The template should be an R script
-  located in the "templates" directory of the YouAnalyser package.
-  Currently, `"kda"` is supported
+  Optional. A single string specifying the template script to be copied
+  into the scripts folder (`02_scripts`). The templates are R scripts in
+  the "templates" directory of the YouAnalyser package:
+
+  - `"kda"`: Key Driver Analysis, see
+    [`vignette("kda", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/kda.md).
+
+  - `"seg"`: Segmentation (cluster analysis) with hierarchical k-means,
+    from the data preparation to the validation, interpretation and
+    export of the segments and the assignment of new respondents, see
+    [`vignette("seg", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/seg.md).
+
+  Defaults to `NULL` (no template).
 
 - make_rproj:
 
   Optional. A logical value indicating whether to create an R project
-  file in the main folder. Defaults to TRUE.
+  file in the main folder. Defaults to FALSE.
 
 ## Value
 
@@ -48,3 +57,12 @@ NULL, invisibly. The function creates a standardized folder structure
 for a project at the specified location and optionally copies a template
 script and creates an R project file. Informative messages about the
 created folder structure are printed to the console.
+
+## Examples
+
+``` r
+if (FALSE) { # interactive()
+# Segmentation project with the segmentation template
+ya_setup_folder_structure("my_segmentation", template = "seg")
+}
+```

@@ -174,6 +174,8 @@ kda <- kda_regression(
     show_labels = FALSE
   )
 )
+#> Parsing `F600` as a non-binary variable.
+#> Applying multiple regression to calculate relative weights...
 ```
 
 We can access the IPMA plot using:
@@ -347,6 +349,8 @@ kda_bin <- kda_regression(
   importance_method = "jrw",
   diagnostics = TRUE
 )
+#> Parsing `F600` as a binary variable.
+#> Applying logistic regression to calculate relative weights...
 ```
 
 We get essentially the same plots as for the KDA with the continuous
@@ -716,6 +720,18 @@ my_kda_function <- function(df) {
 # Apply helper function to each data frame in the "data" column using purrr::map()
 bkw_kda_by_segment <- bkw_by_segment |>
   dplyr::mutate(kda_result = purrr::map(data, my_kda_function))
+#> Parsing `F600` as a non-binary variable.
+#> Applying multiple regression to calculate relative weights...
+#> Parsing `F600` as a non-binary variable.
+#> Applying multiple regression to calculate relative weights...
+#> Parsing `F600` as a non-binary variable.
+#> Applying multiple regression to calculate relative weights...
+#> Parsing `F600` as a non-binary variable.
+#> Applying multiple regression to calculate relative weights...
+#> Parsing `F600` as a non-binary variable.
+#> Applying multiple regression to calculate relative weights...
+#> Parsing `F600` as a non-binary variable.
+#> Applying multiple regression to calculate relative weights...
 
 # Note how we added the column "kda_result" which now contains the KDA results
 # for each segment:

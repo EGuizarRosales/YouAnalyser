@@ -19,12 +19,27 @@ variable and value labels.
 ## Exploratory Data Analysis (EDA)
 
 Functions to perform exploratory data analysis (EDA) on survey data,
-including summary statistics and correlations.
+including summary statistics, correlations, descriptive statistics,
+tests and plots of several variables by group (e.g. clusters), and an
+interactive Shiny gadget
+([`eda_explore()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_explore.md)).
 
 - [`eda_correlation()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_correlation.md)
   : Exploratory data analysis: correlation
+- [`eda_describe()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_describe.md)
+  : Exploratory data analysis: descriptive statistics of several
+  variables
+- [`eda_explore()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_explore.md)
+  : Explore data interactively
+- [`eda_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_plot.md)
+  : Exploratory data analysis: plot several variables in one plot
+- [`eda_plot_detail()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_plot_detail.md)
+  : Exploratory data analysis: detailed plot of one variable by group
 - [`eda_summary()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_summary.md)
   : Exploratory data analysis: Summary of data
+- [`eda_test()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_test.md)
+  : Exploratory data analysis: test group differences of several
+  variables
 
 ## Key Driver Analysis (KDA)
 
@@ -80,6 +95,70 @@ including the Newton Miller Smith Extension (NMS-Extension).
 - [`psm_save_data_for_chart()`](https://eguizarrosales.github.io/YouAnalyser/reference/psm_save_data_for_chart.md)
   : Save PSM data for chart in Excel template
 
+## Segmentation (SEG)
+
+Functions to perform segmentation (cluster analysis) on survey data:
+preparation of the data and distance matrices, assessment of the
+clustering tendency, number of clusters and choice of the algorithm,
+cluster analysis with different algorithms, returning standardized
+solutions with visualizations, and validation of the cluster solutions
+with internal measures (silhouette width, Dunn index) and external
+measures (agreement with a reference grouping).
+
+- [`seg_prep_data()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_prep_data.md)
+  : Prepare survey data for cluster analysis
+- [`seg_distance()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_distance.md)
+  : Compute a distance matrix for cluster analysis
+- [`seg_clustering_tendency()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_clustering_tendency.md)
+  : Assess the clustering tendency of the data
+- [`seg_optimal_clusters()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_optimal_clusters.md)
+  : Determine the optimal number of clusters
+- [`seg_nbclust_gap()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_nbclust_gap.md)
+  : Optimal number of clusters: Gap statistic
+- [`seg_nbclust_indices()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_nbclust_indices.md)
+  : Optimal number of clusters: NbClust indices
+- [`seg_nbclust_silhouette()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_nbclust_silhouette.md)
+  : Optimal number of clusters: Average silhouette method
+- [`seg_nbclust_wss()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_nbclust_wss.md)
+  : Optimal number of clusters: Elbow method (WSS)
+- [`seg_compare_algorithms()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_compare_algorithms.md)
+  : Compare clustering algorithms
+- [`seg_cluster()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_cluster.md)
+  : Cluster analysis (segmentation)
+- [`seg_cluster_density()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_cluster_density.md)
+  : Density-based clustering: DBSCAN and HDBSCAN
+- [`seg_cluster_fuzzy()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_cluster_fuzzy.md)
+  : Fuzzy clustering
+- [`seg_cluster_hierarchical()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_cluster_hierarchical.md)
+  : Hierarchical clustering: AGNES and DIANA
+- [`seg_cluster_hkmeans()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_cluster_hkmeans.md)
+  : Hierarchical k-means clustering
+- [`seg_cluster_model()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_cluster_model.md)
+  : Model-based clustering
+- [`seg_cluster_partitioning()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_cluster_partitioning.md)
+  : Partitioning clustering: k-means and PAM
+- [`seg_dbscan_eps()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_dbscan_eps.md)
+  : Choose eps for DBSCAN: k-nearest-neighbor distance plot
+- [`seg_as_cluster()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_as_cluster.md)
+  : Convert an existing segmentation to a cluster solution
+- [`seg_plot_cluster()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_plot_cluster.md)
+  : Plot a cluster solution in the space of the principal components
+- [`seg_plot_dend()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_plot_dend.md)
+  : Plot the dendrogram of a hierarchical cluster solution
+- [`seg_plot_heatmap()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_plot_heatmap.md)
+  : Heatmap of a cluster solution
+- [`seg_plot_centers()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_plot_centers.md)
+  : Plot the cluster centers of a solution
+- [`seg_validation()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_validation.md)
+  : Validate cluster solutions
+- [`seg_plot_silhouette()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_plot_silhouette.md)
+  : Silhouette plot of a cluster solution
+- [`seg_agreement()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_agreement.md)
+  : Agreement between cluster solutions
+- [`predict(`*`<seg_cluster>`*`)`](https://eguizarrosales.github.io/YouAnalyser/reference/predict.seg_cluster.md)
+  [`predict(`*`<seg_cluster_set>`*`)`](https://eguizarrosales.github.io/YouAnalyser/reference/predict.seg_cluster.md)
+  : Assign new respondents to the clusters of a solution
+
 ## YouAnalyser (YA) Utility Functions
 
 Miscellaneous utility functions for the YouAnalyser package.
@@ -120,6 +199,10 @@ Example datasets included in the YouAnalyser package.
   : Anonymized Random Subsample of a DEKA Study
 - [`chm_synthetic`](https://eguizarrosales.github.io/YouAnalyser/reference/chm_synthetic.md)
   : Synthetic CH Media Oneplus Streaming Study Data (Synthetic)
+- [`sm_synthetic`](https://eguizarrosales.github.io/YouAnalyser/reference/sm_synthetic.md)
+  : Synthetic Swissmilk Milch & Umwelt Study Data (Synthetic)
+- [`sim_segments`](https://eguizarrosales.github.io/YouAnalyser/reference/sim_segments.md)
+  : Simulated Survey Data with a Clear Segment Structure
 
 ## Other Functions
 
@@ -127,3 +210,5 @@ Other functions or data that do not fit into the above categories.
 
 - [`yougov_colors`](https://eguizarrosales.github.io/YouAnalyser/reference/yougov_colors.md)
   : YouGov Colors
+- [`yougov_palette`](https://eguizarrosales.github.io/YouAnalyser/reference/yougov_palette.md)
+  : YouGov Palette

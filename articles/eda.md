@@ -80,6 +80,8 @@ eda_summary(
 #>                                                              6. [6] 6                       209 (18.9%)          III                              
 #>                                                              7. [7] Sehr gut  7              77 ( 7.0%)          I                                
 #> --------------------------------------------------------------------------------------------------------------------------------------------------
+#> Warning: Argument `iqr` is deprecated. Please use `indices` instead.
+#> Warning: Argument `quartiles` is deprecated. Please use `indices` instead.
 #> 
 #> ── Descriptive Statistics
 #> Variable | Mean |   SD |        Range |  Quartiles | Skewness | Kurtosis |    n | n_Missing

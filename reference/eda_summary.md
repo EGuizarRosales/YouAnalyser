@@ -42,11 +42,6 @@ eda_summary(
   A list of additional arguments passed to
   [`datawizard::describe_distribution()`](https://easystats.github.io/datawizard/reference/describe_distribution.html).
 
-- dfSummary_args:
-
-  A list of additional arguments passed to
-  [`summarytools::dfSummary()`](https://rdrr.io/pkg/summarytools/man/dfSummary.html).
-
 ## Value
 
 A temporary html summary table of the data, which is displayed in the
@@ -95,6 +90,8 @@ eda_summary(data = bkw_missings, variables = c("F600", "F800_1", "F800_2"), cons
 #>                                                              6. [6] 6                       244 (20.3%)          IIII                           
 #>                                                              7. [7] Sehr gut  7              97 ( 8.1%)          I                              
 #> ------------------------------------------------------------------------------------------------------------------------------------------------
+#> Warning: Argument `iqr` is deprecated. Please use `indices` instead.
+#> Warning: Argument `quartiles` is deprecated. Please use `indices` instead.
 #> 
 #> ── Descriptive Statistics 
 #> Variable | Mean |   SD |        Range |  Quartiles | Skewness | Kurtosis |    n | n_Missing

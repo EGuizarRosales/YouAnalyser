@@ -3,9 +3,10 @@
 The goal of YouAnalyser is to provide Analytics Partners of YouGov DACH
 with a convenient and standardized way to perform core analyses on
 survey data, such as Key Driver Analysis (KDA). The package includes
-functions for data preprocessing, exploratory data analysis (EDA), and
-KDA (more to come), all designed to work seamlessly with survey data in
-the
+functions for data preprocessing, exploratory data analysis (EDA), Key
+Driver Analysis (KDA), Price Sensitivity Meter analysis (PSM), and
+segmentation (cluster analysis, SEG), all designed to work seamlessly
+with survey data in the
 [`haven::labelled()`](https://haven.tidyverse.org/reference/labelled.html)
 format. By using YouAnalyser, you can save time and ensure consistency
 in your analyses across different projects.
@@ -13,13 +14,27 @@ in your analyses across different projects.
 ## Installation and Setup
 
 You can install the development version of YouAnalyser from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/EGuizarRosales/YouAnalyser) with:
 
 ``` r
 
-# install.packages("pak")
-pak::pak("EGuizarRosales/YouAnalyser")
+# install.packages("remotes")
+remotes::install_github(
+  "EGuizarRosales/YouAnalyser",
+  dependencies = TRUE,
+  build_vignettes = TRUE
+)
 ```
+
+`build_vignettes = TRUE` builds the vignettes during the installation,
+so that they are available offline with
+[`vignette()`](https://rdrr.io/r/utils/vignette.html) and
+[`browseVignettes()`](https://rdrr.io/r/utils/browseVignettes.html).
+`dependencies = TRUE` also installs the suggested packages that the
+vignettes need. Building the vignettes takes a few minutes (mainly the
+segmentation vignette). If you do not need them locally, set
+`build_vignettes = FALSE` and read the vignettes on the
+[website](https://eguizarrosales.github.io/YouAnalyser/) instead.
 
 Then, in your scripts, use:
 
@@ -40,10 +55,10 @@ library(haven)
 - You can find the documentation for each function by calling
   `?function_name` in your R console (e.g.,
   [`?eda_summary`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_summary.md)).
-- This package is documented with vignettes. You can browse the
-  available vignettes with `browseVignettes("YouAnalyser")` and open a
-  specific vignette with
-  `vignette("vignette_name", package = "YouAnalyser")`.
+- This package is documented with vignettes. If you installed it with
+  `build_vignettes = TRUE` (see above), you can browse the available
+  vignettes with `browseVignettes("YouAnalyser")` and open a specific
+  vignette with `vignette("vignette_name", package = "YouAnalyser")`.
 - The most convenient way to access the full documentation of this
   package is through the website:
   <https://eguizarrosales.github.io/YouAnalyser/>.
@@ -97,7 +112,7 @@ function is designed to help you organize your files and outputs in a
 consistent way across different projects. By default, it creates the
 following folder structure:
 
-``` r
+``` text
 ├── 01_input
 │   └── data
 │       ├── processed
@@ -107,15 +122,15 @@ following folder structure:
 │   ├── data
 │   ├── plots
 │   └── reports
-├── Project2.Rproj
-└── R
 ```
 
-The
-[`ya_setup_folder_structure()`](https://eguizarrosales.github.io/YouAnalyser/reference/ya_setup_folder_structure.md)
-function is used in workflows. See
-[`vignette("kda", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/kda.md)
-for an example of how to use it in a workflow.
+With `make_rproj = TRUE`, the folder is also set up as an RStudio
+project. With `template`, a template script for an analysis is copied
+into `02_scripts`: `"kda"` for a Key Driver Analysis (see
+[`vignette("kda", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/kda.md))
+or `"seg"` for a segmentation (see
+[`vignette("seg", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/seg.md)),
+e.g. `ya_setup_folder_structure("mySegmentation", template = "seg")`.
 
 ## 2. Exploratory Data Analysis (EDA)
 
@@ -224,6 +239,8 @@ eda_summary(
 #>                                                               6. [6] 6                       163 (14.8%)          II                               
 #>                                                               7. [7] Sehr gut  7              68 ( 6.2%)          I                                
 #> ---------------------------------------------------------------------------------------------------------------------------------------------------
+#> Warning: Argument `iqr` is deprecated. Please use `indices` instead.
+#> Warning: Argument `quartiles` is deprecated. Please use `indices` instead.
 #> 
 #> ── Descriptive Statistics
 #> Variable | Mean |   SD |        Range |  Quartiles | Skewness | Kurtosis |    n | n_Missing
@@ -379,3 +396,67 @@ the saved plot.
 `res$plots$ipma_scatterPlot$p`
 
 ![](reference/figures/ipma_scatterPlot.jpeg)
+
+## 4. Price Sensitivity Meter (PSM)
+
+All PSM functions start with the prefix `psm_`. They perform a Van
+Westendorp Price Sensitivity Meter analysis, including the
+Newton-Miller-Smith (NMS) extension, and export the results into
+standardized reporting templates. For a detailed walkthrough, please
+refer to
+[`vignette("psm", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/psm.md).
+
+- [`psm_analysis()`](https://max-alletsee.github.io/pricesensitivitymeter/reference/psm_analysis.html)
+  and
+  [`psm_analysis_weighted()`](https://max-alletsee.github.io/pricesensitivitymeter/reference/psm_analysis_weighted.html):
+  Run the (unweighted or weighted) Van Westendorp analysis (re-exported
+  from the `pricesensitivitymeter` package).
+- [`psm_design_for_weighted()`](https://eguizarrosales.github.io/YouAnalyser/reference/psm_design_for_weighted.md):
+  Build the survey design for
+  [`psm_analysis_weighted()`](https://max-alletsee.github.io/pricesensitivitymeter/reference/psm_analysis_weighted.html)
+  from a weight variable.
+- [`psm_plot()`](https://eguizarrosales.github.io/YouAnalyser/reference/psm_plot.md):
+  Plot the price sensitivity curves with the price points and the
+  acceptable price range, plus reach and revenue plots for the NMS
+  extension.
+- [`psm_save_data_for_chart()`](https://eguizarrosales.github.io/YouAnalyser/reference/psm_save_data_for_chart.md)
+  and
+  [`psm_copy_pptx_template()`](https://eguizarrosales.github.io/YouAnalyser/reference/psm_copy_pptx_template.md):
+  Export the results to the Excel and PowerPoint templates.
+
+## 5. Segmentation (SEG)
+
+All segmentation functions start with the prefix `seg_`. They cover a
+complete segmentation (cluster analysis) of survey data. For a detailed
+walkthrough, including the interpretation of all metrics, please refer
+to
+[`vignette("seg", package = "YouAnalyser")`](https://eguizarrosales.github.io/YouAnalyser/articles/seg.md).
+A template script for a segmentation project is available with
+`ya_setup_folder_structure(template = "seg")`.
+
+- [`seg_prep_data()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_prep_data.md):
+  Prepare the clustering variables (missing values, rescaling) and
+  compute the distance matrix.
+- [`seg_clustering_tendency()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_clustering_tendency.md):
+  Check whether the data contains meaningful clusters at all.
+- [`seg_optimal_clusters()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_optimal_clusters.md):
+  Suggest the number of clusters (elbow method, silhouette, gap
+  statistic, NbClust).
+- [`seg_compare_algorithms()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_compare_algorithms.md):
+  Compare clustering algorithms and numbers of clusters.
+- [`seg_cluster()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_cluster.md):
+  Run the cluster analysis (hierarchical k-means by default, and many
+  other algorithms) with standardized results and plots.
+- [`seg_validation()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_validation.md)
+  and
+  [`seg_agreement()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_agreement.md):
+  Validate the solutions with internal and external measures, and
+  compare the solutions of different algorithms.
+- [`seg_plot_centers()`](https://eguizarrosales.github.io/YouAnalyser/reference/seg_plot_centers.md):
+  Plot the profiles of the clusters.
+- [`predict()`](https://rdrr.io/r/stats/predict.html): Assign new
+  respondents (e.g. of a new wave) to the clusters.
+
+The clusters can then be described in detail with the `eda_` functions,
+most conveniently with the interactive app
+[`eda_explore()`](https://eguizarrosales.github.io/YouAnalyser/reference/eda_explore.md).
