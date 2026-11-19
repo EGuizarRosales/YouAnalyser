@@ -53,8 +53,11 @@ reference:
       - seg_plot_cluster
       - seg_plot_dend
       - seg_plot_heatmap
+      - seg_plot_centers
       - seg_validation
       - seg_plot_silhouette
+      - seg_agreement
+      - predict.seg_cluster
   - title: YouAnalyser (YA) Utility Functions
     desc: >
       Miscellaneous utility functions for the YouAnalyser package.

@@ -56,12 +56,14 @@ Imports:
     sjlabelled,
     stringr,
     summarytools,
-    tibble
+    tibble,
+    tidyr
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1.0)
 LazyData: true
 Suggests: 
     bslib,
+    clue,
     dbscan,
     DT,
     ggstatsplot,
@@ -70,7 +72,9 @@ Suggests:
     mclust,
     rmarkdown,
     shiny,
-    synthpop
+    synthpop,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Config/Needs/website: rmarkdown
 Config/roxygen2/version: 8.1.0
+Config/testthat/edition: 3

@@ -14,10 +14,10 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{datawizard}{\code{\link[datawizard]{data_codebook}}}
+  \item{datawizard}{\code{\link[datawizard:data_codebook]{data_codebook()}}}
 
-  \item{parameters}{\code{\link[parameters]{model_parameters}}}
+  \item{parameters}{\code{\link[parameters:model_parameters]{model_parameters()}}}
 
-  \item{pricesensitivitymeter}{\code{\link[pricesensitivitymeter]{psm_analysis}}, \code{\link[pricesensitivitymeter]{psm_analysis_weighted}}}
+  \item{pricesensitivitymeter}{\code{\link[pricesensitivitymeter:psm_analysis]{psm_analysis()}}, \code{\link[pricesensitivitymeter:psm_analysis_weighted]{psm_analysis_weighted()}}}
 }}
 

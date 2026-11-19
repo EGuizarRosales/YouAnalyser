@@ -14,8 +14,9 @@ seg_prep_data(
   distance = "euclidean",
   distance_engine = c("auto", "get_dist", "daisy"),
   compute_distance = TRUE,
-  imputation_args = list(method = "pmm", seed = 123, printFlag = FALSE),
+  imputation_args = list(),
   daisy_args = list(),
+  seed = 123,
   verbose = TRUE
 )
 }
@@ -77,11 +78,19 @@ data is needed (e.g. for k-means), as the distance matrix grows with the
 square of the number of respondents.}
 
 \item{imputation_args}{A list of arguments passed to \code{\link[mice:mice]{mice::mice()}} when
-\code{missing = "mice"}. Only a single imputation (\code{m = 1}) is used.}
+\code{missing = "mice"}, added to the defaults \code{method = "pmm"} (predictive
+mean matching) and \code{printFlag = FALSE}, e.g. \code{list(method = "cart")}.
+Only a single imputation (\code{m = 1}) is used. A \code{seed} given here takes
+precedence over \code{seed}.}
 
 \item{daisy_args}{A list of further arguments passed to \code{\link[cluster:daisy]{cluster::daisy()}},
 e.g. \code{list(type = list(ordratio = c("F50_0_1", "F50_0_2")))} to treat
 variables as ordinal when using Gower distance.}
+
+\item{seed}{Random seed for the imputation with \code{missing = "mice"}, which
+makes the imputed values reproducible. The global random seed is left
+untouched. Defaults to 123. \code{NULL} uses the current random state (not
+reproducible).}
 
 \item{verbose}{Logical. Whether to print a summary of the preparation steps.
 Defaults to \code{TRUE}.}
@@ -98,7 +107,11 @@ profile the resulting segments.
 \item \code{dist}: the distance matrix (class \code{dist}), or \code{NULL} if
 \code{compute_distance = FALSE}.
 \item \code{row_index}: integer positions of the retained respondents in \code{data}.
-\item \code{settings}: list of the settings used.
+\item \code{settings}: list of the settings used, including the parameters needed
+to prepare new respondents in the same way (see
+\code{\link[=predict.seg_cluster]{predict.seg_cluster()}}): \code{scaling} (tibble with the center and scale of
+each clustering variable), \code{impute_values} (the means or medians used
+for imputation), \code{imputation_args} and \code{seed}.
 \item \code{info}: list with the number of respondents before and after the
 preparation, the number of imputed values and dropped constant variables.
 }

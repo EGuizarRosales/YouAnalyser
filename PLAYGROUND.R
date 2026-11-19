@@ -1,6 +1,7 @@
 # Playground for the segmentation (seg_) functions in R/seg_prep.R
 # (preparation, clustering tendency, number of clusters, algorithms),
-# R/seg_cluster.R (clustering) and R/seg_post.R (validation).
+# R/seg_cluster.R (clustering), R/seg_post.R (validation) and R/seg_predict.R
+# (assignment of new respondents).
 # Run section by section after devtools::load_all().
 
 devtools::load_all()
@@ -51,6 +52,19 @@ prep_mice <- seg_prep_data(
   missing = "mice",
   max_missing_prop = 0.2
 )
+
+# Reproducible imputation: seed (default 123, global seed untouched);
+# imputation_args are added to the defaults (pmm, printFlag = FALSE)
+prep_mice_cart <- seg_prep_data(
+  sm_synthetic,
+  vars = starts_with("F50_0_"),
+  id = "id",
+  missing = "mice",
+  max_missing_prop = 0.2,
+  imputation_args = list(method = "cart"),
+  seed = 2024
+)
+prep_mice_cart$settings[c("imputation_args", "seed")]
 
 # Mean imputation, min-max scaling, correlation-based distance
 prep_mean <- seg_prep_data(
@@ -251,6 +265,22 @@ seg_plot_heatmap(cl_hk, row_order = "dendrogram")
 # All respondents
 seg_plot_heatmap(cl_hk, n = NULL)
 
+# Cluster profiles: mean of each clustering variable per cluster (centers)
+cl_hk$plots$centers # default: profile lines, prepared (z) scale, total dashed
+seg_plot_centers(cl_hk, type = "bars", order = "difference") # for naming
+seg_plot_centers(cl_hk, type = "heatmap", scale = "original") # 1-10 scale
+seg_plot_centers(cl_hk, axis_labels = "both", label_width = 60, total = FALSE)
+seg_plot_centers(cl_fuzzy) # fuzzy / mclust: hard assignment
+seg_plot_centers(cl_db) # density-based: noise not shown
+
+# Customize the plot of a solution when clustering
+seg_cluster(
+  prep_mice,
+  method = "pam",
+  k = 4,
+  centers_args = list(type = "bars", scale = "original")
+)$plots$centers
+
 # Existing segmentation (benchmark 2024) in the same format
 cl_benchmark <- seg_as_cluster(
   prep_mice,
@@ -258,6 +288,7 @@ cl_benchmark <- seg_as_cluster(
   name = "Benchmark 2024"
 )
 cl_benchmark$plots$heatmap
+cl_benchmark$plots$centers # segment names as legend
 
 # Agreement of a new solution with the benchmark
 table(new = cl_hk$cluster, benchmark = cl_benchmark$cluster)
@@ -391,6 +422,44 @@ seg_cluster(
 ) |>
   seg_validation(external = "Species")
 
+# 9e. Agreement between algorithms with the same k (R/seg_agreement.R, needs
+# clue): clusters matched to the reference (first solution) with the
+# Hungarian algorithm, so that cluster numbers are comparable
+agr <- seg_agreement(list(
+  hkmeans = cl_hk,
+  kmeans = cl_km,
+  PAM = cl_pam$solutions$k4,
+  Ward = cl_agnes,
+  Fuzzy = cl_fuzzy,
+  Mclust = cl_mclust,
+  Benchmark = cl_benchmark
+))
+agr$pairwise # agreement, corrected Rand, VI per pair
+agr$matrix
+agr$plot
+agr$crosstabs$PAM # diagonal = matched clusters
+agr$respondents # aligned cluster per solution, modal cluster, agreement
+agr$respondents |> count(n_agree) # how many algorithms agree per respondent
+agr$aligned$Ward$centers # profiles with the cluster numbers of hkmeans
+agr$aligned$Ward$plots$cluster
+
+# Another reference, chosen by name
+seg_agreement(list(hkmeans = cl_hk, Benchmark = cl_benchmark), reference = "Benchmark")
+
+# Stable core: respondents assigned to the same cluster by all algorithms
+core_ids <- agr$respondents |> filter(all_agree) |> pull(id)
+cl_hk$data_full |>
+  mutate(stable = id %in% core_ids, cluster = cl_hk$cluster) |>
+  count(cluster, stable)
+
+# Sanity check: on data with clear clusters, the algorithms agree (almost)
+# completely
+seg_agreement(list(
+  hkmeans = cl_sim,
+  PAM = seg_cluster(prep_sim, "pam", k = 3, plots = FALSE, verbose = FALSE),
+  Ward = seg_cluster(prep_sim, "agnes", k = 3, plots = FALSE, verbose = FALSE)
+))
+
 # ---- 10. Descriptive statistics and plots by cluster (eda_) ------------------
 # (R/eda_interactive.R; eda_explore() needs shiny, bslib and DT, the detailed
 # test plots in its "Tests" tab ggstatsplot)
@@ -519,3 +588,67 @@ res$plot
 res$describe
 cat(res$code)
 eda_explore(viewer = "browser") # all data frames / seg_cluster outputs in the session
+
+
+# ---- 11. predict(): assign new respondents -----------------------------------
+# (R/seg_predict.R) New data is prepared like the original sample (missing
+# values, rescaling with the parameters of the original sample) and assigned
+# with the rule of the method (see ?predict.seg_cluster)
+
+# 11a. Holdout: solution on 1000 respondents, assignment of the rest
+prep_train <- seg_prep_data(
+  sm_synthetic[1:1000, ],
+  vars = starts_with("F50_0_"),
+  id = "id",
+  missing = "mice",
+  max_missing_prop = 0.2
+)
+cl_train <- seg_cluster(prep_train, k = 4, plots = FALSE)
+d_holdout <- sm_synthetic[1001:nrow(sm_synthetic), ]
+
+pred <- predict(cl_train, d_holdout) # id, cluster, distance to the center
+pred
+count(pred, cluster) # NA: too many missing values (max_missing_prop)
+
+# Holdout stability: clusters of a separate solution on the holdout vs.
+# predicted clusters
+prep_holdout <- seg_prep_data(
+  d_holdout,
+  vars = starts_with("F50_0_"),
+  id = "id",
+  missing = "mice",
+  max_missing_prop = 0.2,
+  verbose = FALSE
+)
+cl_holdout <- seg_cluster(prep_holdout, k = 4, plots = FALSE, verbose = FALSE)
+pred |>
+  inner_join(cl_holdout$assignment, by = "id", suffix = c("_pred", "_holdout")) |>
+  count(cluster_pred, cluster_holdout) |>
+  pivot_wider(names_from = cluster_holdout, values_from = n, values_fill = 0)
+
+# 11b. Original sample: newdata = NULL returns the original assignment
+predict(cl_train)
+
+# 11c. Probabilities: fuzzy, model-based, or k nearest neighbors
+cl_train_fuzzy <- seg_cluster(prep_train, "fuzzy", k = 4, plots = FALSE)
+predict(cl_train_fuzzy, d_holdout, type = "prob")
+cl_train_mclust <- seg_cluster(prep_train, "mclust", k = 4, plots = FALSE)
+predict(cl_train_mclust, d_holdout, type = "prob")
+predict(cl_train, d_holdout, rule = "knn", neighbors = 15, type = "prob")
+
+# 11d. Hierarchical: linkage rule (default) vs. nearest centroid
+cl_train_agnes <- seg_cluster(prep_train, "agnes", k = 4, plots = FALSE)
+table(
+  linkage = predict(cl_train_agnes, d_holdout)$cluster,
+  centroid = predict(cl_train_agnes, d_holdout, rule = "centroid")$cluster
+)
+
+# 11e. Existing segmentation: cluster labels are kept as value labels
+cl_bm <- seg_as_cluster(prep_train, "cluster_benchmark", plots = FALSE)
+predict(cl_bm, d_holdout) |>
+  mutate(cluster = sjlabelled::as_label(cluster)) |>
+  count(cluster)
+
+# 11f. Several solutions: pick one
+cl_set <- seg_cluster(prep_train, "kmeans", k = 3:5, plots = FALSE)
+predict(cl_set$solutions$k4, d_holdout)

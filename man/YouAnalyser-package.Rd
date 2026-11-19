@@ -20,7 +20,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Emmanuel Guizar Rosales \email{emmanuel.guizar@yougov.ch} (Data & Analytics Innovation Scientist)
+\strong{Maintainer}: Emmanuel Guizar Rosales \email{emmanuel.guizar@yougov.ch} (Position: Data & Analytics Innovation Scientist)
+
+Authors:
+\itemize{
+  \item Emmanuel Guizar Rosales \email{emmanuel.guizar@yougov.ch} (Position: Data & Analytics Innovation Scientist)
+}
 
 }
 \keyword{internal}

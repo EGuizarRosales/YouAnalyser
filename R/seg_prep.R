@@ -163,7 +163,14 @@ seg_daisy_methods <- c("euclidean", "manhattan", "gower")
 #'   data is needed (e.g. for k-means), as the distance matrix grows with the
 #'   square of the number of respondents.
 #' @param imputation_args A list of arguments passed to [mice::mice()] when
-#'   `missing = "mice"`. Only a single imputation (`m = 1`) is used.
+#'   `missing = "mice"`, added to the defaults `method = "pmm"` (predictive
+#'   mean matching) and `printFlag = FALSE`, e.g. `list(method = "cart")`.
+#'   Only a single imputation (`m = 1`) is used. A `seed` given here takes
+#'   precedence over `seed`.
+#' @param seed Random seed for the imputation with `missing = "mice"`, which
+#'   makes the imputed values reproducible. The global random seed is left
+#'   untouched. Defaults to 123. `NULL` uses the current random state (not
+#'   reproducible).
 #' @param daisy_args A list of further arguments passed to [cluster::daisy()],
 #'   e.g. `list(type = list(ordratio = c("F50_0_1", "F50_0_2")))` to treat
 #'   variables as ordinal when using Gower distance.
@@ -180,7 +187,11 @@ seg_daisy_methods <- c("euclidean", "manhattan", "gower")
 #'   * `dist`: the distance matrix (class `dist`), or `NULL` if
 #'     `compute_distance = FALSE`.
 #'   * `row_index`: integer positions of the retained respondents in `data`.
-#'   * `settings`: list of the settings used.
+#'   * `settings`: list of the settings used, including the parameters needed
+#'     to prepare new respondents in the same way (see
+#'     [predict.seg_cluster()]): `scaling` (tibble with the center and scale of
+#'     each clustering variable), `impute_values` (the means or medians used
+#'     for imputation), `imputation_args` and `seed`.
 #'   * `info`: list with the number of respondents before and after the
 #'     preparation, the number of imputed values and dropped constant variables.
 #'
@@ -208,14 +219,30 @@ seg_prep_data <- function(
   distance = "euclidean",
   distance_engine = c("auto", "get_dist", "daisy"),
   compute_distance = TRUE,
-  imputation_args = list(method = "pmm", seed = 123, printFlag = FALSE),
+  imputation_args = list(),
   daisy_args = list(),
+  seed = 123,
   verbose = TRUE
 ) {
   # ---- 1. Check arguments ----
 
   if (!is.data.frame(data)) {
     cli::cli_abort("{.arg data} must be a data frame.")
+  }
+
+  if (!is.list(imputation_args)) {
+    cli::cli_abort("{.arg imputation_args} must be a list.")
+  }
+  # User arguments are added to the defaults; a seed in imputation_args takes
+  # precedence over `seed`
+  imputation_args <- utils::modifyList(
+    list(method = "pmm", printFlag = FALSE),
+    imputation_args
+  )
+  seed <- imputation_args$seed %||% seed
+  imputation_args$seed <- NULL
+  if (!is.null(seed) && (!is.numeric(seed) || length(seed) != 1 || is.na(seed))) {
+    cli::cli_abort("{.arg seed} must be a single number or {.code NULL}.")
   }
 
   missing <- rlang::arg_match(missing)
@@ -302,6 +329,7 @@ seg_prep_data <- function(
   # 3c. Apply missing strategy
   n_imputed <- sum(is.na(x))
   n_dropped_omit <- 0L
+  impute_values <- NULL
 
   if (missing == "omit") {
     keep <- stats::complete.cases(x)
@@ -311,14 +339,19 @@ seg_prep_data <- function(
     row_index <- row_index[keep]
   } else if (missing %in% c("mean", "median")) {
     fun <- if (missing == "mean") mean else stats::median
+    # Stored to impute new respondents in the same way (predict())
+    impute_values <- purrr::map_dbl(x, \(v) fun(v, na.rm = TRUE))
     x <- x |>
       dplyr::mutate(dplyr::across(dplyr::everything(), \(v) {
-        v[is.na(v)] <- fun(v, na.rm = TRUE)
+        v[is.na(v)] <- impute_values[[dplyr::cur_column()]]
         v
       }))
   } else if (missing == "mice" && n_imputed > 0) {
     imputation_args$m <- 1
-    imp <- do.call(mice::mice, c(list(data = as.data.frame(x)), imputation_args))
+    imp <- seg_with_seed(
+      seed,
+      do.call(mice::mice, c(list(data = as.data.frame(x)), imputation_args))
+    )
     x <- tibble::as_tibble(mice::complete(imp, 1))
     if (anyNA(x)) {
       cli::cli_abort(c(
@@ -349,10 +382,10 @@ seg_prep_data <- function(
 
   # ---- 5. Rescale ----
 
-  x <- x |>
-    dplyr::mutate(dplyr::across(dplyr::everything(), \(v) {
-      seg_rescale(v, scale)
-    }))
+  # The parameters are stored to rescale new respondents in the same way
+  # (predict())
+  scaling <- seg_scaling_params(x, scale)
+  x <- seg_apply_scaling(x, scaling)
 
   # Add back variable labels
   x <- sjlabelled::set_label(x, label = unname(var_labels[names(x)]))
@@ -395,7 +428,11 @@ seg_prep_data <- function(
         scale = scale,
         distance = distance,
         distance_engine = distance_engine,
-        daisy_args = daisy_args
+        daisy_args = daisy_args,
+        scaling = scaling,
+        impute_values = impute_values[names(x)],
+        imputation_args = if (missing == "mice") imputation_args else NULL,
+        seed = seed
       ),
       info = list(
         n_input = n_input,
@@ -2252,6 +2289,35 @@ seg_rescale <- function(v, scale) {
       (max(v, na.rm = TRUE) - min(v, na.rm = TRUE)),
     none = v
   )
+}
+
+# Rescaling parameters of the clustering variables: (v - center) / scale
+seg_scaling_params <- function(data, scale) {
+  params <- purrr::map(data, \(v) {
+    switch(
+      scale,
+      z = c(mean(v, na.rm = TRUE), stats::sd(v, na.rm = TRUE)),
+      range = c(
+        min(v, na.rm = TRUE),
+        max(v, na.rm = TRUE) - min(v, na.rm = TRUE)
+      ),
+      none = c(0, 1)
+    )
+  })
+  tibble::tibble(
+    var = names(data),
+    center = purrr::map_dbl(params, 1),
+    scale = purrr::map_dbl(params, 2)
+  )
+}
+
+# Rescale the columns of data with the parameters of seg_scaling_params()
+seg_apply_scaling <- function(data, scaling) {
+  for (i in seq_len(nrow(scaling))) {
+    v <- scaling$var[[i]]
+    data[[v]] <- (data[[v]] - scaling$center[[i]]) / scaling$scale[[i]]
+  }
+  data
 }
 
 # Evaluate an expression with a given seed, leaving the global seed untouched

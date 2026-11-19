@@ -13,6 +13,7 @@ seg_cluster(
   plots = TRUE,
   cluster_plot_args = list(),
   dend_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -45,6 +46,9 @@ clustering or \code{eps} for DBSCAN.}
 overriding the defaults (see \code{\link[=seg_plot_dend]{seg_plot_dend()}}), e.g.
 \code{list(type = "phylogenic")}.}
 
+\item{centers_args}{A list of arguments passed to \code{\link[=seg_plot_centers]{seg_plot_centers()}},
+overriding the defaults, e.g. \code{list(type = "bars", scale = "original")}.}
+
 \item{heatmap_n}{Number of respondents randomly sampled for the heatmap.
 Defaults to 200.}
 
@@ -75,6 +79,11 @@ available), as passed on from \code{\link[=seg_prep_data]{seg_prep_data()}}.
 \item \code{fit}: the result of the underlying clustering function.
 \item \code{tree}: the hierarchical tree (class \code{hclust}) for hierarchical methods
 and hierarchical k-means, otherwise \code{NULL}.
+\item \code{cluster_map}: named integer vector mapping the cluster codes of \code{fit}
+(names) to the renumbered codes, \code{NULL} if not renumbered.
+\item \code{prep}: the preparation settings of \code{\link[=seg_prep_data]{seg_prep_data()}} (variables,
+missing values, rescaling parameters), used to prepare new respondents
+in \code{\link[=predict.seg_cluster]{predict.seg_cluster()}}.
 \item \code{plots}: list of plots (see "Visualizations").
 \item \code{settings}: list of the settings used.
 }
@@ -162,6 +171,9 @@ plot even if they are separated in the full space.
 k-means (\code{\link[factoextra:fviz_dend]{factoextra::fviz_dend()}}); see \code{\link[=seg_plot_dend]{seg_plot_dend()}}.
 \item \code{plots$heatmap}: a heatmap of a random sample of respondents, sorted by
 cluster; see \code{\link[=seg_plot_heatmap]{seg_plot_heatmap()}}.
+\item \code{plots$centers}: the profiles of the clusters, i.e. the mean of each
+clustering variable per cluster (\code{centers}), by default as profile lines;
+see \code{\link[=seg_plot_centers]{seg_plot_centers()}}.
 \item \code{plots$bic}: the BIC of the model-based clustering models
 (\code{\link[factoextra:fviz_mclust]{factoextra::fviz_mclust()}}).
 }
@@ -199,6 +211,8 @@ cl_agnes <- seg_cluster(
 }
 \seealso{
 Other clustering:
+\code{\link[=predict.seg_cluster]{predict.seg_cluster()}},
+\code{\link[=seg_agreement]{seg_agreement()}},
 \code{\link[=seg_as_cluster]{seg_as_cluster()}},
 \code{\link[=seg_cluster_density]{seg_cluster_density()}},
 \code{\link[=seg_cluster_fuzzy]{seg_cluster_fuzzy()}},
@@ -207,6 +221,7 @@ Other clustering:
 \code{\link[=seg_cluster_model]{seg_cluster_model()}},
 \code{\link[=seg_cluster_partitioning]{seg_cluster_partitioning()}},
 \code{\link[=seg_dbscan_eps]{seg_dbscan_eps()}},
+\code{\link[=seg_plot_centers]{seg_plot_centers()}},
 \code{\link[=seg_plot_cluster]{seg_plot_cluster()}},
 \code{\link[=seg_plot_dend]{seg_plot_dend()}},
 \code{\link[=seg_plot_heatmap]{seg_plot_heatmap()}}

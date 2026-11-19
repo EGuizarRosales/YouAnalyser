@@ -13,6 +13,7 @@ seg_cluster_partitioning(
   plots = TRUE,
   cluster_plot_args = list(),
   dend_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -42,6 +43,9 @@ number of clusters. Ignored by the density-based methods. For \code{"mclust"},
 \item{dend_args}{A list of arguments passed to \code{\link[factoextra:fviz_dend]{factoextra::fviz_dend()}},
 overriding the defaults (see \code{\link[=seg_plot_dend]{seg_plot_dend()}}), e.g.
 \code{list(type = "phylogenic")}.}
+
+\item{centers_args}{A list of arguments passed to \code{\link[=seg_plot_centers]{seg_plot_centers()}},
+overriding the defaults, e.g. \code{list(type = "bars", scale = "original")}.}
 
 \item{heatmap_n}{Number of respondents randomly sampled for the heatmap.
 Defaults to 200.}
@@ -73,6 +77,11 @@ available), as passed on from \code{\link[=seg_prep_data]{seg_prep_data()}}.
 \item \code{fit}: the result of the underlying clustering function.
 \item \code{tree}: the hierarchical tree (class \code{hclust}) for hierarchical methods
 and hierarchical k-means, otherwise \code{NULL}.
+\item \code{cluster_map}: named integer vector mapping the cluster codes of \code{fit}
+(names) to the renumbered codes, \code{NULL} if not renumbered.
+\item \code{prep}: the preparation settings of \code{\link[=seg_prep_data]{seg_prep_data()}} (variables,
+missing values, rescaling parameters), used to prepare new respondents
+in \code{\link[=predict.seg_cluster]{predict.seg_cluster()}}.
 \item \code{plots}: list of plots (see "Visualizations").
 \item \code{settings}: list of the settings used.
 }
@@ -155,6 +164,8 @@ pam <- seg_cluster_partitioning(prep, k = 2:5, method = "pam")
 }
 \seealso{
 Other clustering:
+\code{\link[=predict.seg_cluster]{predict.seg_cluster()}},
+\code{\link[=seg_agreement]{seg_agreement()}},
 \code{\link[=seg_as_cluster]{seg_as_cluster()}},
 \code{\link[=seg_cluster]{seg_cluster()}},
 \code{\link[=seg_cluster_density]{seg_cluster_density()}},
@@ -163,6 +174,7 @@ Other clustering:
 \code{\link[=seg_cluster_hkmeans]{seg_cluster_hkmeans()}},
 \code{\link[=seg_cluster_model]{seg_cluster_model()}},
 \code{\link[=seg_dbscan_eps]{seg_dbscan_eps()}},
+\code{\link[=seg_plot_centers]{seg_plot_centers()}},
 \code{\link[=seg_plot_cluster]{seg_plot_cluster()}},
 \code{\link[=seg_plot_dend]{seg_plot_dend()}},
 \code{\link[=seg_plot_heatmap]{seg_plot_heatmap()}}

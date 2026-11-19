@@ -81,6 +81,9 @@
 #'   k-means ([factoextra::fviz_dend()]); see [seg_plot_dend()].
 #' * `plots$heatmap`: a heatmap of a random sample of respondents, sorted by
 #'   cluster; see [seg_plot_heatmap()].
+#' * `plots$centers`: the profiles of the clusters, i.e. the mean of each
+#'   clustering variable per cluster (`centers`), by default as profile lines;
+#'   see [seg_plot_centers()].
 #' * `plots$bic`: the BIC of the model-based clustering models
 #'   ([factoextra::fviz_mclust()]).
 #'
@@ -103,6 +106,8 @@
 #' @param dend_args A list of arguments passed to [factoextra::fviz_dend()],
 #'   overriding the defaults (see [seg_plot_dend()]), e.g.
 #'   `list(type = "phylogenic")`.
+#' @param centers_args A list of arguments passed to [seg_plot_centers()],
+#'   overriding the defaults, e.g. `list(type = "bars", scale = "original")`.
 #' @param heatmap_n Number of respondents randomly sampled for the heatmap.
 #'   Defaults to 200.
 #' @param seed Random seed. The global random seed is left untouched.
@@ -129,6 +134,11 @@
 #'   * `fit`: the result of the underlying clustering function.
 #'   * `tree`: the hierarchical tree (class `hclust`) for hierarchical methods
 #'     and hierarchical k-means, otherwise `NULL`.
+#'   * `cluster_map`: named integer vector mapping the cluster codes of `fit`
+#'     (names) to the renumbered codes, `NULL` if not renumbered.
+#'   * `prep`: the preparation settings of [seg_prep_data()] (variables,
+#'     missing values, rescaling parameters), used to prepare new respondents
+#'     in [predict.seg_cluster()].
 #'   * `plots`: list of plots (see "Visualizations").
 #'   * `settings`: list of the settings used.
 #'
@@ -188,6 +198,7 @@ seg_cluster <- function(
   plots = TRUE,
   cluster_plot_args = list(),
   dend_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -199,6 +210,7 @@ seg_cluster <- function(
     plots = plots,
     cluster_plot_args = cluster_plot_args,
     dend_args = dend_args,
+    centers_args = centers_args,
     heatmap_n = heatmap_n,
     seed = seed,
     verbose = verbose
@@ -327,6 +339,7 @@ seg_cluster_partitioning <- function(
   plots = TRUE,
   cluster_plot_args = list(),
   dend_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -369,7 +382,7 @@ seg_cluster_partitioning <- function(
     k_values = k_values,
     fit_fun = fit_fun,
     settings = list(nstart = nstart, iter_max = iter_max),
-    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n),
+    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n, centers_args),
     seed = seed,
     verbose = verbose
   )
@@ -443,6 +456,7 @@ seg_cluster_hkmeans <- function(
   plots = TRUE,
   cluster_plot_args = list(),
   dend_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -474,7 +488,7 @@ seg_cluster_hkmeans <- function(
     k_values = k_values,
     fit_fun = fit_fun,
     settings = list(hc_method = hc_method, hc_metric = hc_metric, iter_max = iter_max),
-    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n),
+    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n, centers_args),
     seed = seed,
     verbose = verbose
   )
@@ -574,6 +588,7 @@ seg_cluster_hierarchical <- function(
   plots = TRUE,
   cluster_plot_args = list(),
   dend_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -607,7 +622,7 @@ seg_cluster_hierarchical <- function(
       linkage = if (method == "agnes") linkage else NA_character_,
       coefficient = coefficient
     ),
-    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n),
+    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n, centers_args),
     seed = seed,
     verbose = verbose
   )
@@ -683,6 +698,7 @@ seg_cluster_fuzzy <- function(
   plots = TRUE,
   cluster_plot_args = list(),
   dend_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -727,7 +743,7 @@ seg_cluster_fuzzy <- function(
     k_values = k_values,
     fit_fun = fit_fun,
     settings = list(memb_exp = memb_exp, max_iter = max_iter),
-    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n),
+    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n, centers_args),
     seed = seed,
     verbose = verbose
   )
@@ -816,6 +832,7 @@ seg_cluster_model <- function(
   plots = TRUE,
   cluster_plot_args = list(),
   dend_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -850,7 +867,7 @@ seg_cluster_model <- function(
     k_values = k_values,
     fit_fun = fit_fun,
     settings = list(model_names = model_names),
-    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n),
+    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n, centers_args),
     seed = seed,
     verbose = verbose
   )
@@ -937,6 +954,7 @@ seg_cluster_density <- function(
   plots = TRUE,
   cluster_plot_args = list(),
   dend_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -981,7 +999,7 @@ seg_cluster_density <- function(
     k_values = NA_integer_,
     fit_fun = fit_fun,
     settings = list(eps = if (method == "dbscan") eps else NA_real_, min_pts = min_pts),
-    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n),
+    plot_opts = seg_plot_opts(plots, cluster_plot_args, dend_args, heatmap_n, centers_args),
     seed = seed,
     verbose = FALSE
   )
@@ -1105,6 +1123,7 @@ seg_as_cluster <- function(
   relabel = FALSE,
   plots = TRUE,
   cluster_plot_args = list(),
+  centers_args = list(),
   heatmap_n = 200,
   seed = 123,
   verbose = TRUE
@@ -1146,7 +1165,7 @@ seg_as_cluster <- function(
     k_values = length(unique(cluster_codes[cluster_codes != 0])),
     fit_fun = fit_fun,
     settings = list(relabel = relabel),
-    plot_opts = seg_plot_opts(plots, cluster_plot_args, list(), heatmap_n),
+    plot_opts = seg_plot_opts(plots, cluster_plot_args, list(), heatmap_n, centers_args),
     seed = seed,
     verbose = verbose,
     relabel = relabel,
@@ -1694,6 +1713,316 @@ seg_dend_by_group <- function(d, groups) {
 }
 
 
+#' Plot the cluster centers of a solution
+#'
+#' Plots the profiles of the clusters: the mean of each clustering variable
+#' per cluster (the centers of the solution), as profile lines, bars or a
+#' heatmap. This is the quickest overview of what characterizes each cluster
+#' and the basis for naming the clusters.
+#'
+#' @details
+#' ## Types
+#'
+#' * `"lines"` (default): the classic profile ("snake") plot, with the
+#'   clustering variables on the y-axis and one line per cluster. Best to
+#'   compare all clusters in one chart.
+#' * `"bars"`: one panel per cluster with the means as horizontal bars and the
+#'   total mean as a grey mark. Best to see the highs and lows of each cluster
+#'   when naming them.
+#' * `"heatmap"`: clusters (columns) by variables (rows), with the means as
+#'   numbers and the difference to the total mean as color (red = above, blue
+#'   = below the total).
+#'
+#' ## Scales
+#'
+#' * `"prepared"` (default): the means of the prepared clustering variables,
+#'   i.e. the centers that the clustering is based on (`object$centers`). With
+#'   z-standardized variables ([seg_prep_data()] with `scale = "z"`), the means
+#'   are expressed in standard deviations from the total mean (0): following
+#'   Cohen (1988), deviations of about 0.2, 0.5 and 0.8 can be regarded as
+#'   small, medium and large.
+#' * `"original"`: the means of the original clustering variables (e.g. on a
+#'   1-10 rating scale) of the respondents of each cluster, from
+#'   `object$data_full`. Imputed values are not included. Easier to
+#'   communicate, but variables with different scales or variances are less
+#'   comparable.
+#'
+#' The dashed grey line (`"lines"`) or grey marks (`"bars"`) show the total
+#' mean of all respondents of the solution. For fuzzy and model-based
+#' clustering, the means are computed for the respondents assigned to each
+#' cluster (highest membership / probability). Noise (density-based methods)
+#' is not shown, but included in the total.
+#'
+#' For a detailed comparison of the clusters, with confidence intervals,
+#' significance tests, survey weights and further profiling variables, see
+#' [eda_plot()] and [eda_explore()].
+#'
+#' @inheritParams seg_plot_cluster
+#' @param type Type of plot: `"lines"` (default), `"bars"` or `"heatmap"`,
+#'   see "Details".
+#' @param scale Scale of the means: `"prepared"` (default) for the prepared
+#'   (e.g. z-standardized) clustering variables or `"original"` for the
+#'   original variables, see "Details".
+#' @param order Order of the variables: `"data"` (default) keeps the order of
+#'   the clustering variables, `"difference"` sorts them by the difference
+#'   between the clusters (range of the cluster means on the prepared scale),
+#'   so that the variables that separate the clusters most come first.
+#' @param total Logical. Whether to show the total mean of all respondents
+#'   (and a "Total" column in the heatmap). Defaults to `TRUE`.
+#' @param axis_labels How to label the variables: `"label"` (default) uses the
+#'   variable labels (the names if missing), `"name"` the variable names,
+#'   `"both"` the name followed by the label.
+#' @param label_width Number of characters after which the labels are
+#'   wrapped. Defaults to 40. `NULL` for no wrapping.
+#' @param digits Number of decimals of the values in the heatmap. Defaults
+#'   to 1.
+#'
+#' @returns A ggplot object.
+#'
+#' @references
+#' Cohen, J. (1988). *Statistical power analysis for the behavioral sciences*
+#' (2nd ed.). Lawrence Erlbaum.
+#'
+#' @family clustering
+#'
+#' @examples
+#' \donttest{
+#' prep <- seg_prep_data(
+#'   sm_synthetic,
+#'   vars = dplyr::starts_with("F50_0_"),
+#'   missing = "mice",
+#'   max_missing_prop = 0.2,
+#'   verbose = FALSE
+#' )
+#' cl <- seg_cluster(prep, k = 4, plots = FALSE, verbose = FALSE)
+#' seg_plot_centers(cl)
+#' seg_plot_centers(cl, type = "bars", order = "difference")
+#' seg_plot_centers(cl, type = "heatmap", scale = "original")
+#' }
+#'
+#' @export
+seg_plot_centers <- function(
+  object,
+  type = c("lines", "bars", "heatmap"),
+  scale = c("prepared", "original"),
+  order = c("data", "difference"),
+  total = TRUE,
+  axis_labels = c("label", "name", "both"),
+  label_width = 40,
+  digits = 1
+) {
+  seg_check_cluster_object(object)
+  type <- rlang::arg_match(type)
+  scale <- rlang::arg_match(scale)
+  order <- rlang::arg_match(order)
+  axis_labels <- rlang::arg_match(axis_labels)
+
+  vars <- names(object$data)
+  codes <- sort(setdiff(unique(object$cluster), 0))
+  if (length(codes) == 0) {
+    cli::cli_abort("The solution has no clusters (only noise).")
+  }
+
+  # ---- Means per cluster and total ----
+
+  values <- if (scale == "prepared") {
+    tibble::as_tibble(as.data.frame(object$data))
+  } else {
+    seg_numeric_vars(object$data_full, vars, "object$data_full")
+  }
+  means <- values |>
+    dplyr::mutate(cluster = object$cluster) |>
+    dplyr::filter(.data$cluster != 0) |>
+    dplyr::summarise(
+      dplyr::across(dplyr::all_of(vars), \(v) mean(v, na.rm = TRUE)),
+      .by = "cluster"
+    ) |>
+    tidyr::pivot_longer(-"cluster", names_to = "variable", values_to = "mean")
+  totals <- tibble::tibble(
+    variable = vars,
+    total = purrr::map_dbl(values[vars], \(v) mean(v, na.rm = TRUE))
+  )
+  means <- dplyr::left_join(means, totals, by = "variable")
+
+  # ---- Variables: order and labels ----
+
+  if (order == "difference") {
+    spread <- object$centers |>
+      tidyr::pivot_longer(-"cluster", names_to = "variable") |>
+      dplyr::summarise(
+        spread = max(.data$value) - min(.data$value),
+        .by = "variable"
+      )
+    vars <- spread$variable[order(-spread$spread)]
+  }
+  # Variable labels of the original data (the prepared data has none)
+  label_source <- if (all(vars %in% names(object$data_full))) {
+    object$data_full[vars]
+  } else {
+    object$data[vars]
+  }
+  var_labels <- sjlabelled::get_label(label_source, def.value = vars)
+  var_labels <- unname(var_labels[vars])
+  var_labels <- switch(
+    axis_labels,
+    label = var_labels,
+    name = vars,
+    both = ifelse(var_labels == vars, vars, paste0(vars, ": ", var_labels))
+  )
+  if (!is.null(label_width)) {
+    var_labels <- stringr::str_wrap(var_labels, width = label_width)
+  }
+  y_labels <- stats::setNames(var_labels, vars)
+
+  cluster_names <- seg_cluster_names(object, codes)
+  colors <- stats::setNames(seg_palette(max(codes))[codes], cluster_names)
+  means <- means |>
+    dplyr::mutate(
+      variable = factor(.data$variable, levels = rev(vars)),
+      cluster = factor(.data$cluster, levels = codes, labels = cluster_names)
+    ) |>
+    dplyr::arrange(.data$cluster, dplyr::desc(.data$variable))
+
+  # ---- Titles ----
+
+  scale_type <- object$prep$scale %||% "none"
+  x_title <- if (scale == "original" || scale_type == "none") {
+    "Mean"
+  } else if (scale_type == "z") {
+    "Mean (z-standardized)"
+  } else {
+    "Mean (scaled 0-1)"
+  }
+  subtitle <- paste0(
+    seg_solution_title(object),
+    if (scale == "original") " | original scale" else "",
+    if (total && type != "heatmap") " | grey: total" else ""
+  )
+  labs <- ggplot2::labs(
+    title = "Cluster profiles",
+    subtitle = subtitle,
+    x = x_title,
+    y = NULL
+  )
+
+  # ---- Plot ----
+
+  if (type == "lines") {
+    totals_plot <- totals |>
+      dplyr::mutate(variable = factor(.data$variable, levels = rev(vars))) |>
+      dplyr::arrange(dplyr::desc(.data$variable))
+    plot <- ggplot2::ggplot(
+      means,
+      ggplot2::aes(x = .data$mean, y = .data$variable)
+    )
+    if (total) {
+      plot <- plot +
+        ggplot2::geom_path(
+          data = totals_plot,
+          ggplot2::aes(x = .data$total, y = .data$variable, group = 1),
+          color = "grey50",
+          linetype = "dashed",
+          linewidth = 0.6
+        )
+    }
+    plot <- plot +
+      ggplot2::geom_path(
+        ggplot2::aes(color = .data$cluster, group = .data$cluster),
+        linewidth = 0.8
+      ) +
+      ggplot2::geom_point(ggplot2::aes(color = .data$cluster), size = 2) +
+      ggplot2::scale_color_manual(values = colors, name = NULL) +
+      ggplot2::scale_y_discrete(labels = y_labels) +
+      labs +
+      ggplot2::theme_classic() +
+      ggplot2::theme(
+        legend.position = "top",
+        panel.grid.major.y = ggplot2::element_line(color = "grey92")
+      )
+  } else if (type == "bars") {
+    plot <- ggplot2::ggplot(
+      means,
+      ggplot2::aes(x = .data$mean, y = .data$variable, fill = .data$cluster)
+    ) +
+      ggplot2::geom_col(width = 0.7, show.legend = FALSE)
+    if (total) {
+      plot <- plot +
+        ggplot2::geom_point(
+          ggplot2::aes(x = .data$total),
+          shape = 124,
+          size = 4,
+          color = "grey30",
+          show.legend = FALSE
+        )
+    }
+    plot <- plot +
+      ggplot2::geom_vline(xintercept = 0, color = "grey40", linewidth = 0.3) +
+      ggplot2::facet_wrap(ggplot2::vars(.data$cluster), nrow = 1) +
+      ggplot2::scale_fill_manual(values = colors) +
+      ggplot2::scale_y_discrete(labels = y_labels) +
+      labs +
+      ggplot2::theme_classic() +
+      ggplot2::theme(
+        strip.background = ggplot2::element_blank(),
+        strip.text = ggplot2::element_text(face = "bold"),
+        panel.grid.major.y = ggplot2::element_line(color = "grey92")
+      )
+  } else {
+    tiles <- means
+    if (total) {
+      tiles <- dplyr::bind_rows(
+        tiles,
+        totals |>
+          dplyr::mutate(
+            cluster = "Total",
+            mean = .data$total,
+            variable = factor(.data$variable, levels = rev(vars))
+          )
+      ) |>
+        dplyr::mutate(cluster = factor(.data$cluster, levels = c(cluster_names, "Total")))
+    }
+    # Total column in grey (no difference to itself)
+    tiles <- dplyr::mutate(
+      tiles,
+      difference = dplyr::if_else(
+        .data$cluster == "Total",
+        NA_real_,
+        .data$mean - .data$total
+      )
+    )
+    limit <- max(abs(tiles$difference), na.rm = TRUE)
+    plot <- ggplot2::ggplot(
+      tiles,
+      ggplot2::aes(x = .data$cluster, y = .data$variable, fill = .data$difference)
+    ) +
+      ggplot2::geom_tile(color = "white", linewidth = 0.6) +
+      ggplot2::geom_text(
+        ggplot2::aes(label = formatC(.data$mean, format = "f", digits = digits)),
+        size = 3
+      ) +
+      ggplot2::scale_fill_gradient2(
+        low = yougov_colors[["Blue 1"]],
+        mid = "white",
+        high = yougov_colors[["Red 1"]],
+        midpoint = 0,
+        limits = c(-limit, limit),
+        na.value = "grey92",
+        name = "Difference\nto total"
+      ) +
+      ggplot2::scale_x_discrete(position = "top") +
+      ggplot2::scale_y_discrete(labels = y_labels) +
+      labs +
+      ggplot2::labs(x = NULL) +
+      ggplot2::theme_classic() +
+      ggplot2::theme(
+        axis.line = ggplot2::element_blank(),
+        axis.ticks = ggplot2::element_blank()
+      )
+  }
+  plot
+}
+
+
 # ---- Print methods -----------------------------------------------------------
 
 #' @export
@@ -1758,10 +2087,35 @@ seg_cluster_input <- function(x) {
     } else {
       as.vector(haven::zap_labels(x$data_full[[id]]))
     }
+    s <- x$settings
+    input$prep <- list(
+      vars = names(input$data),
+      id = id,
+      missing = s$missing,
+      max_missing_prop = s$max_missing_prop,
+      scaling = s$scaling,
+      impute_values = s$impute_values,
+      imputation_args = s$imputation_args,
+      seed = s$seed,
+      scale = s$scale,
+      daisy_args = input$daisy_args
+    )
   } else {
     input$data_full <- tibble::as_tibble(as.data.frame(x))
     input$id_name <- "row"
     input$ids <- seq_len(nrow(input$data))
+    # Already prepared data: new data is used as is
+    input$prep <- list(
+      vars = names(input$data),
+      id = NULL,
+      missing = "omit",
+      max_missing_prop = NULL,
+      scaling = seg_scaling_params(input$data, "none"),
+      impute_values = NULL,
+      imputation_args = NULL,
+      scale = "none",
+      daisy_args = input$daisy_args
+    )
   }
   input
 }
@@ -1793,12 +2147,19 @@ seg_check_k <- function(k, data) {
   sort(unique(as.integer(k)))
 }
 
-seg_plot_opts <- function(plots, cluster_plot_args, dend_args, heatmap_n) {
+seg_plot_opts <- function(
+  plots,
+  cluster_plot_args,
+  dend_args,
+  heatmap_n,
+  centers_args = list()
+) {
   list(
     plots = plots,
     cluster_plot_args = cluster_plot_args,
     dend_args = dend_args,
-    heatmap_n = heatmap_n
+    heatmap_n = heatmap_n,
+    centers_args = centers_args
   )
 }
 
@@ -1895,11 +2256,13 @@ seg_new_cluster <- function(
 ) {
   cluster <- as.integer(res$cluster)
   membership <- res$membership
+  cluster_map <- NULL
 
   if (relabel) {
     relabelled <- seg_relabel(cluster, membership)
     cluster <- relabelled$cluster
     membership <- relabelled$membership
+    cluster_map <- relabelled$map
     if (!is.null(cluster_labels)) {
       new_codes <- relabelled$map[names(cluster_labels)]
       cluster_labels <- stats::setNames(
@@ -1953,11 +2316,13 @@ seg_new_cluster <- function(
       centers = centers,
       assignment = assignment,
       cluster_labels = cluster_labels,
+      cluster_map = cluster_map,
       data = data,
       data_full = input$data_full,
       dist = input$dist,
       fit = res$fit,
       tree = res$tree,
+      prep = input$prep,
       plots = list(),
       settings = c(
         list(
@@ -1999,6 +2364,10 @@ seg_cluster_plots <- function(obj, plot_opts, seed) {
     plots$dend <- do.call(seg_plot_dend, c(list(obj), plot_opts$dend_args))
   }
   plots$heatmap <- seg_plot_heatmap(obj, n = plot_opts$heatmap_n, seed = seed)
+  plots$centers <- do.call(
+    seg_plot_centers,
+    c(list(obj), plot_opts$centers_args %||% list())
+  )
   if (obj$method == "mclust") {
     plots$bic <- seg_plot_mclust_bic(obj$fit)
   }

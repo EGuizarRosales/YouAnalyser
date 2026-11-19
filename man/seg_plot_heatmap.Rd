@@ -73,6 +73,8 @@ seg_plot_heatmap(cl, n = 300, row_order = "dendrogram")
 }
 \seealso{
 Other clustering:
+\code{\link[=predict.seg_cluster]{predict.seg_cluster()}},
+\code{\link[=seg_agreement]{seg_agreement()}},
 \code{\link[=seg_as_cluster]{seg_as_cluster()}},
 \code{\link[=seg_cluster]{seg_cluster()}},
 \code{\link[=seg_cluster_density]{seg_cluster_density()}},
@@ -82,6 +84,7 @@ Other clustering:
 \code{\link[=seg_cluster_model]{seg_cluster_model()}},
 \code{\link[=seg_cluster_partitioning]{seg_cluster_partitioning()}},
 \code{\link[=seg_dbscan_eps]{seg_dbscan_eps()}},
+\code{\link[=seg_plot_centers]{seg_plot_centers()}},
 \code{\link[=seg_plot_cluster]{seg_plot_cluster()}},
 \code{\link[=seg_plot_dend]{seg_plot_dend()}}
 }
